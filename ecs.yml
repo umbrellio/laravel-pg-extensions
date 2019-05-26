@@ -1,0 +1,12 @@
+imports:
+  - { resource: vendor/umbrellio/code-style-php/umbrellio-cs.yml }
+
+services:
+  PhpCsFixer\Fixer\PhpUnit\PhpUnitTestAnnotationFixer:
+    style: annotation
+  PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer: ~
+
+parameters:
+  cache_directory: .ecs_cache
+  exclude_files:
+    - vendor/*

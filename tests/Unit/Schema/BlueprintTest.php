@@ -86,7 +86,7 @@ class BlueprintTest extends TestCase
         $create = $this->blueprint->create();
         $create->like('other_table')->includingAll();
 
-        $this->assertSameSql('create table "test_table" like "other_table" including all');
+        $this->assertSameSql('create table "test_table" (like "other_table" including all)');
     }
 
     private function assertSameSql(string $sql): void

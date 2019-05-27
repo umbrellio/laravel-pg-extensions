@@ -46,7 +46,7 @@ class CreateCompiler
 
         $includingAll = $command->get('includingAll', false) ? 'including all' : '';
 
-        return "like {$grammar->wrapTable($table)} {$includingAll}";
+        return "(like {$grammar->wrapTable($table)} {$includingAll})";
     }
 
     private static function compileColumns(array $columns): string

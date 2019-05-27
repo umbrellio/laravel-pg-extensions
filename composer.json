@@ -34,7 +34,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Umbrellio\\Postgres\\PostgresDatabaseServiceProvider"
+        "Umbrellio\\Postgres\\UmbrellioPostgresProvider"
       ]
     }
   }

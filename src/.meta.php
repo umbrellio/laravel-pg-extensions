@@ -3,12 +3,21 @@
 namespace Umbrellio\Postgres\Definitions {
 
     use Illuminate\Support\Fluent;
+    use Umbrellio\Postgres\Commands\CreateCommand;
 
 
     /**
      * @method void range(array $range)
      */
-    class AttachedPartition extends Fluent
+    class AttachPartitionDefinition extends Fluent
+    {
+
+    }
+
+    /**
+     * @method CreateCommand includingAll()
+     */
+    class LikeDefinition extends Fluent
     {
 
     }
@@ -16,10 +25,10 @@ namespace Umbrellio\Postgres\Definitions {
 
 namespace Illuminate\Database\Schema {
 
-    use Umbrellio\Postgres\Definitions\AttachedPartition;
+    use Umbrellio\Postgres\Definitions\AttachPartitionDefinition;
 
     /**
-     * @method AttachedPartition attachPartition(string $partition)
+     * @method AttachPartitionDefinition attachPartition(string $partition)
      * @method void detachPartition(string $partition)
      */
     class Blueprint

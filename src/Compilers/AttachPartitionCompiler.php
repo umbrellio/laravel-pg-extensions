@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\Grammar;
 use Illuminate\Support\Fluent;
+use InvalidArgumentException;
 
 class AttachPartitionCompiler
 {
@@ -28,7 +29,7 @@ class AttachPartitionCompiler
             return "for values from ({$from}) to ({$to})";
         }
 
-        throw new \InvalidArgumentException('Not set "for values" for attachPartition');
+        throw new InvalidArgumentException('Not set "for values" for attachPartition');
     }
 
     private static function formatValue($date)

@@ -8,9 +8,15 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\PostgresGrammar;
 use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Compilers\AttachPartitionCompiler;
+use Umbrellio\Postgres\Compilers\CreateCompiler;
 
 class PostgresSchemaGrammar extends PostgresGrammar
 {
+    public function compileCreate(Blueprint $blueprint, Fluent $command): string
+    {
+        return CreateCompiler::compile($this, $blueprint, $command, $this->getColumns($blueprint));
+    }
+
     public function compileAttachPartition(Blueprint $blueprint, Fluent $command): string
     {
         return AttachPartitionCompiler::compile($this, $blueprint, $command);

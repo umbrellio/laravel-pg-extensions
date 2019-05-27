@@ -1,3 +1,4 @@
 /vendor
 /.idea
 .ecs_cache
+phpunit.xml

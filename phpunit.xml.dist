@@ -11,6 +11,10 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
+            <exclude>
+                <file>./src/.meta.php</file>
+                <directory>./lib/vendor/symfony/lib/*</directory>
+            </exclude>
         </whitelist>
     </filter>
     <testsuites>

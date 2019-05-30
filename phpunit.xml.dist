@@ -19,7 +19,7 @@
     </filter>
     <testsuites>
         <testsuite name="Test suite">
-            <directory suffix="Test.php">./tests/Unit</directory>
+            <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>

@@ -40,10 +40,6 @@ class CreateCompiler
     {
         $table = $command->get('like');
 
-        if (!$table) {
-            return '';
-        }
-
         $includingAll = $command->get('includingAll', false) ? 'including all' : '';
 
         return "(like {$grammar->wrapTable($table)} {$includingAll})";

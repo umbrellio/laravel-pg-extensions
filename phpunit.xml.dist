@@ -13,7 +13,7 @@
             <directory suffix=".php">./src</directory>
             <exclude>
                 <file>./src/.meta.php</file>
-                <directory>./lib/vendor/symfony/lib/*</directory>
+                <directory>./src/Commands</directory>
             </exclude>
         </whitelist>
     </filter>

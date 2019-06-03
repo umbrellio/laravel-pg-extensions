@@ -18,11 +18,11 @@ abstract class FunctionalTestCase extends TestCase
         $app['config']->set('database.default', 'testing');
         $app['config']->set('database.connections.testing', [
             'driver' => 'pgsql',
-            'host' => 'localhost',
-            'port' => 5432,
-            'database' => 'testing',
-            'username' => 'postgres',
-            'password' => '',
+            'host' => env('TEST_DB_HOST', 'localhost'),
+            'port' => env('TEST_DB_PORT', 5432),
+            'database' => env('TEST_DB', 'testing'),
+            'username' => env('TEST_DB_USER', 'postgres'),
+            'password' => env('TEST_DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',

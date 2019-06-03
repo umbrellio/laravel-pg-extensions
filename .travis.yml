@@ -4,6 +4,9 @@ php:
   - 7.3
   - nightly
 
+services:
+  - postgresql: "11"
+
 matrix:
   fast_finish: true
   allow_failures:
@@ -11,6 +14,9 @@ matrix:
 
 install:
   - composer install
+
+before_script:
+  - psql -c 'create database testing;' -U postgres
 
 script:
   - vendor/bin/ecs check --config=ecs.yml .

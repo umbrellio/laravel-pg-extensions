@@ -1,5 +1,5 @@
 {
-  "name": "umbrellio/laravel-postgres-driver",
+  "name": "umbrellio/laravel-pg-extensions",
   "type": "library",
   "minimum-stability": "stable",
   "authors": [

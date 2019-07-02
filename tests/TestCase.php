@@ -9,7 +9,7 @@ use Umbrellio\Postgres\UmbrellioPostgresProvider;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [UmbrellioPostgresProvider::class];
     }

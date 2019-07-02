@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Unit\Schema;
 
-use Illuminate\Database\Connection;
-use Illuminate\Database\Schema\Blueprint;
+use Umbrellio\Postgres\PostgresConnection;
+use Umbrellio\Postgres\Schema\Blueprint;
 use Illuminate\Support\Carbon;
 use InvalidArgumentException;
-use Umbrellio\Postgres\Commands\CreateCommand;
-use Umbrellio\Postgres\PostgresSchemaGrammar;
+use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 use Umbrellio\Postgres\Tests\TestCase;
 
 class BlueprintTest extends TestCase
@@ -24,16 +23,14 @@ class BlueprintTest extends TestCase
         $this->blueprint = new Blueprint('test_table');
     }
 
-    /** @test */
-    public function detachPartition(): void
+    public function testDetachPartition(): void
     {
         $this->blueprint->detachPartition('some_partition');
 
         $this->assertSameSql('alter table "test_table" detach partition some_partition');
     }
 
-    /** @test */
-    public function attachPartitionRangeInt(): void
+    public function testAttachPartitionRangeInt(): void
     {
         $this->blueprint->attachPartition('some_partition')->range([
             'from' => 10,
@@ -43,8 +40,7 @@ class BlueprintTest extends TestCase
         $this->assertSameSql('alter table "test_table" attach partition some_partition for values from (10) to (100)');
     }
 
-    /** @test */
-    public function attachPartitionFailedWithoutForValuesPart(): void
+    public function testAttachPartitionFailedWithoutForValuesPart(): void
     {
         $this->blueprint->attachPartition('some_partition');
 
@@ -52,8 +48,7 @@ class BlueprintTest extends TestCase
         $this->runToSql();
     }
 
-    /** @test */
-    public function attachPartitionRangeDates(): void
+    public function testAttachPartitionRangeDates(): void
     {
         $today = Carbon::today();
         $tomorrow = Carbon::tomorrow();
@@ -67,28 +62,6 @@ class BlueprintTest extends TestCase
             . "for values from ('{$today->toDateTimeString()}') to ('{$tomorrow->toDateTimeString()}')");
     }
 
-    /** @test */
-    public function createIfNotExists(): void
-    {
-        /** @var CreateCommand $create */
-        $create = $this->blueprint->create();
-        $create->ifNotExists();
-
-        $this->blueprint->increments('id');
-
-        $this->assertSameSql('create table if not exists "test_table" ("id" serial primary key not null)');
-    }
-
-    /** @test */
-    public function createWitLikeIncludingAll(): void
-    {
-        /** @var CreateCommand $create */
-        $create = $this->blueprint->create();
-        $create->like('other_table')->includingAll();
-
-        $this->assertSameSql('create table "test_table" (like "other_table" including all)');
-    }
-
     private function assertSameSql(string $sql): void
     {
         $this->assertSame([$sql], $this->runToSql());
@@ -96,6 +69,6 @@ class BlueprintTest extends TestCase
 
     private function runToSql(): array
     {
-        return $this->blueprint->toSql($this->createMock(Connection::class), new PostgresSchemaGrammar());
+        return $this->blueprint->toSql($this->createMock(PostgresConnection::class), new PostgresGrammar());
     }
 }

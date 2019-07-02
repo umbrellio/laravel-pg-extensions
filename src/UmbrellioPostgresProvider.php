@@ -4,25 +4,31 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres;
 
-use Illuminate\Database\Connection;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\DatabaseServiceProvider;
+use Illuminate\Database\Eloquent\Model;
+use Umbrellio\Postgres\Connectors\ConnectionFactory;
 
-class UmbrellioPostgresProvider extends ServiceProvider
+class UmbrellioPostgresProvider extends DatabaseServiceProvider
 {
-    public function register(): void
+    public function register()
     {
-        Connection::resolverFor('pgsql', function ($connection, $database, $prefix, $config) {
-            return new PostgresConnection($connection, $database, $prefix, $config);
+        Model::clearBootedModels();
+
+        $this->app->singleton('db.factory', static function ($app) {
+            return new ConnectionFactory($app);
         });
-    }
 
-    public function boot(): void
-    {
-        $this->loadBlueprint();
-    }
+        $this->app->singleton('db', static function ($app) {
+            return new DatabaseManager($app, $app['db.factory']);
+        });
 
-    private function loadBlueprint(): void
-    {
-        require __DIR__ . '/Macros/blueprint.php';
+        $this->app->bind('db.connection', static function ($app) {
+            return $app['db']->connection();
+        });
+
+        $this->registerEloquentFactory();
+
+        $this->registerQueueableEntityResolver();
     }
 }

@@ -4,39 +4,68 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Tests\Functional;
 
-use Illuminate\Database\Schema\Blueprint;
+use Umbrellio\Postgres\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Umbrellio\Postgres\Commands\CreateCommand;
+use Generator;
 
 class SchemaTest extends FunctionalTestCase
 {
-    /** @test */
-    public function simpleCreate()
+    /**
+     * @dataProvider provideTables
+     */
+    public function testCreate(string $tableName): void
     {
-        Schema::create('test_table', function (Blueprint $table) {
+        Schema::create($tableName, static function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
         });
 
-        $this->assertTrue(Schema::hasTable('test_table'));
-        $this->assertSame(['id', 'name'], Schema::getColumnListing('test_table'));
+        $this->assertTrue(Schema::hasTable($tableName));
+        $this->assertSame(['id', 'name'], Schema::getColumnListing($tableName));
     }
 
-    /** @test */
-    public function extendedCreate()
+    /**
+     * @dataProvider provideTables
+     */
+    public function testCreateLikeSimple(string $tableName1, string $tableName2): void
     {
-        Schema::create('test_table', function (Blueprint $table) {
+        Schema::create($tableName1, static function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
         });
 
-        Schema::create('test_table2', function (Blueprint $table, CreateCommand $command) {
-            $command->like('test_table');
+        Schema::create($tableName2, static function (Blueprint $table) use ($tableName2) {
+            $table->like($tableName2);
         });
 
-        $this->assertTrue(Schema::hasTable('test_table'));
-        $this->assertTrue(Schema::hasTable('test_table2'));
+        $this->assertTrue(Schema::hasTable($tableName1));
+        $this->assertTrue(Schema::hasTable($tableName2));
 
-        $this->assertSame(Schema::getColumnListing('test_table'), Schema::getColumnListing('test_table2'));
+        $this->assertSame(Schema::getColumnListing($tableName1), Schema::getColumnListing($tableName2));
+    }
+
+    /**
+     * @dataProvider provideTables
+     */
+    public function testCreateLikeFull(string $tableName1, string $tableName2): void
+    {
+        Schema::create($tableName1, static function (Blueprint $table) {
+            $table->increments('id')->primary();
+            $table->string('name')->unique();
+        });
+
+        Schema::create($tableName2, static function (Blueprint $table) use ($tableName1) {
+            $table->like($tableName1)->includingAll();
+            $table->ifNotExists();
+        });
+
+        $this->assertTrue(Schema::hasTable($tableName1));
+        $this->assertTrue(Schema::hasTable($tableName2));
+        $this->assertSame(Schema::getColumnListing($tableName1), Schema::getColumnListing($tableName2));
+    }
+
+    public function provideTables(): Generator
+    {
+        yield ['test_table', 'test_table_like'];
     }
 }

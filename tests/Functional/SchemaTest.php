@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Tests\Functional;
 
-use Umbrellio\Postgres\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Generator;
+use Illuminate\Support\Facades\Schema;
+use Umbrellio\Postgres\Schema\Blueprint;
 
 class SchemaTest extends FunctionalTestCase
 {
     /**
      * @dataProvider provideTables
+     *
+     * @test
      */
-    public function testCreate(string $tableName): void
+    public function create(string $tableName): void
     {
         Schema::create($tableName, static function (Blueprint $table) {
             $table->increments('id');
@@ -26,8 +28,10 @@ class SchemaTest extends FunctionalTestCase
 
     /**
      * @dataProvider provideTables
+     *
+     * @test
      */
-    public function testCreateLikeSimple(string $tableName1, string $tableName2): void
+    public function createLikeSimple(string $tableName1, string $tableName2): void
     {
         Schema::create($tableName1, static function (Blueprint $table) {
             $table->increments('id');
@@ -46,8 +50,10 @@ class SchemaTest extends FunctionalTestCase
 
     /**
      * @dataProvider provideTables
+     *
+     * @test
      */
-    public function testCreateLikeFull(string $tableName1, string $tableName2): void
+    public function createLikeFull(string $tableName1, string $tableName2): void
     {
         Schema::create($tableName1, static function (Blueprint $table) {
             $table->increments('id')->primary();

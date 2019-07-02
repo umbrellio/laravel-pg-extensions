@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Unit\Schema;
 
-use Umbrellio\Postgres\PostgresConnection;
-use Umbrellio\Postgres\Schema\Blueprint;
 use Illuminate\Support\Carbon;
 use InvalidArgumentException;
+use Umbrellio\Postgres\PostgresConnection;
+use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 use Umbrellio\Postgres\Tests\TestCase;
 
@@ -23,14 +23,20 @@ class BlueprintTest extends TestCase
         $this->blueprint = new Blueprint('test_table');
     }
 
-    public function testDetachPartition(): void
+    /**
+     * @test
+     */
+    public function detachPartition(): void
     {
         $this->blueprint->detachPartition('some_partition');
 
         $this->assertSameSql('alter table "test_table" detach partition some_partition');
     }
 
-    public function testAttachPartitionRangeInt(): void
+    /**
+     * @test
+     */
+    public function attachPartitionRangeInt(): void
     {
         $this->blueprint->attachPartition('some_partition')->range([
             'from' => 10,
@@ -40,7 +46,10 @@ class BlueprintTest extends TestCase
         $this->assertSameSql('alter table "test_table" attach partition some_partition for values from (10) to (100)');
     }
 
-    public function testAttachPartitionFailedWithoutForValuesPart(): void
+    /**
+     * @test
+     */
+    public function attachPartitionFailedWithoutForValuesPart(): void
     {
         $this->blueprint->attachPartition('some_partition');
 
@@ -48,7 +57,10 @@ class BlueprintTest extends TestCase
         $this->runToSql();
     }
 
-    public function testAttachPartitionRangeDates(): void
+    /**
+     * @test
+     */
+    public function attachPartitionRangeDates(): void
     {
         $today = Carbon::today();
         $tomorrow = Carbon::tomorrow();

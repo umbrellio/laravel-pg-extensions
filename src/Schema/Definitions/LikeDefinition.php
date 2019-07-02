@@ -1,6 +1,8 @@
 <?php
 
-namespace Umbrellio\Postgres\Definitions;
+declare(strict_types=1);
+
+namespace Umbrellio\Postgres\Schema\Definitions;
 
 use Illuminate\Support\Fluent;
 

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Umbrellio\Postgres\Schema;
 
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
-use Umbrellio\Postgres\Definitions\LikeDefinition;
-use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
 use Illuminate\Support\Fluent;
+use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
+use Umbrellio\Postgres\Schema\Definitions\LikeDefinition;
 
 class Blueprint extends BaseBlueprint
 {

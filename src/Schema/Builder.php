@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Umbrellio\Postgres\Schema;
 
-use Illuminate\Database\Schema\PostgresBuilder as BasePostgresBuilder;
 use Closure;
+use Illuminate\Database\Schema\PostgresBuilder as BasePostgresBuilder;
 
 class Builder extends BasePostgresBuilder
 {

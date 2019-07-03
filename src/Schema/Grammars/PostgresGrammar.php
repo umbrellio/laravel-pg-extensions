@@ -90,9 +90,9 @@ class PostgresGrammar extends BasePostgresGrammar
 
     /**
      * @param string|Carbon $date
-     * @return string
+     * @return int|string
      */
-    private function formatValue($date): string
+    private function formatValue($date)
     {
         if ($date instanceof Carbon) {
             return "'{$date->toDateTimeString()}'";

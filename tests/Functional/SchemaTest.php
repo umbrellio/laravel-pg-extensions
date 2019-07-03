@@ -38,8 +38,8 @@ class SchemaTest extends FunctionalTestCase
             $table->string('name');
         });
 
-        Schema::create($tableName2, static function (Blueprint $table) use ($tableName2) {
-            $table->like($tableName2);
+        Schema::create($tableName2, static function (Blueprint $table) use ($tableName1) {
+            $table->like($tableName1);
         });
 
         $this->assertTrue(Schema::hasTable($tableName1));
@@ -56,7 +56,7 @@ class SchemaTest extends FunctionalTestCase
     public function createLikeFull(string $tableName1, string $tableName2): void
     {
         Schema::create($tableName1, static function (Blueprint $table) {
-            $table->increments('id')->primary();
+            $table->increments('id');
             $table->string('name')->unique();
         });
 

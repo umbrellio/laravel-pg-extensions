@@ -1,11 +1,11 @@
 language: php
 
 php:
-  - 7.2
-  - nightly
+  - 7.3
+#  - nightly
 
 services:
-  - postgresql: "11"
+  - postgres:11.2
 
 matrix:
   fast_finish: true

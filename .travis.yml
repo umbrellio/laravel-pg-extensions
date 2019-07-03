@@ -5,7 +5,7 @@ php:
   - nightly
 
 services:
-  - postgresql: 10
+  - postgresql: '10.7'
 
 matrix:
   fast_finish: true
@@ -16,7 +16,6 @@ install:
   - composer install
 
 before_script:
-  - psql --version
   - psql -c 'create database testing;' -U postgres
 
 script:

@@ -1,6 +1,6 @@
 <?php
 
-namespace Umbrellio\Postgres\Schema\Compilers;
+namespace Umbrellio\Postgres\Compilers;
 
 use Carbon\Carbon;
 use Illuminate\Database\Schema\Blueprint;

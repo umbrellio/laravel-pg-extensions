@@ -1,6 +1,6 @@
 <?php
 
-namespace Umbrellio\Postgres\Schema\Compilers;
+namespace Umbrellio\Postgres\Compilers;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\Grammar;

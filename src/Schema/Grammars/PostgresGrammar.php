@@ -7,8 +7,8 @@ namespace Umbrellio\Postgres\Schema\Grammars;
 use Illuminate\Database\Schema\Grammars\PostgresGrammar as BasePostgresGrammar;
 use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Schema\Compilers\AttachPartitionCompiler;
-use Umbrellio\Postgres\Schema\Compilers\CreateCompiler;
+use Umbrellio\Postgres\Compilers\AttachPartitionCompiler;
+use Umbrellio\Postgres\Compilers\CreateCompiler;
 
 class PostgresGrammar extends BasePostgresGrammar
 {

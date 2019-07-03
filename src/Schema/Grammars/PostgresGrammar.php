@@ -52,4 +52,19 @@ class PostgresGrammar extends BasePostgresGrammar
             $command->get('partition')
         );
     }
+
+    public function compileCreateView(Blueprint $blueprint, Fluent $command): string
+    {
+        $materialize = $command->get('materialize') ? 'materialized' : '';
+        return implode(' ', array_filter([
+            'create', $materialize, 'view',
+            $this->wrapTable($command->get('view')),
+            'as', $command->get('select')
+        ]));
+    }
+
+    public function compileDropView(Blueprint $blueprint, Fluent $command): string
+    {
+        return 'drop view ' . $this->wrapTable($command->get('view'));
+    }
 }

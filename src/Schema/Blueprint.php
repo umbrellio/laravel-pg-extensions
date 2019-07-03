@@ -36,4 +36,17 @@ class Blueprint extends BaseBlueprint
     {
         return $this->addCommand('ifNotExists');
     }
+
+    /**
+     * @return ViewDefinition|Fluent
+     */
+    public function createView(string $view, string $select, bool $materialize = false): Fluent
+    {
+        return $this->addCommand('createView', compact('view', 'select', 'materialize'));
+    }
+
+    public function dropView(string $view): Fluent
+    {
+        return $this->addCommand('dropView', compact('view'));
+    }
 }

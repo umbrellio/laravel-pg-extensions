@@ -2,15 +2,12 @@ language: php
 
 php:
   - 7.2
-  - nightly
 
 services:
-  - postgresql: "11"
+  - postgresql
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - php: nightly
 
 install:
   - composer install

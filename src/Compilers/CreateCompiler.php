@@ -10,43 +10,34 @@ use Illuminate\Support\Fluent;
 
 class CreateCompiler
 {
-    public static function compile(Grammar $grammar, Blueprint $blueprint, Fluent $command, array $columns): string
+    public static function compile(Grammar $grammar, Blueprint $blueprint, array $columns, array $commands = []): string
     {
-        $compiledCommand = sprintf('%s table %s %s %s',
+        $compiledCommand = sprintf('%s table %s %s (%s)',
             $blueprint->temporary ? 'create temporary' : 'create',
-            self::beforeTable($grammar, $blueprint, $command),
+            self::beforeTable($commands['ifNotExists']),
             $grammar->wrapTable($blueprint),
-            self::afterTable($grammar, $blueprint, $command, $columns)
+            $commands['like']
+                ? self::compileLike($grammar, $commands['like'])
+                : self::compileColumns($columns)
         );
 
         return str_replace('  ', ' ', trim($compiledCommand));
     }
 
-    private static function beforeTable(Grammar $grammar, Blueprint $blueprint, Fluent $command): string
+    private static function beforeTable(?Fluent $command = null): string
     {
-        return $command->get('ifNotExists') ? 'if not exists' : '';
+        return $command ? 'if not exists' : '';
     }
 
-    private static function afterTable(Grammar $grammar, Blueprint $blueprint, Fluent $command, array $columns): string
+    private static function compileLike(Grammar $grammar, Fluent $command): string
     {
-        if ($command->get('like')) {
-            return self::compileLike($grammar, $blueprint, $command);
-        }
-
-        return self::compileColumns($columns);
-    }
-
-    private static function compileLike(Grammar $grammar, Blueprint $blueprint, Fluent $command): string
-    {
-        $table = $command->get('like');
-
-        $includingAll = $command->get('includingAll', false) ? 'including all' : '';
-
-        return "(like {$grammar->wrapTable($table)} {$includingAll})";
+        $table = $command->get('table');
+        $includingAll = $command->get('includingAll') ? ' including all' : '';
+        return "like {$grammar->wrapTable($table)}{$includingAll}";
     }
 
     private static function compileColumns(array $columns): string
     {
-        return '(' . implode(', ', $columns) . ')';
+        return implode(', ', $columns);
     }
 }

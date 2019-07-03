@@ -4,25 +4,20 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres;
 
-use Illuminate\Database\Connection;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\DatabaseServiceProvider;
+use Umbrellio\Postgres\Connectors\ConnectionFactory;
 
-class UmbrellioPostgresProvider extends ServiceProvider
+class UmbrellioPostgresProvider extends DatabaseServiceProvider
 {
-    public function register(): void
+    protected function registerConnectionServices(): void
     {
-        Connection::resolverFor('pgsql', function ($connection, $database, $prefix, $config) {
-            return new PostgresConnection($connection, $database, $prefix, $config);
+        $this->app->singleton('db.factory', function ($app) {
+            return new ConnectionFactory($app);
         });
-    }
 
-    public function boot(): void
-    {
-        $this->loadBlueprint();
-    }
-
-    private function loadBlueprint(): void
-    {
-        require __DIR__ . '/Macros/blueprint.php';
+        $this->app->singleton('db', function ($app) {
+            return new DatabaseManager($app, $app['db.factory']);
+        });
     }
 }

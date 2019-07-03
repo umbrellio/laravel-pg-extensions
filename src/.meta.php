@@ -1,38 +1,18 @@
 <?php
 
-namespace Umbrellio\Postgres\Definitions {
-
-    use Illuminate\Support\Fluent;
-    use Umbrellio\Postgres\Commands\CreateCommand;
-
-
-    /**
-     * @method void range(array $range)
-     */
-    class AttachPartitionDefinition extends Fluent
-    {
-
-    }
-
-    /**
-     * @method CreateCommand includingAll()
-     */
-    class LikeDefinition extends Fluent
-    {
-
-    }
-}
-
 namespace Illuminate\Database\Schema {
 
-    use Umbrellio\Postgres\Definitions\AttachPartitionDefinition;
+    use Illuminate\Support\Fluent;
+    use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
+    use Umbrellio\Postgres\Schema\Definitions\LikeDefinition;
 
     /**
      * @method AttachPartitionDefinition attachPartition(string $partition)
      * @method void detachPartition(string $partition)
+     * @method LikeDefinition like(string $table)
+     * @method Fluent ifNotExists()
      */
     class Blueprint
     {
-
     }
 }

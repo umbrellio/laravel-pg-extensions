@@ -12,11 +12,11 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
 {
     protected function registerConnectionServices(): void
     {
-        $this->app->singleton('db.factory', static function ($app) {
+        $this->app->singleton('db.factory', function ($app) {
             return new ConnectionFactory($app);
         });
 
-        $this->app->singleton('db', static function ($app) {
+        $this->app->singleton('db', function ($app) {
             return new DatabaseManager($app, $app['db.factory']);
         });
     }

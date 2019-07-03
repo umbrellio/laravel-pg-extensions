@@ -12,7 +12,7 @@ class SchemaTest extends FunctionalTestCase
     /** @test */
     public function create(): void
     {
-        Schema::create('test_table', static function (Blueprint $table) {
+        Schema::create('test_table', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
         });
@@ -24,12 +24,12 @@ class SchemaTest extends FunctionalTestCase
     /** @test */
     public function createLikeSimple(): void
     {
-        Schema::create('test_table', static function (Blueprint $table) {
+        Schema::create('test_table', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
         });
 
-        Schema::create('test_table2', static function (Blueprint $table) {
+        Schema::create('test_table2', function (Blueprint $table) {
             $table->like('test_table');
         });
 
@@ -42,12 +42,12 @@ class SchemaTest extends FunctionalTestCase
     /** @test */
     public function createLikeFull(): void
     {
-        Schema::create('test_table', static function (Blueprint $table) {
+        Schema::create('test_table', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
         });
 
-        Schema::create('test_table2', static function (Blueprint $table) {
+        Schema::create('test_table2', function (Blueprint $table) {
             $table->like('test_table')->includingAll();
             $table->ifNotExists();
         });

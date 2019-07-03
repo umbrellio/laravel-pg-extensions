@@ -4,7 +4,7 @@ php:
   - 7.2
 
 services:
-  - postgresql: '9.6'
+  - postgresql
 
 matrix:
   fast_finish: true

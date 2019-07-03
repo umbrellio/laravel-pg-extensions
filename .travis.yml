@@ -5,7 +5,7 @@ php:
   - nightly
 
 services:
-  - postgresql: '10.7'
+  - postgresql
 
 matrix:
   fast_finish: true

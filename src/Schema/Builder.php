@@ -9,16 +9,6 @@ use Illuminate\Database\Schema\PostgresBuilder as BasePostgresBuilder;
 
 class Builder extends BasePostgresBuilder
 {
-    /**
-     * @param string $table
-     * @param Closure|null $callback
-     * @return Blueprint|\Illuminate\Database\Schema\Blueprint
-     */
-    protected function createBlueprint($table, Closure $callback = null)
-    {
-        return new Blueprint($table, $callback);
-    }
-
     public function createView(string $view, string $select, $materialize = false): void
     {
         $blueprint = $this->createBlueprint($view);
@@ -31,5 +21,30 @@ class Builder extends BasePostgresBuilder
         $blueprint = $this->createBlueprint($view);
         $blueprint->dropView($view);
         $this->build($blueprint);
+    }
+
+    public function hasView(string $view): bool
+    {
+        $view = $this->connection->getTablePrefix().$view;
+        return count($this->connection->selectFromWriteConnection(
+            $this->grammar->compileViewExists(), [$view]
+        )) > 0;
+    }
+
+    public function getViewDefinition($view)
+    {
+        return $this->connection->selectFromWriteConnection($this->grammar->compileViewDefinition(
+            $this->connection->getTablePrefix().$view
+        ));
+    }
+
+    /**
+     * @param string $table
+     * @param Closure|null $callback
+     * @return Blueprint|\Illuminate\Database\Schema\Blueprint
+     */
+    protected function createBlueprint($table, Closure $callback = null)
+    {
+        return new Blueprint($table, $callback);
     }
 }

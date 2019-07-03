@@ -15,19 +15,21 @@ class ViewTest extends FunctionalTestCase
         Schema::create('test_table', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->createView(
-                'test_view',
-                'select * from test_table where name is not null'
-            )->materialize();
+            $table->createView('test_view', 'select * from test_table where name is not null')->materialize();
         });
 
-        $this->assertTrue(Schema::hasTable('test_view'));
+        $this->assertTrue(Schema::hasView('test_view'));
+        $this->assertSame(
+            'select * from test_table where name is not null',
+            Schema::getViewDefinition('test_view')
+        );
 
         Schema::table('test_table', function (Blueprint $table) {
             $table->dropView('test_view');
         });
+        Schema::dropIfExists('test_table');
 
-        $this->assertFalse(Schema::hasTable('test_view'));
+        $this->assertFalse(Schema::hasView('test_view'));
     }
 
     /** @test */
@@ -40,10 +42,15 @@ class ViewTest extends FunctionalTestCase
 
         Schema::createView('test_view', 'select * from test_table where name is not null', false);
 
-        $this->assertTrue(Schema::hasTable('test_view'));
+        $this->assertTrue(Schema::hasView('test_view'));
+        $this->assertSame(
+            'select * from test_table where name is not null',
+            Schema::getViewDefinition('test_view')
+        );
 
         Schema::dropView('test_view');
+        Schema::dropIfExists('test_table');
 
-        $this->assertFalse(Schema::hasTable('test_view'));
+        $this->assertFalse(Schema::hasView('test_view'));
     }
 }

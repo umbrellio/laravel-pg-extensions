@@ -59,12 +59,22 @@ class PostgresGrammar extends BasePostgresGrammar
         return implode(' ', array_filter([
             'create', $materialize, 'view',
             $this->wrapTable($command->get('view')),
-            'as', $command->get('select')
+            'as', $command->get('select'),
         ]));
     }
 
     public function compileDropView(Blueprint $blueprint, Fluent $command): string
     {
         return 'drop view ' . $this->wrapTable($command->get('view'));
+    }
+
+    public function compileViewExists(): string
+    {
+        return "select * from information_schema.views where table_schema = ? and table_name = ?";
+    }
+
+    public function compileColumnListing(): string
+    {
+        return 'select view_definition from information_schema.views where table_schema = ? and table_name = ?';
     }
 }

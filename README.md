@@ -19,13 +19,11 @@ php composer.phar require umbrellio/laravel-pg-extensions
 
 ### Extended table creation
 
-Anonymous function in `Schema::create` has second argument with `CreateCommand`, that allows to extend this command. 
-
 Example:
 ```php
-Schema::create('table', function (Blueprint $table, CreateCommand $command) {
-    $command->like('other_table')->includingAll(); 
-    $command->ifNotExists();
+Schema::create('table', function (Blueprint $table) {
+    $table->like('other_table')->includingAll(); 
+    $table->ifNotExists();
 });
 ```
 

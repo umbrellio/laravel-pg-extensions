@@ -6,9 +6,9 @@ namespace Umbrellio\Postgres\Schema\Grammars;
 
 use Illuminate\Database\Schema\Grammars\PostgresGrammar as BasePostgresGrammar;
 use Illuminate\Support\Fluent;
-use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Compilers\AttachPartitionCompiler;
 use Umbrellio\Postgres\Compilers\CreateCompiler;
+use Umbrellio\Postgres\Schema\Blueprint;
 
 class PostgresGrammar extends BasePostgresGrammar
 {
@@ -22,7 +22,12 @@ class PostgresGrammar extends BasePostgresGrammar
         $like = $this->getCommandByName($blueprint, 'like');
         $ifNotExists = $this->getCommandByName($blueprint, 'ifNotExists');
 
-        return CreateCompiler::compile($this, $blueprint, $this->getColumns($blueprint), compact('like', 'ifNotExists'));
+        return CreateCompiler::compile(
+            $this,
+            $blueprint,
+            $this->getColumns($blueprint),
+            compact('like', 'ifNotExists')
+        );
     }
 
     /**

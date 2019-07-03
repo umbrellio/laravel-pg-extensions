@@ -12,7 +12,6 @@ use Umbrellio\Postgres\Schema\Definitions\LikeDefinition;
 class Blueprint extends BaseBlueprint
 {
     /**
-     * @param string $partition
      * @return AttachPartitionDefinition|Fluent
      */
     public function attachPartition(string $partition)
@@ -26,7 +25,6 @@ class Blueprint extends BaseBlueprint
     }
 
     /**
-     * @param string $table
      * @return LikeDefinition|Fluent
      */
     public function like(string $table)

@@ -23,9 +23,7 @@ class BlueprintTest extends TestCase
         $this->blueprint = new Blueprint('test_table');
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function detachPartition(): void
     {
         $this->blueprint->detachPartition('some_partition');
@@ -33,9 +31,7 @@ class BlueprintTest extends TestCase
         $this->assertSameSql('alter table "test_table" detach partition some_partition');
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function attachPartitionRangeInt(): void
     {
         $this->blueprint->attachPartition('some_partition')->range([
@@ -46,9 +42,7 @@ class BlueprintTest extends TestCase
         $this->assertSameSql('alter table "test_table" attach partition some_partition for values from (10) to (100)');
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function attachPartitionFailedWithoutForValuesPart(): void
     {
         $this->blueprint->attachPartition('some_partition');
@@ -57,9 +51,7 @@ class BlueprintTest extends TestCase
         $this->runToSql();
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function attachPartitionRangeDates(): void
     {
         $today = Carbon::today();

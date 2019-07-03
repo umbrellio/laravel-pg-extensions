@@ -23,10 +23,6 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
             return new DatabaseManager($app, $app['db.factory']);
         });
 
-        $this->app->bind('db.connection', static function ($app) {
-            return $app['db']->connection();
-        });
-
         $this->registerEloquentFactory();
 
         $this->registerQueueableEntityResolver();

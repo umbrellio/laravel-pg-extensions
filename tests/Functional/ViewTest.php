@@ -20,8 +20,8 @@ class ViewTest extends FunctionalTestCase
 
         $this->assertTrue(Schema::hasView('test_view'));
         $this->assertSame(
-            'select * from test_table where name is not null',
-            Schema::getViewDefinition('test_view')
+            strtolower('select test_table.id, test_table.name from test_table where (test_table.name is not null)'),
+            strtolower(str_replace("\n", ' ', Schema::getViewDefinition('test_view')))
         );
 
         Schema::table('test_table', function (Blueprint $table) {
@@ -44,8 +44,8 @@ class ViewTest extends FunctionalTestCase
 
         $this->assertTrue(Schema::hasView('test_view'));
         $this->assertSame(
-            'select * from test_table where name is not null',
-            Schema::getViewDefinition('test_view')
+            strtolower('select test_table.id, test_table.name from test_table where (test_table.name is not null)'),
+            strtolower(str_replace("\n", ' ', Schema::getViewDefinition('test_view')))
         );
 
         Schema::dropView('test_view');

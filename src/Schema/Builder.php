@@ -6,7 +6,6 @@ namespace Umbrellio\Postgres\Schema;
 
 use Closure;
 use Illuminate\Database\Schema\PostgresBuilder as BasePostgresBuilder;
-use Umbrellio\Postgres\Schema\Definitions\ViewDefinition;
 
 class Builder extends BasePostgresBuilder
 {

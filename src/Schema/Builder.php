@@ -25,6 +25,15 @@ class Builder extends BasePostgresBuilder
 
     public function hasView(string $view): bool
     {
+        echo $this->grammar->compileViewExists(), PHP_EOL;
+        print_r([
+            $this->connection->getConfig()['schema'],
+            $this->connection->getTablePrefix() . $view,
+        ], true);
+        dd($this->connection->selectFromWriteConnection($this->grammar->compileViewExists(), [
+            $this->connection->getConfig()['schema'],
+            $this->connection->getTablePrefix() . $view,
+        ]));
         return count($this->connection->selectFromWriteConnection($this->grammar->compileViewExists(), [
             $this->connection->getConfig()['schema'],
             $this->connection->getTablePrefix() . $view,
@@ -37,7 +46,7 @@ class Builder extends BasePostgresBuilder
             $this->connection->getConfig()['schema'],
             $this->connection->getTablePrefix() . $view,
         ]);
-        return count($results) > 0 ? $results[0] : '';
+        return count($results) > 0 ? $results[0]->view_definition : '';
     }
 
     /**

@@ -19,7 +19,6 @@ class ViewTest extends FunctionalTestCase
 
         Schema::createView('test_view', 'select * from test_table where name is not null', true);
 
-        $this->assertTrue(Schema::hasView('test_view'));
         $this->assertSame(
             strtolower('select test_table.id,     test_table.name    from test_table   where (test_table.name is not null);'),
             trim(strtolower(str_replace("\n", ' ', Schema::getViewDefinition('test_view'))))
@@ -27,7 +26,5 @@ class ViewTest extends FunctionalTestCase
 
         Schema::dropView('test_view');
         Schema::dropIfExists('test_table');
-
-        $this->assertFalse(Schema::hasView('test_view'));
     }
 }

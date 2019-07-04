@@ -13,8 +13,7 @@ class Builder extends BasePostgresBuilder
     public function createView(string $view, string $select, $materialize = false): void
     {
         $blueprint = $this->createBlueprint($view);
-        $command = $blueprint->createView($view, $select);
-        $command->materialize($materialize);
+        $blueprint->createView($view, $select, $materialize);
         $this->build($blueprint);
     }
 

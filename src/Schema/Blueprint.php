@@ -8,6 +8,7 @@ use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
 use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
 use Umbrellio\Postgres\Schema\Definitions\LikeDefinition;
+use Umbrellio\Postgres\Schema\Definitions\ViewDefinition;
 
 class Blueprint extends BaseBlueprint
 {

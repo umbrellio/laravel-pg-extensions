@@ -6,13 +6,15 @@ namespace Umbrellio\Postgres\Schema;
 
 use Closure;
 use Illuminate\Database\Schema\PostgresBuilder as BasePostgresBuilder;
+use Umbrellio\Postgres\Schema\Definitions\ViewDefinition;
 
 class Builder extends BasePostgresBuilder
 {
     public function createView(string $view, string $select, $materialize = false): void
     {
         $blueprint = $this->createBlueprint($view);
-        $blueprint->createView($view, $select, $materialize);
+        $command = $blueprint->createView($view, $select);
+        $command->materialize($materialize);
         $this->build($blueprint);
     }
 
@@ -25,12 +27,6 @@ class Builder extends BasePostgresBuilder
 
     public function hasView(string $view): bool
     {
-        echo $this->grammar->compileViewExists(), PHP_EOL;
-        print_r([$this->connection->getConfig()['schema'], $this->connection->getTablePrefix() . $view]);
-        print_r($this->connection->selectFromWriteConnection($this->grammar->compileViewExists(), [
-            $this->connection->getConfig()['schema'],
-            $this->connection->getTablePrefix() . $view,
-        ]));
         return count($this->connection->selectFromWriteConnection($this->grammar->compileViewExists(), [
             $this->connection->getConfig()['schema'],
             $this->connection->getTablePrefix() . $view,

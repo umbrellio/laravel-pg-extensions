@@ -27,13 +27,13 @@ class ViewTest extends FunctionalTestCase
     /** @test */
     public function createFacadeView(): void
     {
-        Schema::createView('test_view', 'select * from test_table where name is not null', true);
+        Schema::createView('test_view', 'select * from test_table where name is not null');
 
         print_r(Schema::hasTable('test_table'));
         print_r(Schema::getColumnListing('test_table'));
         print_r(Schema::hasView('test_view'));
         print_r(Schema::getViewDefinition('test_view'));
-        
+
         $this->assertSame(
             strtolower(
                 'select test_table.id,     test_table.name    from test_table   where (test_table.name is not null);'

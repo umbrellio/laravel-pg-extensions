@@ -73,7 +73,7 @@ class PostgresGrammar extends BasePostgresGrammar
         return 'select * from information_schema.views where table_schema = ? and table_name = ?';
     }
 
-    public function compileColumnListing(): string
+    public function compileViewDefinition(): string
     {
         return 'select view_definition from information_schema.views where table_schema = ? and table_name = ?';
     }

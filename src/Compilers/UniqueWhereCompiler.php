@@ -14,6 +14,6 @@ class UniqueWhereCompiler
 {
     public static function compile(Grammar $grammar, Blueprint $blueprint, Fluent $command): string
     {
-        dd($blueprint, $command);
+        dd($command);
     }
 }

@@ -62,9 +62,10 @@ class PostgresGrammar extends BasePostgresGrammar
      */
     public function compileUniquePartial($blueprint, Fluent $command): string
     {
-        if ($command->get('wheres') instanceof UniqueWhereDefinition) {
-            return UniqueWhereCompiler::compile($this, $blueprint, $command);
+        $sql = $this->compileUnique($blueprint, $command);
+        if ($command->get('constraints') instanceof UniqueWhereDefinition) {
+            $sql .= ' WHERE ' . UniqueWhereCompiler::compile($this, $blueprint, $command);
         }
-        return $this->compileUnique($blueprint, $command);
+        return $sql;
     }
 }

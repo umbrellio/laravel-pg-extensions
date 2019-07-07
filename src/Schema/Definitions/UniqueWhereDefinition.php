@@ -17,7 +17,10 @@ class UniqueWhereDefinition extends Fluent
      */
     public function andWhereRaw($sql, $bindings = [])
     {
-        $this->attributes['andWhereRaw'][] = compact('sql', 'bindings');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'Raw', 'boolean' => 'and'],
+            compact('sql', 'bindings')
+        );
         return $this;
     }
 
@@ -28,7 +31,10 @@ class UniqueWhereDefinition extends Fluent
      */
     public function orWhereRaw($sql, $bindings = [])
     {
-        $this->attributes['orWhereRaw'][] = compact('sql', 'bindings');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'Raw', 'boolean' => 'or'],
+            compact('sql', 'bindings')
+        );
         return $this;
     }
 
@@ -40,7 +46,10 @@ class UniqueWhereDefinition extends Fluent
      */
     public function andWhere($column, $operator = null, $value = null)
     {
-        $this->attributes['andWhere'][] = compact('column', 'operator', 'value');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'Basic', 'boolean' => 'and'],
+            compact('column', 'operator', 'value')
+        );
         return $this;
     }
 
@@ -52,7 +61,10 @@ class UniqueWhereDefinition extends Fluent
      */
     public function orWhere($column, $operator = null, $value = null)
     {
-        $this->attributes['orWhere'][] = compact('column', 'operator', 'value');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'Basic', 'boolean' => 'or'],
+            compact('column', 'operator', 'value')
+        );
         return $this;
     }
 
@@ -64,7 +76,10 @@ class UniqueWhereDefinition extends Fluent
      */
     public function andWhereColumn($first, $operator = null, $second = null)
     {
-        $this->attributes['andWhereColumn'][] = compact('first', 'operator', 'second');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'Column', 'boolean' => 'and'],
+            compact('column', 'operator', 'second')
+        );
         return $this;
     }
 
@@ -76,7 +91,10 @@ class UniqueWhereDefinition extends Fluent
      */
     public function orWhereColumn($first, $operator = null, $second = null)
     {
-        $this->attributes['orWhereColumn'][] = compact('first', 'operator', 'second');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'Column', 'boolean' => 'or'],
+            compact('column', 'operator', 'second')
+        );
         return $this;
     }
 
@@ -87,7 +105,10 @@ class UniqueWhereDefinition extends Fluent
      */
     public function andWhereIn($column, $values)
     {
-        $this->attributes['andWhereIn'][] = compact('column', 'values');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'In', 'boolean' => 'and'],
+            compact('column', 'values')
+        );
         return $this;
     }
 
@@ -98,7 +119,10 @@ class UniqueWhereDefinition extends Fluent
      */
     public function orWhereIn($column, $values)
     {
-        $this->attributes['orWhereIn'][] = compact('column', 'values');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'In', 'boolean' => 'or'],
+            compact('column','values')
+        );
         return $this;
     }
 
@@ -109,7 +133,10 @@ class UniqueWhereDefinition extends Fluent
      */
     public function andWhereNotIn($column, $values)
     {
-        $this->attributes['andWhereNotIn'][] = compact('column', 'values');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'NotIn', 'boolean' => 'and'],
+            compact('column', 'values')
+        );
         return $this;
     }
 
@@ -120,7 +147,10 @@ class UniqueWhereDefinition extends Fluent
      */
     public function orWhereNotIn($column, $values)
     {
-        $this->attributes['orWhereNotIn'][] = compact('column', 'values');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'NotIn', 'boolean' => 'or'],
+            compact('column', 'values')
+        );
         return $this;
     }
 
@@ -130,7 +160,10 @@ class UniqueWhereDefinition extends Fluent
      */
     public function andWhereNull($column)
     {
-        $this->attributes['andWhereNull'][] = compact('column');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'Null', 'boolean' => 'and'],
+            compact('column')
+        );
         return $this;
     }
 
@@ -140,51 +173,70 @@ class UniqueWhereDefinition extends Fluent
      */
     public function orWhereNull($column)
     {
-        $this->attributes['orWhereNull'][] = compact('column');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'Null', 'boolean' => 'or'],
+            compact('column')
+        );
         return $this;
     }
 
     /**
      * @param string $column
      * @param array $values
+     * @param bool $not
      * @return $this
      */
-    public function andWhereBetween($column, $values)
+    public function andWhereBetween($column, $values, $not = false)
     {
-        $this->attributes['andWhereBetween'][] = compact('column', 'values');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'between', 'boolean' => 'and'],
+            compact('column', 'values', 'not')
+        );
         return $this;
     }
 
     /**
      * @param string $column
      * @param array $values
+     * @param bool $not
      * @return $this
      */
-    public function orWhereBetween($column, $values)
+    public function orWhereBetween($column, $values, $not = false)
     {
-        $this->attributes['orWhereBetween'][] = compact('column', 'values');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'between', 'boolean' => 'or'],
+            compact('column', 'values', 'not')
+        );
         return $this;
     }
 
     /**
      * @param string $column
      * @param array $values
+     * @param bool $not
      * @return $this
      */
-    public function andWhereNotBetween($column, $values)
+    public function andWhereNotBetween($column, $values, $not = true)
     {
-        $this->attributes['andWhereNotBetween'][] = compact('column', 'values');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'between', 'boolean' => 'and'],
+            compact('column', 'values', 'not')
+        );
         return $this;
     }
 
     /**
      * @param string $column
      * @param array $values
+     * @param bool $not
      * @return $this
      */
-    public function orWhereNotBetween($column, $values)
+    public function orWhereNotBetween($column, $values, $not = true)
     {
-        $this->attributes['orWhereNotBetween'][] = compact('column', 'values');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'between', 'boolean' => 'or'],
+            compact('column', 'values', 'not')
+        );
         return $this;
     }
 
@@ -194,7 +246,10 @@ class UniqueWhereDefinition extends Fluent
      */
     public function andWhereNotNull($column)
     {
-        $this->attributes['andWhereNotNull'][] = compact('column');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'NotNull', 'boolean' => 'and'],
+            compact('column')
+        );
         return $this;
     }
 
@@ -204,7 +259,10 @@ class UniqueWhereDefinition extends Fluent
      */
     public function orWhereNotNull($column)
     {
-        $this->attributes['orWhereNotNull'][] = compact('column');
+        $this->attributes['wheres'][] = array_merge(
+            ['type' => 'NotNull', 'boolean' => 'or'],
+            compact('column')
+        );
         return $this;
     }
 }

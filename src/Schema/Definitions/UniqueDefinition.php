@@ -17,7 +17,7 @@ class UniqueDefinition extends Fluent
      */
     public function whereRaw($sql, $bindings = [], $boolean = 'and')
     {
-        return $this->createCommand($boolean . 'WhereRaw', compact('sql', 'bindings'));
+        return $this->createCommand( "{$boolean}WhereRaw", compact('sql', 'bindings'));
     }
 
     /**
@@ -29,7 +29,7 @@ class UniqueDefinition extends Fluent
      */
     public function where($column, $operator = null, $value = null, $boolean = 'and')
     {
-        return $this->createCommand($boolean . 'Where', compact('column', 'operator', 'value'));
+        return $this->createCommand("{$boolean}Where", compact('column', 'operator', 'value'));
     }
 
     /**
@@ -41,7 +41,7 @@ class UniqueDefinition extends Fluent
      */
     public function whereColumn($first, $operator = null, $second = null, $boolean = 'and')
     {
-        return $this->createCommand($boolean . 'WhereColumn', compact('first', 'operator', 'second'));
+        return $this->createCommand("{$boolean}WhereColumn", compact('first', 'operator', 'second'));
     }
 
     /**
@@ -53,8 +53,8 @@ class UniqueDefinition extends Fluent
      */
     public function whereIn($column, $values, $boolean = 'and', $not = false)
     {
-        $command = $boolean . 'Where' . ($not ? 'Not' : '') . 'In';
-        return $this->createCommand($command, compact('column', 'values'));
+        $type = $not ? 'NotIn' : 'In';
+        return $this->createCommand("{$boolean}Where{$type}", compact('column', 'values', 'not'));
     }
 
     /**
@@ -65,7 +65,8 @@ class UniqueDefinition extends Fluent
      */
     public function whereNotIn($column, $values, $boolean = 'and')
     {
-        return $this->createCommand($boolean . 'WhereNotIn', compact('column', 'values'));
+        return $this->whereIn($column, $values, $boolean, true);
+//        return $this->createCommand("{$boolean}WhereNotIn", compact('column', 'values'));
     }
 
     /**
@@ -76,8 +77,8 @@ class UniqueDefinition extends Fluent
      */
     public function whereNull($column, $boolean = 'and', $not = false)
     {
-        $command = $boolean . 'Where' . ($not ? 'Not' : '') . 'Null';
-        return $this->createCommand($command, compact('column'));
+        $type = $not ? 'NotNull' : 'Null';
+        return $this->createCommand("{$boolean}Where{$type}", compact('column', 'boolean'));
     }
 
     /**
@@ -89,8 +90,7 @@ class UniqueDefinition extends Fluent
      */
     public function whereBetween($column, $values, $boolean = 'and', $not = false)
     {
-        $command = $boolean . 'Where' . ($not ? 'Not' : '') . 'Between';
-        return $this->createCommand($command, compact('column', 'values'));
+        return $this->createCommand("{$boolean}WhereBetween", compact('column', 'values', 'not'));
     }
 
     /**
@@ -101,7 +101,7 @@ class UniqueDefinition extends Fluent
      */
     public function whereNotBetween($column, $values, $boolean = 'and')
     {
-        return $this->createCommand($boolean . 'WhereNotBetween', compact('column', 'values'));
+        return $this->whereBetween($column, $values, $boolean, true);
     }
 
     /**
@@ -111,13 +111,13 @@ class UniqueDefinition extends Fluent
      */
     public function whereNotNull($column, $boolean = 'and')
     {
-        return $this->createCommand($boolean . 'WhereNotNull', compact('column'));
+        return $this->whereNull($column, $boolean, true);
     }
 
     protected function createCommand(string $name, array $parameters = []): UniqueWhereDefinition
     {
         $command = new UniqueWhereDefinition();
-        $this->attributes['wheres'] = call_user_func_array([$command, $name], $parameters);
+        $this->attributes['constraints'] = call_user_func_array([$command, $name], $parameters);
         return $command;
     }
 }

@@ -13,256 +13,114 @@ class UniqueWhereDefinition extends Fluent
     /**
      * @param string $sql
      * @param array $bindings
-     * @return $this
+     * @param string $boolean
+     * @return UniqueWhereDefinition
      */
-    public function andWhereRaw($sql, $bindings = [])
+    public function whereRaw($sql, $bindings = [], $boolean = 'and')
     {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'Raw', 'boolean' => 'and'],
-            compact('sql', 'bindings')
-        );
-        return $this;
-    }
-
-    /**
-     * @param string $sql
-     * @param array $bindings
-     * @return $this
-     */
-    public function orWhereRaw($sql, $bindings = [])
-    {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'Raw', 'boolean' => 'or'],
-            compact('sql', 'bindings')
-        );
-        return $this;
+        return $this->compileWhere( "raw", $boolean, compact('sql', 'bindings'));
     }
 
     /**
      * @param string $column
-     * @param mixed|string|null $operator
-     * @param mixed|string|null $value
-     * @return $this
+     * @param null $operator
+     * @param null $value
+     * @param string $boolean
+     * @return UniqueWhereDefinition
      */
-    public function andWhere($column, $operator = null, $value = null)
+    public function where($column, $operator = null, $value = null, $boolean = 'and')
     {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'Basic', 'boolean' => 'and'],
-            compact('column', 'operator', 'value')
-        );
-        return $this;
+        return $this->compileWhere( "Basic", $boolean, compact('column', 'operator', 'value'));
     }
 
     /**
-     * @param string $column
-     * @param mixed|string|null $operator
-     * @param mixed|string|null $value
-     * @return $this
-     */
-    public function orWhere($column, $operator = null, $value = null)
-    {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'Basic', 'boolean' => 'or'],
-            compact('column', 'operator', 'value')
-        );
-        return $this;
-    }
-
-    /**
-     * @param string $first
+     * @param $first
      * @param mixed|string|null $operator
      * @param mixed|string|null $second
-     * @return $this
+     * @param string $boolean
+     * @return UniqueWhereDefinition
      */
-    public function andWhereColumn($first, $operator = null, $second = null)
+    public function whereColumn($first, $operator = null, $second = null, $boolean = 'and')
     {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'Column', 'boolean' => 'and'],
-            compact('column', 'operator', 'second')
-        );
-        return $this;
-    }
-
-    /**
-     * @param string $first
-     * @param mixed|string|null $operator
-     * @param mixed|string|null $second
-     * @return $this
-     */
-    public function orWhereColumn($first, $operator = null, $second = null)
-    {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'Column', 'boolean' => 'or'],
-            compact('column', 'operator', 'second')
-        );
-        return $this;
+        return $this->compileWhere( "Column", $boolean, compact('column', 'operator', 'second'));
     }
 
     /**
      * @param string $column
      * @param array $values
-     * @return $this
-     */
-    public function andWhereIn($column, $values)
-    {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'In', 'boolean' => 'and'],
-            compact('column', 'values')
-        );
-        return $this;
-    }
-
-    /**
-     * @param string $column
-     * @param array $values
-     * @return $this
-     */
-    public function orWhereIn($column, $values)
-    {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'In', 'boolean' => 'or'],
-            compact('column','values')
-        );
-        return $this;
-    }
-
-    /**
-     * @param string $column
-     * @param array $values
-     * @return $this
-     */
-    public function andWhereNotIn($column, $values)
-    {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'NotIn', 'boolean' => 'and'],
-            compact('column', 'values')
-        );
-        return $this;
-    }
-
-    /**
-     * @param string $column
-     * @param array $values
-     * @return $this
-     */
-    public function orWhereNotIn($column, $values)
-    {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'NotIn', 'boolean' => 'or'],
-            compact('column', 'values')
-        );
-        return $this;
-    }
-
-    /**
-     * @param string $column
-     * @return $this
-     */
-    public function andWhereNull($column)
-    {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'Null', 'boolean' => 'and'],
-            compact('column')
-        );
-        return $this;
-    }
-
-    /**
-     * @param string $column
-     * @return $this
-     */
-    public function orWhereNull($column)
-    {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'Null', 'boolean' => 'or'],
-            compact('column')
-        );
-        return $this;
-    }
-
-    /**
-     * @param string $column
-     * @param array $values
+     * @param string $boolean
      * @param bool $not
-     * @return $this
+     * @return UniqueWhereDefinition
      */
-    public function andWhereBetween($column, $values, $not = false)
+    public function whereIn($column, $values, $boolean = 'and', $not = false)
     {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'between', 'boolean' => 'and'],
-            compact('column', 'values', 'not')
-        );
-        return $this;
+        return $this->compileWhere( $not ? 'NotIn' : 'In', $boolean, compact('column', 'values'));
     }
 
     /**
      * @param string $column
      * @param array $values
-     * @param bool $not
-     * @return $this
+     * @param string $boolean
+     * @return UniqueWhereDefinition
      */
-    public function orWhereBetween($column, $values, $not = false)
+    public function whereNotIn($column, $values, $boolean = 'and')
     {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'between', 'boolean' => 'or'],
-            compact('column', 'values', 'not')
-        );
-        return $this;
+        return $this->whereIn($column, $values, $boolean, true);
+    }
+
+    /**
+     * @param string $column
+     * @param string $boolean
+     * @param bool $not
+     * @return UniqueWhereDefinition
+     */
+    public function whereNull($column, $boolean = 'and', $not = false)
+    {
+        return $this->compileWhere($not ? 'NotNull' : 'Null', $boolean, compact('column'));
     }
 
     /**
      * @param string $column
      * @param array $values
+     * @param string $boolean
      * @param bool $not
-     * @return $this
+     * @return UniqueWhereDefinition
      */
-    public function andWhereNotBetween($column, $values, $not = true)
+    public function whereBetween($column, $values, $boolean = 'and', $not = false)
     {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'between', 'boolean' => 'and'],
-            compact('column', 'values', 'not')
-        );
-        return $this;
+        return $this->compileWhere('between', $boolean, compact('column', 'values', 'not'));
     }
 
     /**
      * @param string $column
      * @param array $values
-     * @param bool $not
-     * @return $this
+     * @param string $boolean
+     * @return UniqueWhereDefinition
      */
-    public function orWhereNotBetween($column, $values, $not = true)
+    public function whereNotBetween($column, $values, $boolean = 'and')
     {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'between', 'boolean' => 'or'],
-            compact('column', 'values', 'not')
-        );
-        return $this;
+        return $this->whereBetween($column, $values, $boolean, true);
     }
 
     /**
      * @param string $column
-     * @return $this
+     * @param string $boolean
+     * @return UniqueWhereDefinition
      */
-    public function andWhereNotNull($column)
+    public function whereNotNull($column, $boolean = 'and')
     {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'NotNull', 'boolean' => 'and'],
-            compact('column')
-        );
-        return $this;
+        return $this->whereNull($column, $boolean, true);
     }
 
     /**
-     * @param string $column
+     * @param string $type
+     * @param string $boolean
+     * @param array $parameters
      * @return $this
      */
-    public function orWhereNotNull($column)
+    protected function compileWhere($type, $boolean, $parameters)
     {
-        $this->attributes['wheres'][] = array_merge(
-            ['type' => 'NotNull', 'boolean' => 'or'],
-            compact('column')
-        );
+        $this->attributes['wheres'][] = array_merge(compact('type', 'boolean'), $parameters);
         return $this;
     }
 }

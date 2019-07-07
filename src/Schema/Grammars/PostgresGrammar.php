@@ -7,6 +7,7 @@ namespace Umbrellio\Postgres\Schema\Grammars;
 use Illuminate\Database\Schema\Grammars\PostgresGrammar as BasePostgresGrammar;
 use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Compilers\UniqueWhereCompiler;
+use Umbrellio\Postgres\Compilers\AttachPartitionCompiler;
 use Umbrellio\Postgres\Compilers\CreateCompiler;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Schema\Definitions\UniqueDefinition;
@@ -60,7 +61,7 @@ class PostgresGrammar extends BasePostgresGrammar
      * @param UniqueDefinition $command
      * @return string
      */
-    public function compileUniquePartial($blueprint, Fluent $command): string
+    public function compileUniquePartial($blueprint, UniqueDefinition $command): string
     {
         $sql = $this->compileUnique($blueprint, $command);
         if ($command->get('constraints') instanceof UniqueWhereDefinition) {

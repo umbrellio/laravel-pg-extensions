@@ -4,8 +4,6 @@ namespace Umbrellio\Postgres\Schema\Definitions;
 
 use Codeception\Util\Annotation;
 use Illuminate\Support\Fluent;
-use phpDocumentor\Reflection\DocBlock;
-use ReflectionClass;
 
 /**
  * @method UniqueWhereDefinition where($column, $operator = null, $value = null, $boolean = 'and')

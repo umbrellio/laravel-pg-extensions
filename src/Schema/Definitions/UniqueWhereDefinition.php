@@ -2,11 +2,7 @@
 
 namespace Umbrellio\Postgres\Schema\Definitions;
 
-use DeepCopy\Reflection\ReflectionHelper;
 use Illuminate\Support\Fluent;
-use InvalidArgumentException;
-use ReflectionClass;
-use Reflection;
 
 class UniqueWhereDefinition extends Fluent
 {
@@ -18,7 +14,7 @@ class UniqueWhereDefinition extends Fluent
      */
     public function whereRaw($sql, $bindings = [], $boolean = 'and')
     {
-        return $this->compileWhere( "raw", $boolean, compact('sql', 'bindings'));
+        return $this->compileWhere('raw', $boolean, compact('sql', 'bindings'));
     }
 
     /**
@@ -30,7 +26,7 @@ class UniqueWhereDefinition extends Fluent
      */
     public function where($column, $operator = null, $value = null, $boolean = 'and')
     {
-        return $this->compileWhere( "Basic", $boolean, compact('column', 'operator', 'value'));
+        return $this->compileWhere('Basic', $boolean, compact('column', 'operator', 'value'));
     }
 
     /**
@@ -42,7 +38,7 @@ class UniqueWhereDefinition extends Fluent
      */
     public function whereColumn($first, $operator = null, $second = null, $boolean = 'and')
     {
-        return $this->compileWhere( "Column", $boolean, compact('column', 'operator', 'second'));
+        return $this->compileWhere('Column', $boolean, compact('first', 'operator', 'second'));
     }
 
     /**

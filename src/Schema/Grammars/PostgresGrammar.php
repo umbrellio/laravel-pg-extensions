@@ -10,6 +10,7 @@ use Umbrellio\Postgres\Compilers\UniqueWhereCompiler;
 use Umbrellio\Postgres\Compilers\CreateCompiler;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Schema\Definitions\UniqueDefinition;
+use Umbrellio\Postgres\Schema\Definitions\UniqueWhereDefinition;
 
 class PostgresGrammar extends BasePostgresGrammar
 {
@@ -61,7 +62,7 @@ class PostgresGrammar extends BasePostgresGrammar
      */
     public function compileUniquePartial($blueprint, Fluent $command): string
     {
-        if ($wheres = $command->get('wheres')) {
+        if ($command->get('wheres') instanceof UniqueWhereDefinition) {
             return UniqueWhereCompiler::compile($this, $blueprint, $command);
         }
         return $this->compileUnique($blueprint, $command);

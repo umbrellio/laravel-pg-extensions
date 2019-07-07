@@ -9,57 +9,114 @@ use ReflectionClass;
 
 class UniqueDefinition extends Fluent
 {
-    public function whereRaw(string $sql, array $bindings = [], string $boolean = 'and'): WhereDefinition
+    /**
+     * @param string $sql
+     * @param array $bindings
+     * @param string $boolean
+     * @return UniqueWhereDefinition
+     */
+    public function whereRaw($sql, $bindings = [], $boolean = 'and')
     {
         return $this->createCommand($boolean . 'WhereRaw', compact('sql', 'bindings'));
     }
 
-    public function where(string $column, $operator = null, $value = null, string $boolean = 'and'): WhereDefinition
+    /**
+     * @param string $column
+     * @param null $operator
+     * @param null $value
+     * @param string $boolean
+     * @return UniqueWhereDefinition
+     */
+    public function where($column, $operator = null, $value = null, $boolean = 'and')
     {
         return $this->createCommand($boolean . 'Where', compact('column', 'operator', 'value'));
     }
 
-    public function whereColumn(string $first, $operator = null, $second = null, string $boolean = 'and'): WhereDefinition
+    /**
+     * @param $first
+     * @param mixed|string|null $operator
+     * @param mixed|string|null $second
+     * @param string $boolean
+     * @return UniqueWhereDefinition
+     */
+    public function whereColumn($first, $operator = null, $second = null, $boolean = 'and')
     {
         return $this->createCommand($boolean . 'WhereColumn', compact('first', 'operator', 'second'));
     }
 
-    public function whereIn(string $column, array $values, string $boolean = 'and', bool $not = false): WhereDefinition
+    /**
+     * @param string $column
+     * @param array $values
+     * @param string $boolean
+     * @param bool $not
+     * @return UniqueWhereDefinition
+     */
+    public function whereIn($column, $values, $boolean = 'and', $not = false)
     {
         $command = $boolean . 'Where' . ($not ? 'Not' : '') . 'In';
         return $this->createCommand($command, compact('column', 'values'));
     }
 
-    public function whereNotIn(string $column, array $values, string $boolean = 'and'): WhereDefinition
+    /**
+     * @param string $column
+     * @param array $values
+     * @param string $boolean
+     * @return UniqueWhereDefinition
+     */
+    public function whereNotIn($column, $values, $boolean = 'and')
     {
         return $this->createCommand($boolean . 'WhereNotIn', compact('column', 'values'));
     }
 
-    public function whereNull(string $column, string $boolean = 'and', bool $not = false): WhereDefinition
+    /**
+     * @param string $column
+     * @param string $boolean
+     * @param bool $not
+     * @return UniqueWhereDefinition
+     */
+    public function whereNull($column, $boolean = 'and', $not = false)
     {
         $command = $boolean . 'Where' . ($not ? 'Not' : '') . 'Null';
         return $this->createCommand($command, compact('column'));
     }
 
-    public function whereBetween(string $column, array $values, string $boolean = 'and', bool $not = false): WhereDefinition
+    /**
+     * @param string $column
+     * @param array $values
+     * @param string $boolean
+     * @param bool $not
+     * @return UniqueWhereDefinition
+     */
+    public function whereBetween($column, $values, $boolean = 'and', $not = false)
     {
         $command = $boolean . 'Where' . ($not ? 'Not' : '') . 'Between';
         return $this->createCommand($command, compact('column', 'values'));
     }
 
-    public function whereNotBetween(string $column, array $values, string $boolean = 'and'): WhereDefinition
+    /**
+     * @param string $column
+     * @param array $values
+     * @param string $boolean
+     * @return UniqueWhereDefinition
+     */
+    public function whereNotBetween($column, $values, $boolean = 'and')
     {
         return $this->createCommand($boolean . 'WhereNotBetween', compact('column', 'values'));
     }
 
-    public function whereNotNull(string $column, string $boolean = 'and'): WhereDefinition
+    /**
+     * @param string $column
+     * @param string $boolean
+     * @return UniqueWhereDefinition
+     */
+    public function whereNotNull($column, $boolean = 'and')
     {
         return $this->createCommand($boolean . 'WhereNotNull', compact('column'));
     }
 
-    protected function createCommand($name, $parameters): WhereDefinition
+    protected function createCommand(string $name, array $parameters = []): UniqueWhereDefinition
     {
-        $command = new WhereDefinition();
+        $command = new UniqueWhereDefinition();
         $this->attributes['wheres'] = call_user_func_array([$command, $name], $parameters);
         return $command;
     }

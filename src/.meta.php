@@ -5,7 +5,6 @@ namespace Illuminate\Database\Schema {
     use Illuminate\Support\Fluent;
     use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
     use Umbrellio\Postgres\Schema\Definitions\LikeDefinition;
-    use Umbrellio\Postgres\Schema\Definitions\ColumnDefinition;
 
     /**
      * @method AttachPartitionDefinition attachPartition(string $partition)

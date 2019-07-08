@@ -22,6 +22,8 @@ class UniqueIndexTest extends FunctionalTestCase
             $table->string('name');
             $table->string('code');
             $table->integer('phone');
+            $table->boolean('enabled');
+            $table->integer('icq');
             $table->softDeletes();
             $callback($table);
         });
@@ -58,9 +60,9 @@ class UniqueIndexTest extends FunctionalTestCase
             },
         ];
         yield [
-            ' WHERE (phone = 1234)',
+            " WHERE ((code)::text = 'test'::text)",
             function (Blueprint $table) {
-                $table->uniquePartial('name')->where('phone', '=', 1234);
+                $table->uniquePartial('name')->where('code', '=', 'test');
             },
         ];
         yield [
@@ -73,6 +75,30 @@ class UniqueIndexTest extends FunctionalTestCase
             ' WHERE ((phone < 1) OR (phone > 2))',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereNotBetween('phone', [1, 2]);
+            },
+        ];
+        yield [
+            ' WHERE (phone <> icq)',
+            function (Blueprint $table) {
+                $table->uniquePartial('name')->whereColumn('phone', '<>', 'icq');
+            },
+        ];
+        yield [
+            ' WHERE ((phone = 1) AND (icq < 2))',
+            function (Blueprint $table) {
+                $table->uniquePartial('name')->whereRaw('phone = ? and icq < ?', [1, 2]);
+            },
+        ];
+        yield [
+            ' WHERE (phone = ANY (ARRAY[1, 2, 4]))',
+            function (Blueprint $table) {
+                $table->uniquePartial('name')->whereIn('phone', [1, 2, 4]);
+            },
+        ];
+        yield [
+            ' WHERE (phone <> ALL (ARRAY[1, 2, 4]))',
+            function (Blueprint $table) {
+                $table->uniquePartial('name')->whereNotIn('phone', [1, 2, 4]);
             },
         ];
     }

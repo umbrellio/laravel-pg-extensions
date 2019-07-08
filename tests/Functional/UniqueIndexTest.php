@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Tests\Functional;
 
+use Generator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Umbrellio\Postgres\Schema\Blueprint;
-use Generator;
 
 class UniqueIndexTest extends FunctionalTestCase
 {
@@ -36,47 +36,44 @@ class UniqueIndexTest extends FunctionalTestCase
 
     public function provideIndexes(): Generator
     {
-        yield [
-            '',
-            function (Blueprint $table) {
-                $table->unique('name');
-            }
-        ];
+        yield ['', function (Blueprint $table) {
+            $table->unique('name');
+        }];
         yield [
             ' WHERE (deleted_at IS NULL)',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereNull('deleted_at');
-            }
+            },
         ];
         yield [
             ' WHERE (deleted_at IS NOT NULL)',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereNotNull('deleted_at');
-            }
+            },
         ];
         yield [
-            " WHERE (phone = 1234)",
+            ' WHERE (phone = 1234)',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->where('phone', '=', 1234);
-            }
+            },
         ];
         yield [
-            " WHERE (phone = 1234)",
+            ' WHERE (phone = 1234)',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->where('phone', '=', 1234);
-            }
+            },
         ];
         yield [
-            " WHERE ((phone >= 1) AND (phone <= 2))",
+            ' WHERE ((phone >= 1) AND (phone <= 2))',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereBetween('phone', [1, 2]);
-            }
+            },
         ];
         yield [
-            " WHERE ((phone < 1) OR (phone > 2))",
+            ' WHERE ((phone < 1) OR (phone > 2))',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereNotBetween('phone', [1, 2]);
-            }
+            },
         ];
     }
 

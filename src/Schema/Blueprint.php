@@ -14,9 +14,7 @@ class Blueprint extends BaseBlueprint
 {
     public function attachPartition(string $partition): AttachPartitionDefinition
     {
-        return $this->addExtendedCommand(AttachPartitionDefinition::class, 'attachPartition', compact(
-            'partition'
-        ));
+        return $this->addExtendedCommand(AttachPartitionDefinition::class, 'attachPartition', compact('partition'));
     }
 
     public function detachPartition(string $partition): void
@@ -42,7 +40,7 @@ class Blueprint extends BaseBlueprint
         // convention of the table name, followed by the columns, followed by an
         // index type, such as primary or index, which makes the index unique.
         $index = $index ?: $this->createIndexName('unique', $columns);
-        
+
         return $this->addExtendedCommand(UniqueDefinition::class, 'uniquePartial', compact(
             'columns',
             'index',
@@ -55,7 +53,8 @@ class Blueprint extends BaseBlueprint
      */
     protected function addExtendedCommand(string $fluent, string $name, array $parameters = [])
     {
-        $this->commands[] = $command = $this->createExtendedCommand($fluent, $name, $parameters);
+        $command = $this->createExtendedCommand($fluent, $name, $parameters);
+        $this->commands[] = $command;
         return $command;
     }
 

@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Umbrellio\Postgres\Schema\Definitions;
 
-use Codeception\Util\Annotation;
 use Illuminate\Support\Fluent;
 
 /**

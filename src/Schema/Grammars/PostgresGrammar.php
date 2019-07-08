@@ -6,9 +6,9 @@ namespace Umbrellio\Postgres\Schema\Grammars;
 
 use Illuminate\Database\Schema\Grammars\PostgresGrammar as BasePostgresGrammar;
 use Illuminate\Support\Fluent;
-use Umbrellio\Postgres\Compilers\UniqueWhereCompiler;
 use Umbrellio\Postgres\Compilers\AttachPartitionCompiler;
 use Umbrellio\Postgres\Compilers\CreateCompiler;
+use Umbrellio\Postgres\Compilers\UniqueWhereCompiler;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Schema\Definitions\UniqueDefinition;
 use Umbrellio\Postgres\Schema\Definitions\UniqueWhereDefinition;

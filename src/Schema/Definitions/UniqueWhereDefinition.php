@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Umbrellio\Postgres\Schema\Definitions;
 
 use Illuminate\Support\Fluent;
@@ -50,7 +52,7 @@ class UniqueWhereDefinition extends Fluent
      */
     public function whereIn($column, $values, $boolean = 'and', $not = false)
     {
-        return $this->compileWhere( $not ? 'NotIn' : 'In', $boolean, compact('column', 'values'));
+        return $this->compileWhere($not ? 'NotIn' : 'In', $boolean, compact('column', 'values'));
     }
 
     /**

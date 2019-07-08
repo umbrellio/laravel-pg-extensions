@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Compilers;
 
-use Carbon\Carbon;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\JoinClause;
-use Illuminate\Database\Schema\Blueprint;
+use Umbrellio\Postgres\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\Grammar;
 use Illuminate\Support\Fluent;
-use InvalidArgumentException;
 use Umbrellio\Postgres\Schema\Definitions\UniqueWhereDefinition;
+use DateTimeInterface;
 
 class UniqueWhereCompiler
 {
@@ -25,7 +22,7 @@ class UniqueWhereCompiler
             ->map(function ($where) use ($grammar, $blueprint) {
                 return implode(' ', [
                     $where['boolean'],
-                    '(' . static::{"where{$where['type']}"}($grammar, $blueprint, $where) . ')'
+                    '(' . static::{"where{$where['type']}"}($grammar, $blueprint, $where) . ')',
                 ]);
             })
             ->all();
@@ -38,21 +35,21 @@ class UniqueWhereCompiler
             static::removeLeadingBoolean(implode(' ', $wheres))
         );
     }
-    
+
     protected static function whereRaw(Grammar $grammar, Blueprint $blueprint, $where = [])
     {
         return call_user_func_array('sprintf', array_merge(
             [str_replace('?', '%s', $where['sql'])],
-            static::wrapValues($where['bindings'])
+            static::wrapValues($grammar, $where['bindings'])
         ));
     }
-    
+
     protected static function whereBasic(Grammar $grammar, Blueprint $blueprint, $where)
     {
         return implode(' ', [
             $grammar->wrap($where['column']),
             $where['operator'],
-            $grammar->parameter($where['value'])
+            static::wrapValue($grammar, $where['value']),
         ]);
     }
 
@@ -71,24 +68,24 @@ class UniqueWhereCompiler
             return implode(' ', [
                 $grammar->wrap($where['column']),
                 'in',
-                '(' . implode(',', static::wrapValues($where['values'])) . ')'
+                '(' . implode(',', static::wrapValues($grammar, $where['values'])) . ')',
             ]);
         }
         return '0 = 1';
     }
-    
+
     protected static function whereNotIn(Grammar $grammar, Blueprint $blueprint, $where)
     {
         if (!empty($where['values'])) {
             return implode(' ', [
                 $grammar->wrap($where['column']),
                 'not in',
-                '(' . implode(',', static::wrapValues($where['values'])) . ')'
+                '(' . implode(',', static::wrapValues($grammar, $where['values'])) . ')',
             ]);
         }
         return '1 = 1';
     }
-    
+
     protected static function whereNull(Grammar $grammar, Blueprint $blueprint, $where)
     {
         return implode(' ', [$grammar->wrap($where['column']), 'is null']);
@@ -107,26 +104,31 @@ class UniqueWhereCompiler
         return implode(' ', [
             $grammar->wrap($where['column']),
             $where['not'] ? 'not between' : 'between',
-            reset($where['values']),
+            static::wrapValue($grammar, reset($where['values'])),
             'and',
-            end($where['values']),
+            static::wrapValue($grammar, end($where['values'])),
         ]);
     }
 
-    protected static function wrapValues($values = []): array
+    protected static function wrapValues(Grammar $grammar, $values = []): array
     {
-        return collect($values)->map(function($value) {
-            if (is_string($value)) {
-                return "'{$value}'";
-            } elseif ($value instanceof \DateTimeInterface) {
-                return $value->format($grammar->getDateFormat());
-            } elseif (is_bool($value)) {
-                return (bool) $value;
-            }
-            return (int) $value;
+        return collect($values)->map(function ($value) use ($grammar) {
+            return static::wrapValue($grammar, $value);
         })->toArray();
     }
-    
+
+    protected static function wrapValue(Grammar $grammar, $value)
+    {
+        if (is_string($value)) {
+            return "'{$value}'";
+        } elseif ($value instanceof DateTimeInterface) {
+            return $value->format($grammar->getDateFormat());
+        } elseif (is_bool($value)) {
+            return (bool)$value;
+        }
+        return (int) $value;
+    }
+
     protected static function removeLeadingBoolean($value)
     {
         return preg_replace('/and |or /i', '', $value, 1);

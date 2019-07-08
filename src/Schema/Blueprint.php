@@ -6,15 +6,19 @@ namespace Umbrellio\Postgres\Schema;
 
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
 use Illuminate\Support\Fluent;
+use Umbrellio\Postgres\Schema\Builders\UniquePartialBuilder;
 use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
 use Umbrellio\Postgres\Schema\Definitions\LikeDefinition;
 use Umbrellio\Postgres\Schema\Definitions\UniqueDefinition;
 
 class Blueprint extends BaseBlueprint
 {
-    public function attachPartition(string $partition): AttachPartitionDefinition
+    /**
+     * @return AttachPartitionDefinition
+     */
+    public function attachPartition(string $partition)
     {
-        return $this->addExtendedCommand(AttachPartitionDefinition::class, 'attachPartition', compact('partition'));
+        return $this->addCommand('attachPartition', compact('partition'));
     }
 
     public function detachPartition(string $partition): void
@@ -22,9 +26,12 @@ class Blueprint extends BaseBlueprint
         $this->addCommand('detachPartition', compact('partition'));
     }
 
-    public function like(string $table): LikeDefinition
+    /**
+     * @return LikeDefinition
+     */
+    public function like(string $table)
     {
-        return $this->addExtendedCommand(LikeDefinition::class, 'like', compact('table'));
+        return $this->addCommand('like', compact('table'));
     }
 
     public function ifNotExists(): Fluent
@@ -32,34 +39,27 @@ class Blueprint extends BaseBlueprint
         return $this->addCommand('ifNotExists');
     }
 
-    public function uniquePartial($columns, $index = null, $algorithm = null): UniqueDefinition
+    /**
+     * @param array|string $columns
+     * @return UniqueDefinition
+     */
+    public function uniquePartial($columns, ?string $index = null, ?string $algorithm = null)
     {
         $columns = (array) $columns;
 
-        // If no name was specified for this index, we will create one using a basic
-        // convention of the table name, followed by the columns, followed by an
-        // index type, such as primary or index, which makes the index unique.
         $index = $index ?: $this->createIndexName('unique', $columns);
 
-        return $this->addExtendedCommand(UniqueDefinition::class, 'uniquePartial', compact(
-            'columns',
-            'index',
-            'algorithm'
-        ));
+        return $this->addExtendedCommand(
+            UniquePartialBuilder::class,
+            'uniquePartial',
+            compact('columns', 'index', 'algorithm')
+        );
     }
 
-    /**
-     * @return Fluent|LikeDefinition|AttachPartitionDefinition|UniqueDefinition
-     */
-    protected function addExtendedCommand(string $fluent, string $name, array $parameters = [])
+    private function addExtendedCommand(string $fluent, string $name, array $parameters = [])
     {
-        $command = $this->createExtendedCommand($fluent, $name, $parameters);
+        $command = new $fluent(array_merge(compact('name'), $parameters));
         $this->commands[] = $command;
         return $command;
-    }
-
-    protected function createExtendedCommand($fluent, $name, array $parameters = [])
-    {
-        return new $fluent(array_merge(compact('name'), $parameters));
     }
 }

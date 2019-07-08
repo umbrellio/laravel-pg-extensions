@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Compilers;
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\Grammar;
-use Illuminate\Support\Fluent;
-use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Schema\Definitions\UniqueWhereDefinition;
+use Umbrellio\Postgres\Schema\Builders\UniquePartialBuilder;
+use Umbrellio\Postgres\Schema\Builders\UniqueWhereBuilder;
 
 class UniqueWhereCompiler
 {
     public static function compile(
         Grammar $grammar,
         Blueprint $blueprint,
-        Fluent $fluent,
-        UniqueWhereDefinition $command
+        UniquePartialBuilder $fluent,
+        UniqueWhereBuilder $command
     ): string {
         $wheres = collect($command->get('wheres'))
             ->map(function ($where) use ($grammar, $blueprint) {
@@ -35,7 +35,7 @@ class UniqueWhereCompiler
         );
     }
 
-    protected static function whereRaw(Grammar $grammar, Blueprint $blueprint, $where = [])
+    protected static function whereRaw(Grammar $grammar, Blueprint $blueprint, array $where = []): string
     {
         return call_user_func_array('sprintf', array_merge(
             [str_replace('?', '%s', $where['sql'])],
@@ -43,7 +43,7 @@ class UniqueWhereCompiler
         ));
     }
 
-    protected static function whereBasic(Grammar $grammar, Blueprint $blueprint, $where)
+    protected static function whereBasic(Grammar $grammar, Blueprint $blueprint, array $where): string
     {
         return implode(' ', [
             $grammar->wrap($where['column']),
@@ -52,7 +52,7 @@ class UniqueWhereCompiler
         ]);
     }
 
-    protected static function whereColumn(Grammar $grammar, Blueprint $blueprint, $where)
+    protected static function whereColumn(Grammar $grammar, Blueprint $blueprint, array $where): string
     {
         return implode(' ', [
             $grammar->wrap($where['first']),
@@ -61,7 +61,7 @@ class UniqueWhereCompiler
         ]);
     }
 
-    protected static function whereIn(Grammar $grammar, Blueprint $blueprint, $where)
+    protected static function whereIn(Grammar $grammar, Blueprint $blueprint, array $where = []): string
     {
         if (!empty($where['values'])) {
             return implode(' ', [
@@ -73,7 +73,7 @@ class UniqueWhereCompiler
         return '0 = 1';
     }
 
-    protected static function whereNotIn(Grammar $grammar, Blueprint $blueprint, $where)
+    protected static function whereNotIn(Grammar $grammar, Blueprint $blueprint, array $where = []): string
     {
         if (!empty($where['values'])) {
             return implode(' ', [
@@ -85,17 +85,17 @@ class UniqueWhereCompiler
         return '1 = 1';
     }
 
-    protected static function whereNull(Grammar $grammar, Blueprint $blueprint, $where)
+    protected static function whereNull(Grammar $grammar, Blueprint $blueprint, array $where): string
     {
         return implode(' ', [$grammar->wrap($where['column']), 'is null']);
     }
 
-    protected static function whereNotNull(Grammar $grammar, Blueprint $blueprint, $where)
+    protected static function whereNotNull(Grammar $grammar, Blueprint $blueprint, array $where): string
     {
         return implode(' ', [$grammar->wrap($where['column']), 'is not null']);
     }
 
-    protected static function whereBetween(Grammar $grammar, Blueprint $blueprint, $where)
+    protected static function whereBetween(Grammar $grammar, Blueprint $blueprint, array $where): string
     {
         return implode(' ', [
             $grammar->wrap($where['column']),
@@ -106,7 +106,7 @@ class UniqueWhereCompiler
         ]);
     }
 
-    protected static function wrapValues($values = []): array
+    protected static function wrapValues(array $values = []): array
     {
         return collect($values)->map(function ($value) {
             return static::wrapValue($value);
@@ -121,7 +121,7 @@ class UniqueWhereCompiler
         return (int) $value;
     }
 
-    protected static function removeLeadingBoolean($value)
+    protected static function removeLeadingBoolean(string $value): string
     {
         return preg_replace('/and |or /i', '', $value, 1);
     }

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Compilers;
 
-use Umbrellio\Postgres\Schema\Blueprint;
+use DateTimeInterface;
 use Illuminate\Database\Schema\Grammars\Grammar;
 use Illuminate\Support\Fluent;
+use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Schema\Definitions\UniqueWhereDefinition;
-use DateTimeInterface;
 
 class UniqueWhereCompiler
 {
@@ -93,10 +93,7 @@ class UniqueWhereCompiler
 
     protected static function whereNotNull(Grammar $grammar, Blueprint $blueprint, $where)
     {
-        return implode(' ', [
-            $grammar->wrap($where['column']),
-            'is not null',
-        ]);
+        return implode(' ', [$grammar->wrap($where['column']), 'is not null']);
     }
 
     protected static function whereBetween(Grammar $grammar, Blueprint $blueprint, $where)
@@ -124,7 +121,7 @@ class UniqueWhereCompiler
         } elseif ($value instanceof DateTimeInterface) {
             return $value->format($grammar->getDateFormat());
         } elseif (is_bool($value)) {
-            return (bool)$value;
+            return (bool) $value;
         }
         return (int) $value;
     }

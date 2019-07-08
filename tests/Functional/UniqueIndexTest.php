@@ -96,9 +96,21 @@ class UniqueIndexTest extends FunctionalTestCase
             },
         ];
         yield [
+            ' WHERE (0 = 1)',
+            function (Blueprint $table) {
+                $table->uniquePartial('name')->whereIn('phone', []);
+            },
+        ];
+        yield [
             ' WHERE (phone <> ALL (ARRAY[1, 2, 4]))',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereNotIn('phone', [1, 2, 4]);
+            },
+        ];
+        yield [
+            ' WHERE (1 = 1)',
+            function (Blueprint $table) {
+                $table->uniquePartial('name')->whereNotIn('phone', []);
             },
         ];
     }

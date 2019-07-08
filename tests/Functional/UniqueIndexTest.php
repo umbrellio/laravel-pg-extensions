@@ -39,7 +39,7 @@ class UniqueIndexTest extends FunctionalTestCase
     public function provideIndexes(): Generator
     {
         yield ['', function (Blueprint $table) {
-            $table->unique('name');
+            $table->uniquePartial('name');
         }];
         yield [
             ' WHERE (deleted_at IS NULL)',

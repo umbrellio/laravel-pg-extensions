@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Umbrellio\Postgres\Compilers;
 
 use Doctrine\DBAL\Query\Expression\CompositeExpression;

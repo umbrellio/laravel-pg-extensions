@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Unit\Schema;
 
+use Closure;
 use Generator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +13,6 @@ use Umbrellio\Postgres\PostgresConnection;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 use Umbrellio\Postgres\Tests\TestCase;
-use Closure;
 
 class BlueprintTest extends TestCase
 {

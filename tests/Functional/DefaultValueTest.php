@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Umbrellio\Postgres\Tests\Functional;
 
 use Generator;
@@ -7,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Umbrellio\Postgres\Schema\Blueprint;
 
-class BlueprintTest extends FunctionalTestCase
+class DefaultValueTest extends FunctionalTestCase
 {
     /**
      * @test
@@ -20,7 +22,7 @@ class BlueprintTest extends FunctionalTestCase
             $table->string('code');
         });
 
-        DB::statement("create sequence IF NOT EXISTS test_table_id_seq");
+        DB::statement('create sequence IF NOT EXISTS test_table_id_seq');
 
         Schema::table('test_table', function (Blueprint $table) use ($callback) {
             $callback($table);
@@ -54,7 +56,7 @@ class BlueprintTest extends FunctionalTestCase
     protected function getDefaultValue(string $column)
     {
         return collect(DB::select(
-            "SELECT column_default FROM information_schema.columns WHERE column_name = ? and table_name = ?",
+            'SELECT column_default FROM information_schema.columns WHERE column_name = ? and table_name = ?',
             [$column, 'test_table']
         ))->first();
     }

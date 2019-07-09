@@ -35,7 +35,7 @@ Example:
 Schema::create('table', function (Blueprint $table) {
     $table->string('code'); 
     $table->softDeletes();
-    $table->uniquePartial()->whereNull('deleted_at');
+    $table->uniquePartial('code')->whereNull('deleted_at');
 });
 ```
 

@@ -15,6 +15,7 @@ php composer.phar require umbrellio/laravel-pg-extensions
 ## Features
 
  - [Extended `Schema::create()`](#extended-table-creation)
+ - [Working with unique indexes](#extended-unique-indexes-creation)
  - [Working with partitions](#partitions)
 
 ### Extended table creation
@@ -24,6 +25,17 @@ Example:
 Schema::create('table', function (Blueprint $table) {
     $table->like('other_table')->includingAll(); 
     $table->ifNotExists();
+});
+```
+
+### Extended unique indexes creation
+
+Example:
+```php
+Schema::create('table', function (Blueprint $table) {
+    $table->string('code'); 
+    $table->softDeletes();
+    $table->uniquePartial()->whereNull('deleted_at');
 });
 ```
 
@@ -40,7 +52,6 @@ Schema::table('table', function (Blueprint $table) {
     ]);
 });
 ```
-
 
 ## TODO features
 
@@ -70,4 +81,3 @@ Created by Vitaliy Lazeev.
 <a href="https://github.com/umbrellio/">
 <img style="float: left;" src="https://umbrellio.github.io/Umbrellio/supported_by_umbrellio.svg" alt="Supported by Umbrellio" width="439" height="72">
 </a>
-

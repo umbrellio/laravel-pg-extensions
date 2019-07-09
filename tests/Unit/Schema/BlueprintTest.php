@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Unit\Schema;
 
+use Generator;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Umbrellio\Postgres\PostgresConnection;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 use Umbrellio\Postgres\Tests\TestCase;
+use Closure;
 
 class BlueprintTest extends TestCase
 {
@@ -64,6 +67,33 @@ class BlueprintTest extends TestCase
         $this->assertSameSql(
             'alter table "test_table" attach partition some_partition '
             . "for values from ('{$today->toDateTimeString()}') to ('{$tomorrow->toDateTimeString()}')");
+    }
+
+    /**
+     * @test
+     * @dataProvider provideDefaultValues
+     */
+    public function changeDefaultValue(string $expectedSql, Closure $callback): void
+    {
+        $callback($this->blueprint);
+
+        $this->assertSameSql($expectedSql);
+    }
+
+    public function provideDefaultValues(): Generator
+    {
+        yield [
+            "alter table \"test_table\" add column \"id\" bigint not null default nextval('test_table_id_seq'::regclass)",
+            function (Blueprint $table) {
+                $table->bigInteger('id')->default(DB::raw("nextval('test_table_id_seq'::regclass)"));
+            },
+        ];
+        yield [
+            "alter table \"test_table\" add column \"code\" varchar(255) not null default ''::character varying",
+            function (Blueprint $table) {
+                $table->string('code')->default(DB::raw("''::character varying"));
+            },
+        ];
     }
 
     private function assertSameSql(string $sql): void

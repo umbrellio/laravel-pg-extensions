@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Schema\Grammars;
 
+use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\PostgresGrammar as BasePostgresGrammar;
 use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Compilers\AttachPartitionCompiler;
+use Umbrellio\Postgres\Compilers\ChangeColumnCompiler;
 use Umbrellio\Postgres\Compilers\CreateCompiler;
 use Umbrellio\Postgres\Compilers\UniqueWhereCompiler;
 use Umbrellio\Postgres\Schema\Builders\UniquePartialBuilder;
@@ -15,6 +17,11 @@ use Umbrellio\Postgres\Schema\Builders\UniqueWhereBuilder;
 
 class PostgresGrammar extends BasePostgresGrammar
 {
+    public function compileChange(Blueprint $blueprint, Fluent $command, Connection $connection): array
+    {
+        return ChangeColumnCompiler::compile($this, $blueprint, $command, $connection);
+    }
+
     public function compileCreate(Blueprint $blueprint, Fluent $command): string
     {
         $like = $this->getCommandByName($blueprint, 'like');

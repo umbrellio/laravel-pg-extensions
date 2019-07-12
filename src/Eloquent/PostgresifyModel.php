@@ -1,14 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Umbrellio\Postgres\Eloquent;
 
-use Umbrellio\Postgres\Eloquent\Transformers\PostgresifyTypeTransformer;
 use Illuminate\Database\Eloquent\Model;
+use Umbrellio\Postgres\Eloquent\Transformers\PostgresifyTypeTransformer;
+use Umbrellio\Postgres\Types\AbstractType;
 
 class PostgresifyModel extends Model
 {
     protected $postgresifyTypes = [];
 
+    /**
+     * @param string $key
+     * @return mixed|AbstractType
+     */
     public function getAttributeValue($key)
     {
         $value = parent::getAttributeValue($key);

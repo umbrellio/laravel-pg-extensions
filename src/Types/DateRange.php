@@ -11,9 +11,9 @@ class DateRange extends AbstractType
     public $start;
     public $end;
 
-    public function __construct($interval)
+    public function __construct(string $value)
     {
-        $interval = explode(',', $interval);
+        $interval = explode(',', $value);
         $this->start = Carbon::createFromTimestamp(strtotime($interval[0]));
         $this->end = Carbon::createFromTimestamp(strtotime($interval[1]));
     }

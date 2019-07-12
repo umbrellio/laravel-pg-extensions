@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Unit\Schema;
 
+use Generator;
 use Illuminate\Support\Carbon;
 use Umbrellio\Postgres\Eloquent\PostgresifyModel;
 use Umbrellio\Postgres\Tests\TestCase;
-use Generator;
 
 class PostgresifyModelTest extends TestCase
 {
@@ -17,21 +17,21 @@ class PostgresifyModelTest extends TestCase
      */
     public function transform(string $interval, Carbon $periodStart, Carbon $periodEnd): void
     {
-        $model = new class () extends PostgresifyModel {
+        $model = new class() extends PostgresifyModel {
             protected $postgresifyTypes = [
                 'interval' => [
-                    'type' => 'dateRange'
-                ]
+                    'type' => 'dateRange',
+                ],
             ];
 
-            protected $fillable = [
-                'interval'
-            ];
+            protected $fillable = ['interval'];
         };
 
         $model->fill(compact('interval'));
 
         $this->assertSame(implode(',', [$periodStart, $periodEnd]), (string) $model->interval);
+        $this->assertIsArray($model->interval->toArray());
+        $this->assertCount(2, (array) $model->interval);
     }
 
     public function provideIntervals(): Generator

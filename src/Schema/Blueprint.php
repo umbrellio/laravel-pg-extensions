@@ -57,18 +57,18 @@ class Blueprint extends BaseBlueprint
         );
     }
 
-    private function addExtendedCommand(string $fluent, string $name, array $parameters = [])
-    {
-        $command = new $fluent(array_merge(compact('name'), $parameters));
-        $this->commands[] = $command;
-        return $command;
-    }
-
     /**
      * @return ColumnDefinition
      */
     public function dateRange(string $column)
     {
         return $this->addColumn('dateRange', $column);
+    }
+
+    private function addExtendedCommand(string $fluent, string $name, array $parameters = [])
+    {
+        $command = new $fluent(array_merge(compact('name'), $parameters));
+        $this->commands[] = $command;
+        return $command;
     }
 }

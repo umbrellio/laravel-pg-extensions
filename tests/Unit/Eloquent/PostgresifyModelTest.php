@@ -35,8 +35,23 @@ class PostgresifyModelTest extends TestCase
 
     public function provideIntervals(): Generator
     {
-        yield ['name', '2019-01-01,2019-01-31', Carbon::create(2019)->firstOfMonth(), Carbon::create(2019)->lastOfMonth()];
-        yield ['name', '2019-01-01,2019-03-31', Carbon::create(2019)->firstOfQuarter(), Carbon::create(2019)->lastOfQuarter()];
-        yield ['name', '2019-01-01,2019-12-31', Carbon::create(2019)->firstOfYear(), Carbon::create(2019)->lastOfYear()];
+        yield [
+            'name',
+            '2019-01-01,2019-01-31',
+            Carbon::create(2019)->firstOfMonth(),
+            Carbon::create(2019)->lastOfMonth(),
+        ];
+        yield [
+            'name',
+            '2019-01-01,2019-03-31',
+            Carbon::create(2019)->firstOfQuarter(),
+            Carbon::create(2019)->lastOfQuarter(),
+        ];
+        yield [
+            'name',
+            '2019-01-01,2019-12-31',
+            Carbon::create(2019)->firstOfYear(),
+            Carbon::create(2019)->lastOfYear(),
+        ];
     }
 }

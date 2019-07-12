@@ -49,4 +49,9 @@ class PostgresGrammar extends BasePostgresGrammar
         }
         return $this->compileUnique($blueprint, $command);
     }
+
+    protected function typeDateRange(Fluent $column): string
+    {
+        return 'daterange';
+    }
 }

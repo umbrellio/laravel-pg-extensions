@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Schema;
 
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
+use Illuminate\Database\Schema\ColumnDefinition;
 use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Schema\Builders\UniquePartialBuilder;
 use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
@@ -61,5 +62,13 @@ class Blueprint extends BaseBlueprint
         $command = new $fluent(array_merge(compact('name'), $parameters));
         $this->commands[] = $command;
         return $command;
+    }
+
+    /**
+     * @return ColumnDefinition
+     */
+    public function dateRange(string $column)
+    {
+        return $this->addColumn('dateRange', $column);
     }
 }

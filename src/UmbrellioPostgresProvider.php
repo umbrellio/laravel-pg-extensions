@@ -14,9 +14,11 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
     {
         parent::register();
 
-        foreach (config('database.doctrine') as $config) {
-            foreach ($config['mapping_types'] as $type => $className) {
-                $this->getSchemaBuilder()->registerCustomDoctrineType($className, $type, $type);
+        if (config()->has('database.doctrine')) {
+            foreach (config('database.doctrine') as $config) {
+                foreach ($config['mapping_types'] as $type => $className) {
+                    $this->getSchemaBuilder()->registerCustomDoctrineType($className, $type, $type);
+                }
             }
         }
     }

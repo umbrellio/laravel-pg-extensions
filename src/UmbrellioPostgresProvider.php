@@ -11,6 +11,11 @@ use Umbrellio\Postgres\Connectors\ConnectionFactory;
 
 class UmbrellioPostgresProvider extends DatabaseServiceProvider
 {
+    public function boot()
+    {
+        parent::boot();
+        $this->registerDoctrineTypes();
+    }
     protected function registerConnectionServices(): void
     {
         $this->app->singleton('db.factory', function ($app) {
@@ -20,12 +25,6 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
         $this->app->singleton('db', function ($app) {
             return new DatabaseManager($app, $app['db.factory']);
         });
-    }
-
-    public function boot()
-    {
-        parent::boot();
-        $this->registerDoctrineTypes();
     }
 
     private function registerDoctrineTypes(): void

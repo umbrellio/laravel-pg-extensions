@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Umbrellio\Postgres\Schema\Extensions;
 
 use Umbrellio\Postgres\PostgresConnection;
-use Umbrellio\Postgres\Schema\Extensions\AbstractObject;
 
 /**
  * @see PostgresConnection

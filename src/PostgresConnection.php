@@ -12,7 +12,7 @@ use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 class PostgresConnection extends BasePostgresConnection
 {
     use Macroable;
-    
+
     public function getSchemaBuilder()
     {
         if ($this->schemaGrammar === null) {

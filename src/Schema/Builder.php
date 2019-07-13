@@ -6,9 +6,12 @@ namespace Umbrellio\Postgres\Schema;
 
 use Closure;
 use Illuminate\Database\Schema\PostgresBuilder as BasePostgresBuilder;
+use Illuminate\Support\Traits\Macroable;
 
 class Builder extends BasePostgresBuilder
 {
+    use Macroable;
+    
     /**
      * @param string $table
      * @param Closure|null $callback

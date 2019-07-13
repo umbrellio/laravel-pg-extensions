@@ -6,6 +6,7 @@ namespace Umbrellio\Postgres;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\DatabaseServiceProvider;
+use Illuminate\Support\Facades\DB;
 use Umbrellio\Postgres\Connectors\ConnectionFactory;
 
 class UmbrellioPostgresProvider extends DatabaseServiceProvider
@@ -19,5 +20,21 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
         $this->app->singleton('db', function ($app) {
             return new DatabaseManager($app, $app['db.factory']);
         });
+    }
+
+    public function boot()
+    {
+        parent::boot();
+        $this->registerDoctrineTypes();
+    }
+
+    private function registerDoctrineTypes(): void
+    {
+        $connection = DB::connection('pgsql');
+        foreach (config('database.doctrine') as $config) {
+            foreach ($config['mapping_types'] as $type => $className) {
+                $connection->getSchemaBuilder()->registerCustomDoctrineType($className, $type, $type);
+            }
+        }
     }
 }

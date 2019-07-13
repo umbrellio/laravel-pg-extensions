@@ -17,4 +17,11 @@ namespace Illuminate\Database\Schema {
     class Blueprint
     {
     }
+
+    /**
+     * @method ColumnDefinition using($expression)
+     */
+    class ColumnDefinition
+    {
+    }
 }

@@ -6,6 +6,7 @@ namespace Umbrellio\Postgres;
 
 use Illuminate\Database\PostgresConnection as BasePostgresConnection;
 use Umbrellio\Postgres\Schema\Builder;
+use Umbrellio\Postgres\Schema\Drivers\UmbrellioDoctrineDriver;
 use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 
 class PostgresConnection extends BasePostgresConnection
@@ -21,5 +22,10 @@ class PostgresConnection extends BasePostgresConnection
     protected function getDefaultSchemaGrammar()
     {
         return $this->withTablePrefix(new PostgresGrammar());
+    }
+
+    protected function getDoctrineDriver()
+    {
+        return new UmbrellioDoctrineDriver();
     }
 }

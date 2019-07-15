@@ -10,3 +10,7 @@ parameters:
   cache_directory: .ecs_cache
   exclude_files:
     - vendor/*
+
+  skip:
+    Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+      - src/Schema/Blueprint.php

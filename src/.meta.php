@@ -13,6 +13,8 @@ namespace Illuminate\Database\Schema {
      * @method LikeDefinition like(string $table)
      * @method Fluent ifNotExists()
      * @method UniqueDefinition uniquePartial($columns, ?string $index = null, ?string $algorithm = null)
+     * @method Fluent gin($columns, ?string $name = null)
+     * @method Fluent gist($columns, ?string $name = null)
      */
     class Blueprint
     {

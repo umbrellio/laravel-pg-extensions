@@ -36,9 +36,7 @@ class UniqueIndexTest extends FunctionalTestCase
         $this->assertSame($this->getDummyIndex() . $expected, $indexes->indexdef);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function createIndexIfNotExists(): void
     {
         Schema::create('test_table', function (Blueprint $table) {

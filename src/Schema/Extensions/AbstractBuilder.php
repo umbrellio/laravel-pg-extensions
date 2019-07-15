@@ -10,6 +10,5 @@ use Umbrellio\Postgres\Schema\Builder;
  * @see Builder
  */
 abstract class AbstractBuilder
-
 {
 }

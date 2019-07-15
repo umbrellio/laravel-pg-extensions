@@ -57,13 +57,6 @@ class Blueprint extends BaseBlueprint
         );
     }
 
-    private function addExtendedCommand(string $fluent, string $name, array $parameters = [])
-    {
-        $command = new $fluent(array_merge(compact('name'), $parameters));
-        $this->commands[] = $command;
-        return $command;
-    }
-
     public function hasIndex($index, bool $unique = false): bool
     {
         if (is_array($index)) {
@@ -76,5 +69,12 @@ class Blueprint extends BaseBlueprint
     protected function getSchemaManager()
     {
         return Schema::getConnection()->getDoctrineSchemaManager();
+    }
+
+    private function addExtendedCommand(string $fluent, string $name, array $parameters = [])
+    {
+        $command = new $fluent(array_merge(compact('name'), $parameters));
+        $this->commands[] = $command;
+        return $command;
     }
 }

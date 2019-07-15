@@ -16,6 +16,7 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
 
     /**
      * @param AbstractExtension|string $extension
+     * @codeCoverageIgnore
      */
     public static function registerExtension(string $extension): void
     {

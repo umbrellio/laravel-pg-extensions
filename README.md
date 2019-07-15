@@ -17,6 +17,7 @@ php composer.phar require umbrellio/laravel-pg-extensions
  - [Extended `Schema::create()`](#extended-table-creation)
  - [Working with unique indexes](#extended-unique-indexes-creation)
  - [Working with partitions](#partitions)
+ - [Check existing index before manipulation](#check-existing-index)
 
 ### Extended table creation
 
@@ -50,6 +51,18 @@ Schema::table('table', function (Blueprint $table) {
         'from' => now()->startOfDay(), // Carbon will be converted to date time string
         'to' => now()->tomorrow(),
     ]);
+});
+```
+
+### Check existing index
+
+```php
+Schema::table('some_table', function (Blueprint $table) {
+   // check unique index exists on column
+   if ($table->hasIndex(['column'], true)) {
+      $table->dropUnique(['column']);
+   }
+   $table->uniquePartial('column')->whereNull('deleted_at');
 });
 ```
 

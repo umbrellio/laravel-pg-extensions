@@ -33,7 +33,7 @@ abstract class AbstractExtension extends AbstractComponent
                 ));
             }
             if (!method_exists($extension, 'mixin')) {
-                throw new MacroableMissedException(sprintf('Class %s doesn’t using Macroable Trait.', $extension));
+                throw new MacroableMissedException(sprintf('Class %s doesn’t use Macroable Trait.', $extension));
             }
             /** @var Macroable $extension */
             $extension::mixin(new $mixin());

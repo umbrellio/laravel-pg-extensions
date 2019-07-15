@@ -12,9 +12,7 @@ use Umbrellio\Postgres\Tests\TestCase;
 
 class GrammarTest extends TestCase
 {
-    /**
-     * @test
-     */
+    /** @test */
     public function addingGinIndex()
     {
         $blueprint = new Blueprint('test');
@@ -25,9 +23,7 @@ class GrammarTest extends TestCase
         $this->assertStringContainsString('GIN("foo")', $statements[0]);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function addingGistIndex()
     {
         $blueprint = new Blueprint('test');
@@ -38,9 +34,6 @@ class GrammarTest extends TestCase
         $this->assertStringContainsString('GIST("foo")', $statements[0]);
     }
 
-    /**
-     * @return PostgresConnection
-     */
     protected function getConnection()
     {
         return Mockery::mock(PostgresConnection::class);

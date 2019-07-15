@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Schema;
 
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Schema\Builders\UniquePartialBuilder;
 use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
@@ -56,20 +54,6 @@ class Blueprint extends BaseBlueprint
             'uniquePartial',
             compact('columns', 'index', 'algorithm')
         );
-    }
-
-    public function hasIndex($index, bool $unique = false): bool
-    {
-        if (is_array($index)) {
-            $index = $this->createIndexName($unique === false ? 'index' : 'unique', $index);
-        }
-
-        return array_key_exists($index, $this->getSchemaManager()->listTableIndexes($this->getTable()));
-    }
-
-    protected function getSchemaManager(): AbstractSchemaManager
-    {
-        return Schema::getConnection()->getDoctrineSchemaManager();
     }
 
     private function addExtendedCommand(string $fluent, string $name, array $parameters = [])

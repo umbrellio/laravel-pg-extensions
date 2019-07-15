@@ -49,4 +49,25 @@ class PostgresGrammar extends BasePostgresGrammar
         }
         return $this->compileUnique($blueprint, $command);
     }
+
+    public function compileGin(Blueprint $blueprint, Fluent $command): string
+    {
+        return sprintf(
+            'CREATE INDEX %s ON %s USING GIN(%s)',
+            $command->index,
+            $this->wrapTable($blueprint),
+            $this->columnize($command->columns)
+        );
+    }
+
+
+    public function compileGist(Blueprint $blueprint, Fluent $command): string
+    {
+        return sprintf(
+            'CREATE INDEX %s ON %s USING GIST(%s)',
+            $command->index,
+            $this->wrapTable($blueprint),
+            $this->columnize($command->columns)
+        );
+    }
 }

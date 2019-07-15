@@ -34,6 +34,9 @@ class GrammarTest extends TestCase
         $this->assertStringContainsString('GIST("foo")', $statements[0]);
     }
 
+    /**
+     * @return PostgresConnection
+     */
     protected function getConnection()
     {
         return Mockery::mock(PostgresConnection::class);

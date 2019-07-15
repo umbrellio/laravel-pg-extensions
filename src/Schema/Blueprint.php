@@ -99,7 +99,7 @@ class Blueprint extends BaseBlueprint
     {
         return $this->addCommand('dropView', compact('view'));
     }
-  
+
     protected function addFluentIndexes(): void
     {
         foreach ($this->columns as $column) {

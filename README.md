@@ -55,7 +55,7 @@ Schema::table('table', function (Blueprint $table) {
 
 ## Custom Extensions
 
-1. Create a repository for your extension, ex: `Some`
+1. Create a repository for your extension.
 2. Add this package as a dependency in composer, ex:
    `composer require umbrellio/laravel-pg-extensions 2.*`
 3. Inherit the classes you intend to extend from abstract classes with namespace: 

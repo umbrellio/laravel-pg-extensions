@@ -4,20 +4,18 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Schema\Grammars;
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\PostgresGrammar as BasePostgresGrammar;
 use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Compilers\AttachPartitionCompiler;
 use Umbrellio\Postgres\Compilers\CreateCompiler;
-use Umbrellio\Postgres\Schema\Blueprint;
+use Umbrellio\Postgres\Compilers\UniqueWhereCompiler;
+use Umbrellio\Postgres\Schema\Builders\UniquePartialBuilder;
+use Umbrellio\Postgres\Schema\Builders\UniqueWhereBuilder;
 
 class PostgresGrammar extends BasePostgresGrammar
 {
-    /**
-     * @param Blueprint|\Illuminate\Database\Schema\Blueprint $blueprint
-     * @param Fluent $command
-     * @return string
-     */
-    public function compileCreate($blueprint, Fluent $command): string
+    public function compileCreate(Blueprint $blueprint, Fluent $command): string
     {
         $like = $this->getCommandByName($blueprint, 'like');
         $ifNotExists = $this->getCommandByName($blueprint, 'ifNotExists');
@@ -30,22 +28,12 @@ class PostgresGrammar extends BasePostgresGrammar
         );
     }
 
-    /**
-     * @param Blueprint|\Illuminate\Database\Schema\Blueprint $blueprint
-     * @param Fluent $command
-     * @return string
-     */
-    public function compileAttachPartition($blueprint, Fluent $command): string
+    public function compileAttachPartition(Blueprint $blueprint, Fluent $command): string
     {
         return AttachPartitionCompiler::compile($this, $blueprint, $command);
     }
 
-    /**
-     * @param Blueprint|\Illuminate\Database\Schema\Blueprint $blueprint
-     * @param Fluent $command
-     * @return string
-     */
-    public function compileDetachPartition($blueprint, Fluent $command): string
+    public function compileDetachPartition(Blueprint $blueprint, Fluent $command): string
     {
         return sprintf('alter table %s detach partition %s',
             $this->wrapTable($blueprint),
@@ -76,5 +64,14 @@ class PostgresGrammar extends BasePostgresGrammar
     public function compileViewDefinition(): string
     {
         return 'select view_definition from information_schema.views where table_schema = ? and table_name = ?';
+    }
+
+    public function compileUniquePartial(Blueprint $blueprint, UniquePartialBuilder $command): string
+    {
+        $constraints = $command->get('constraints');
+        if ($constraints instanceof UniqueWhereBuilder) {
+            return UniqueWhereCompiler::compile($this, $blueprint, $command, $constraints);
+        }
+        return $this->compileUnique($blueprint, $command);
     }
 }

@@ -15,7 +15,11 @@ php composer.phar require umbrellio/laravel-pg-extensions
 ## Features
 
  - [Extended `Schema::create()`](#extended-table-creation)
+ - [Extended `Schema` with GIST/GIN indexes](#create-gist/gin-indexes)
+ - [Extended `Schema` for views](#create-views)
+ - [Working with unique indexes](#extended-unique-indexes-creation)
  - [Working with partitions](#partitions)
+ - [Check existing index before manipulation](#check-existing-index)
 
 ### Extended table creation
 
@@ -24,6 +28,42 @@ Example:
 Schema::create('table', function (Blueprint $table) {
     $table->like('other_table')->includingAll(); 
     $table->ifNotExists();
+});
+```
+
+### Create gist/gin indexes
+
+```php
+Schema::create('table', function (Blueprint $table) {
+    $table->gist(['column1', 'column2']); 
+    $table->gin('column1');
+});
+```
+
+### Create views
+
+Example:
+```php
+// Facade methods:
+Schema::createView('active_users', "SELECT * FROM users WHERE active = 1");
+Schema::dropView('active_users')
+
+// Schema methods:
+Schema::create('users', function (Blueprint $table) {
+    $table
+        ->createView('active_users', , "SELECT * FROM users WHERE active = 1")
+        ->materialize();
+});
+```
+
+### Extended unique indexes creation
+
+Example:
+```php
+Schema::create('table', function (Blueprint $table) {
+    $table->string('code'); 
+    $table->softDeletes();
+    $table->uniquePartial('code')->whereNull('deleted_at');
 });
 ```
 
@@ -41,6 +81,94 @@ Schema::table('table', function (Blueprint $table) {
 });
 ```
 
+### Check existing index
+
+```php
+Schema::table('some_table', function (Blueprint $table) {
+   // check unique index exists on column
+   if ($table->hasIndex(['column'], true)) {
+      $table->dropUnique(['column']);
+   }
+   $table->uniquePartial('column')->whereNull('deleted_at');
+});
+```
+
+## Custom Extensions
+
+1). Create a repository for your extension.
+
+2).  Add this package as a dependency in composer, ex:
+
+`composer require umbrellio/laravel-pg-extensions 2.*`
+   
+3). Inherit the classes you intend to extend from abstract classes with namespace: 
+
+`namespace Umbrellio\Postgres\Schema\Extensions`
+
+4). Implement extension methods in closures, example:
+
+```php
+use Umbrellio\Postgres\Extensions\Schema\AbstractBlueprint;
+class SomeBlueprint extends AbstractBlueprint
+{
+   public function someMethod()
+   {
+       return function (string $column): Fluent {
+           return $this->addColumn('someColumn', $column);
+       };
+   }
+}
+```
+
+5). Create Extension class and mix these methods using the following syntax, ex:
+
+```php
+use Umbrellio\Postgres\PostgresConnection;
+use Umbrellio\Postgres\Schema\Blueprint;
+use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
+use Umbrellio\Postgres\Extensions\AbstractExtension;
+
+class SomeExtension extends AbstractExtension
+{
+    public static function getMixins(): array
+    {
+        return [
+            Blueprint::class => SomeBlueprint::class,
+            PostgresConnection::class => SomeConnection::class,
+            PostgresGrammar::class => SomeSchemaGrammar::class,
+            ...
+        ];
+    }
+    
+    public static function getTypes(): string
+    {
+        // where SomeType extends Doctrine\DBAL\Types\Type
+        return [
+            'some' => SomeType::class,
+        ];
+    }
+
+    public static function getName(): string
+    {
+        return 'some';
+    }
+}
+```
+
+6). Register your Extension in ServiceProvider and put in config/app.php, ex:
+
+```php
+use Illuminate\Support\ServiceProvider;
+use Umbrellio\Postgres\UmbrellioPostgresProvider;
+
+class SomeServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        UmbrellioPostgresProvider::registerExtension(SomeExtension::class);
+    }
+}
+```
 
 ## TODO features
 
@@ -70,4 +198,3 @@ Created by Vitaliy Lazeev.
 <a href="https://github.com/umbrellio/">
 <img style="float: left;" src="https://umbrellio.github.io/Umbrellio/supported_by_umbrellio.svg" alt="Supported by Umbrellio" width="439" height="72">
 </a>
-

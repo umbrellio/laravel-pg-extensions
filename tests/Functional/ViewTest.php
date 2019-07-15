@@ -39,4 +39,25 @@ class ViewTest extends FunctionalTestCase
         Schema::dropView('test_view');
         $this->assertFalse(Schema::hasView('test_view'));
     }
+
+    /** @test */
+    public function createBlueprintView(): void
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->createView('test_view', 'select * from users where name is not null');
+        });
+
+        $this->assertSame(
+            strtolower('select users.id,     users.name    from users   where (users.name is not null);'),
+            trim(strtolower(str_replace("\n", ' ', Schema::getViewDefinition('test_view'))))
+        );
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropView('test_view');
+        });
+
+        $this->assertFalse(Schema::hasView('test_view'));
+    }
 }

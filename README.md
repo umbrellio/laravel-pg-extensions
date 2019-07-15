@@ -17,6 +17,7 @@ php composer.phar require umbrellio/laravel-pg-extensions
  - [Extended `Schema::create()`](#extended-table-creation)
  - [Working with unique indexes](#extended-unique-indexes-creation)
  - [Working with partitions](#partitions)
+ - [Create custom extensions for PostgreSQL](#custom-extensions)
 
 ### Extended table creation
 
@@ -51,6 +52,63 @@ Schema::table('table', function (Blueprint $table) {
         'to' => now()->tomorrow(),
     ]);
 });
+```
+
+### Custom Extensions
+
+1. Create a repository for your extension, ex: `Some`
+2. Add this package as a dependency in composer, ex:
+   `composer require umbrellio/laravel-pg-extensions 2.*`
+3. Inherit the classes you intend to extend from abstract classes with namespace: 
+   `namespace Umbrellio\Postgres\Schema\Extensions`
+4. Implement extension methods in closures, example:
+
+```php
+   use Umbrellio\Postgres\Schema\Extensions\AbstractBlueprint;
+   
+   class SomeBlueprint extends AbstractBlueprint
+   {
+       public function someMethod()
+       {
+           return function (string $column): Fluent {
+               return $this->addColumn('someColumn', $column);
+           };
+       }
+   }   
+``` 
+
+5. Create Extension class and mix these methods using the following syntax, ex:
+
+```php
+
+use Umbrellio\Postgres\PostgresConnection;
+use Umbrellio\Postgres\Schema\Blueprint;
+use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
+use Umbrellio\Postgres\Schema\Extensions\AbstractExtension;
+
+class SomeExtension extends AbstractExtension
+{
+    public const NAME = 'ltree';
+
+    protected static $mixins = [
+        Blueprint::class => SomeBlueprint::class,
+        PostgresConnection::class => SomeConnection::class,
+        PostgresGrammar::class => SomeSchemaGrammar::class,
+    ];
+}
+```
+
+6. Register your ServiceProvider in the app, ex:
+```php
+use Illuminate\Support\ServiceProvider;
+
+class SomeServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        SomeExtension::register();
+    }
+}
 ```
 
 ## TODO features

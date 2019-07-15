@@ -9,6 +9,6 @@ use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 /**
  * @see PostgresGrammar
  */
-abstract class AbstractGrammarObject extends AbstractObject
+abstract class AbstractGrammar
 {
 }

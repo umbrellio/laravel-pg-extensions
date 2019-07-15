@@ -9,6 +9,6 @@ use Umbrellio\Postgres\PostgresConnection;
 /**
  * @see PostgresConnection
  */
-abstract class AbstractConnectionObject extends AbstractObject
+abstract class AbstractConnection
 {
 }

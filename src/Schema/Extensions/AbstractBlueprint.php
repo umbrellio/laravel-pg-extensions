@@ -9,6 +9,6 @@ use Umbrellio\Postgres\Schema\Blueprint;
 /**
  * @see Blueprint
  */
-abstract class AbstractBlueprintObject extends AbstractObject
+abstract class AbstractBlueprint
 {
 }

@@ -8,7 +8,8 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\DatabaseServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Umbrellio\Postgres\Connectors\ConnectionFactory;
-use Umbrellio\Postgres\Schema\Extensions\AbstractExtension;
+use Umbrellio\Postgres\Extensions\AbstractExtension;
+use Umbrellio\Postgres\Extensions\Exceptions\ExtensionInvalidException;
 
 class UmbrellioPostgresProvider extends DatabaseServiceProvider
 {
@@ -20,6 +21,13 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
      */
     public static function registerExtension(string $extension): void
     {
+        if (!is_subclass_of($extension, AbstractExtension::class)) {
+            throw new ExtensionInvalidException(sprintf(
+                'Class %s must be implemented from %s',
+                $extension,
+                AbstractExtension::class
+            ));
+        }
         static::$extensions[$extension::getName()] = $extension;
     }
 

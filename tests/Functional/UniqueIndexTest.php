@@ -36,6 +36,21 @@ class UniqueIndexTest extends FunctionalTestCase
         $this->assertSame($this->getDummyIndex() . $expected, $indexes->indexdef);
     }
 
+    /** @test */
+    public function createSpecifyIndex(): void
+    {
+        Schema::create('test_table', function (Blueprint $table) {
+            $table->string('name')->index('specify_index_name');
+        });
+
+        $this->assertTrue(Schema::hasTable('test_table'));
+
+        $this->assertSame(
+            'CREATE INDEX specify_index_name ON public.test_table USING btree (name)',
+            $this->getIndexByName('specify_index_name')->indexdef
+        );
+    }
+
     public function provideIndexes(): Generator
     {
         yield ['', function (Blueprint $table) {

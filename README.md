@@ -18,6 +18,7 @@ php composer.phar require umbrellio/laravel-pg-extensions
  - [Extended `Schema` with GIST/GIN indexes](#create-gist/gin-indexes)
  - [Working with unique indexes](#extended-unique-indexes-creation)
  - [Working with partitions](#partitions)
+ - [Check existing index before manipulation](#check-existing-index)
 
 ### Extended table creation
 
@@ -61,6 +62,93 @@ Schema::table('table', function (Blueprint $table) {
         'to' => now()->tomorrow(),
     ]);
 });
+```
+
+### Check existing index
+
+```php
+Schema::table('some_table', function (Blueprint $table) {
+   // check unique index exists on column
+   if ($table->hasIndex(['column'], true)) {
+      $table->dropUnique(['column']);
+   }
+   $table->uniquePartial('column')->whereNull('deleted_at');
+});
+```
+
+## Custom Extensions
+
+1. Create a repository for your extension.
+2. Add this package as a dependency in composer, ex:
+   `composer require umbrellio/laravel-pg-extensions 2.*`
+3. Inherit the classes you intend to extend from abstract classes with namespace: 
+   `namespace Umbrellio\Postgres\Schema\Extensions`
+4. Implement extension methods in closures, example:
+
+```php
+use Umbrellio\Postgres\Extensions\Schema\AbstractBlueprint;
+
+class SomeBlueprint extends AbstractBlueprint
+{
+   public function someMethod()
+   {
+       return function (string $column): Fluent {
+           return $this->addColumn('someColumn', $column);
+       };
+   }
+   
+   ...
+}
+``` 
+
+5. Create Extension class and mix these methods using the following syntax, ex:
+
+```php
+use Umbrellio\Postgres\PostgresConnection;
+use Umbrellio\Postgres\Schema\Blueprint;
+use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
+use Umbrellio\Postgres\Extensions\AbstractExtension;
+
+class SomeExtension extends AbstractExtension
+{
+    public static function getMixins(): array
+    {
+        return [
+            Blueprint::class => SomeBlueprint::class,
+            PostgresConnection::class => SomeConnection::class,
+            PostgresGrammar::class => SomeSchemaGrammar::class,
+            ...
+        ];
+    }
+    
+    public static function getTypes(): string
+    {
+        // where SomeType extends Doctrine\DBAL\Types\Type
+        return [
+            'some' => SomeType::class,
+        ];
+    }
+
+    public static function getName(): string
+    {
+        return 'some';
+    }
+}
+```
+
+6. Register your Extension in ServiceProvider and put in config/app.php, ex:
+
+```php
+use Illuminate\Support\ServiceProvider;
+use Umbrellio\Postgres\UmbrellioPostgresProvider;
+
+class SomeServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        UmbrellioPostgresProvider::registerExtension(SomeExtension::class);
+    }
+}
 ```
 
 ## TODO features

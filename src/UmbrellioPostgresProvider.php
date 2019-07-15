@@ -6,23 +6,26 @@ namespace Umbrellio\Postgres;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\DatabaseServiceProvider;
+use Illuminate\Support\Facades\DB;
 use Umbrellio\Postgres\Connectors\ConnectionFactory;
+use Umbrellio\Postgres\Schema\Extensions\AbstractExtension;
 
 class UmbrellioPostgresProvider extends DatabaseServiceProvider
 {
-    public function register()
-    {
-        parent::register();
+    private static $extensions = [];
 
-        if (config()->has('database.doctrine')) {
-            // @codeCoverageIgnoreStart
-            foreach (config('database.doctrine') as $config) {
-                foreach ($config['mapping_types'] as $type => $className) {
-                    $this->getSchemaBuilder()->registerCustomDoctrineType($className, $type, $type);
-                }
-            }
-            // @codeCoverageIgnoreEnd
-        }
+    /**
+     * @param AbstractExtension|string $extension
+     */
+    public static function registerExtension(string $extension): void
+    {
+        static::$extensions[$extension::getName()] = $extension;
+    }
+
+    public function boot()
+    {
+        parent::boot();
+        $this->registerExtensions();
     }
 
     protected function registerConnectionServices(): void
@@ -33,6 +36,22 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
 
         $this->app->singleton('db', function ($app) {
             return new DatabaseManager($app, $app['db.factory']);
+        });
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    protected function registerExtensions(): void
+    {
+        /** @var PostgresConnection $connection */
+        $connection = DB::connection();
+        collect(static::$extensions)->each(function ($extension, $key) use ($connection) {
+            /** @var AbstractExtension $extension */
+            $extension::register();
+            foreach ($extension::getTypes() as $type => $typeClass) {
+                $connection->getSchemaBuilder()->registerCustomDoctrineType($typeClass, $type, $type);
+            }
         });
     }
 }

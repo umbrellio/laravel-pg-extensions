@@ -64,23 +64,24 @@ Schema::table('table', function (Blueprint $table) {
 4. Implement extension methods in closures, example:
 
 ```php
-   use Umbrellio\Postgres\Schema\Extensions\AbstractBlueprint;
-   
-   class SomeBlueprint extends AbstractBlueprint
+use Umbrellio\Postgres\Schema\Extensions\AbstractBlueprint;
+
+class SomeBlueprint extends AbstractBlueprint
+{
+   public function someMethod()
    {
-       public function someMethod()
-       {
-           return function (string $column): Fluent {
-               return $this->addColumn('someColumn', $column);
-           };
-       }
-   }   
+       return function (string $column): Fluent {
+           return $this->addColumn('someColumn', $column);
+       };
+   }
+   
+   ...
+}
 ``` 
 
 5. Create Extension class and mix these methods using the following syntax, ex:
 
 ```php
-
 use Umbrellio\Postgres\PostgresConnection;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
@@ -88,25 +89,38 @@ use Umbrellio\Postgres\Schema\Extensions\AbstractExtension;
 
 class SomeExtension extends AbstractExtension
 {
-    public const NAME = 'some';
-
     protected static $mixins = [
         Blueprint::class => SomeBlueprint::class,
         PostgresConnection::class => SomeConnection::class,
         PostgresGrammar::class => SomeSchemaGrammar::class,
+        ...
     ];
+    
+    public static function getTypes(): string
+    {
+        return [
+            'some' => SomeType::class, // where SomeType extends Doctrine\DBAL\Types\Type
+        ];
+    }
+
+    public static function getName(): string
+    {
+        return 'some';
+    }
 }
 ```
 
-6. Register your ServiceProvider in the app, ex:
+6. Register your Extension in ServiceProvider and put in config/app.php, ex:
+
 ```php
 use Illuminate\Support\ServiceProvider;
+use Umbrellio\Postgres\UmbrellioPostgresProvider;
 
 class SomeServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        SomeExtension::register();
+        UmbrellioPostgresProvider::registerExtension(SomeExtension::class);
     }
 }
 ```

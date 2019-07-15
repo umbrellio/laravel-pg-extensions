@@ -77,6 +77,15 @@ class Blueprint extends BaseBlueprint
         return $this->indexCommand('gist', $columns, $name);
     }
 
+    public function hasIndex($index, bool $unique = false): bool
+    {
+        if (is_array($index)) {
+            $index = $this->createIndexName($unique === false ? 'index' : 'unique', $index);
+        }
+
+        return array_key_exists($index, $this->getSchemaManager()->listTableIndexes($this->getTable()));
+    }
+
     protected function addFluentIndexes(): void
     {
         foreach ($this->columns as $column) {
@@ -97,15 +106,6 @@ class Blueprint extends BaseBlueprint
                 }
             }
         }
-    }
-      
-    public function hasIndex($index, bool $unique = false): bool
-    {
-        if (is_array($index)) {
-            $index = $this->createIndexName($unique === false ? 'index' : 'unique', $index);
-        }
-
-        return array_key_exists($index, $this->getSchemaManager()->listTableIndexes($this->getTable()));
     }
 
     protected function getSchemaManager()

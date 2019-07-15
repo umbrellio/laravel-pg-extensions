@@ -13,6 +13,10 @@ abstract class AbstractExtension
 {
     protected static $mixins = [];
 
+    final public function __construct()
+    {
+    }
+
     abstract public static function getName(): string;
 
     abstract public static function getTypes(): array;
@@ -23,9 +27,5 @@ abstract class AbstractExtension
             /** @var Macroable $extension */
             $extension::mixin(new $mixin());
         });
-    }
-
-    final public function __construct()
-    {
     }
 }

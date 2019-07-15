@@ -17,7 +17,6 @@ php composer.phar require umbrellio/laravel-pg-extensions
  - [Extended `Schema::create()`](#extended-table-creation)
  - [Working with unique indexes](#extended-unique-indexes-creation)
  - [Working with partitions](#partitions)
- - [Create custom extensions for PostgreSQL](#custom-extensions)
 
 ### Extended table creation
 
@@ -54,7 +53,7 @@ Schema::table('table', function (Blueprint $table) {
 });
 ```
 
-### Custom Extensions
+## Custom Extensions
 
 1. Create a repository for your extension, ex: `Some`
 2. Add this package as a dependency in composer, ex:
@@ -64,7 +63,7 @@ Schema::table('table', function (Blueprint $table) {
 4. Implement extension methods in closures, example:
 
 ```php
-use Umbrellio\Postgres\Schema\Extensions\AbstractBlueprint;
+use Umbrellio\Postgres\Extensions\Schema\AbstractBlueprint;
 
 class SomeBlueprint extends AbstractBlueprint
 {
@@ -85,21 +84,25 @@ class SomeBlueprint extends AbstractBlueprint
 use Umbrellio\Postgres\PostgresConnection;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
-use Umbrellio\Postgres\Schema\Extensions\AbstractExtension;
+use Umbrellio\Postgres\Extensions\AbstractExtension;
 
 class SomeExtension extends AbstractExtension
 {
-    protected static $mixins = [
-        Blueprint::class => SomeBlueprint::class,
-        PostgresConnection::class => SomeConnection::class,
-        PostgresGrammar::class => SomeSchemaGrammar::class,
-        ...
-    ];
+    public static function getMixins(): array
+    {
+        return [
+            Blueprint::class => SomeBlueprint::class,
+            PostgresConnection::class => SomeConnection::class,
+            PostgresGrammar::class => SomeSchemaGrammar::class,
+            ...
+        ];
+    }
     
     public static function getTypes(): string
     {
+        // where SomeType extends Doctrine\DBAL\Types\Type
         return [
-            'some' => SomeType::class, // where SomeType extends Doctrine\DBAL\Types\Type
+            'some' => SomeType::class,
         ];
     }
 

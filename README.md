@@ -88,7 +88,7 @@ use Umbrellio\Postgres\Schema\Extensions\AbstractExtension;
 
 class SomeExtension extends AbstractExtension
 {
-    public const NAME = 'ltree';
+    public const NAME = 'some';
 
     protected static $mixins = [
         Blueprint::class => SomeBlueprint::class,

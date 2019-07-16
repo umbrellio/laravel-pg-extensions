@@ -37,6 +37,9 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
         self::registerExtensions();
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     protected function registerConnectionServices(): void
     {
         $this->app->singleton('db.factory', function ($app) {
@@ -45,6 +48,10 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
 
         $this->app->singleton('db', function ($app) {
             return new DatabaseManager($app, $app['db.factory']);
+        });
+
+        $this->app->bind('db.connection', function ($app) {
+            return $app['db']->connection();
         });
     }
 

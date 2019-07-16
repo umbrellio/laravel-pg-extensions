@@ -19,7 +19,7 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
      * @param AbstractExtension|string $extension
      * @codeCoverageIgnore
      */
-    public static function registerExtension(string $extension): void
+    final public static function registerExtension(string $extension): void
     {
         if (!is_subclass_of($extension, AbstractExtension::class)) {
             throw new ExtensionInvalidException(sprintf(
@@ -28,13 +28,13 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
                 AbstractExtension::class
             ));
         }
-        static::$extensions[$extension::getName()] = $extension;
+        self::$extensions[$extension::getName()] = $extension;
     }
 
     public function boot()
     {
         parent::boot();
-        $this->registerExtensions();
+        self::registerExtensions();
     }
 
     protected function registerConnectionServices(): void
@@ -51,11 +51,11 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
     /**
      * @codeCoverageIgnore
      */
-    protected function registerExtensions(): void
+    final private static function registerExtensions(): void
     {
         /** @var PostgresConnection $connection */
         $connection = DB::connection();
-        collect(static::$extensions)->each(function ($extension, $key) use ($connection) {
+        collect(self::$extensions)->each(function ($extension, $key) use ($connection) {
             /** @var AbstractExtension $extension */
             $extension::register();
             foreach ($extension::getTypes() as $type => $typeClass) {

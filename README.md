@@ -78,16 +78,16 @@ Schema::table('some_table', function (Blueprint $table) {
 
 ## Custom Extensions
 
-1. Create a repository for your extension.
-2. Add this package as a dependency in composer, ex:
-   `composer require umbrellio/laravel-pg-extensions 2.*`
-3. Inherit the classes you intend to extend from abstract classes with namespace: 
-   `namespace Umbrellio\Postgres\Schema\Extensions`
-4. Implement extension methods in closures, example:
+1). Create a repository for your extension.
+
+2). Add this package as a dependency in composer.
+
+3). Inherit the classes you intend to extend from abstract classes with namespace: `namespace Umbrellio\Postgres\Extensions`
+
+4). Implement extension methods in closures, example:
 
 ```php
 use Umbrellio\Postgres\Extensions\Schema\AbstractBlueprint;
-
 class SomeBlueprint extends AbstractBlueprint
 {
    public function someMethod()
@@ -96,12 +96,10 @@ class SomeBlueprint extends AbstractBlueprint
            return $this->addColumn('someColumn', $column);
        };
    }
-   
-   ...
 }
-``` 
+```
 
-5. Create Extension class and mix these methods using the following syntax, ex:
+5). Create Extension class and mix these methods using the following syntax, ex:
 
 ```php
 use Umbrellio\Postgres\PostgresConnection;
@@ -136,7 +134,7 @@ class SomeExtension extends AbstractExtension
 }
 ```
 
-6. Register your Extension in ServiceProvider and put in config/app.php, ex:
+6). Register your Extension in ServiceProvider and put in config/app.php, ex:
 
 ```php
 use Illuminate\Support\ServiceProvider;

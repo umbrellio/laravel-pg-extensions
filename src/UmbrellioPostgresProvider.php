@@ -6,7 +6,6 @@ namespace Umbrellio\Postgres;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\DatabaseServiceProvider;
-use Illuminate\Support\Facades\DB;
 use Umbrellio\Postgres\Connectors\ConnectionFactory;
 use Umbrellio\Postgres\Extensions\AbstractExtension;
 use Umbrellio\Postgres\Extensions\Exceptions\ExtensionInvalidException;
@@ -34,7 +33,7 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
     public function boot()
     {
         parent::boot();
-        self::registerExtensions();
+        $this->registerExtensions();
     }
 
     /**
@@ -58,10 +57,10 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
     /**
      * @codeCoverageIgnore
      */
-    final private static function registerExtensions(): void
+    final private function registerExtensions(): void
     {
         /** @var PostgresConnection $connection */
-        $connection = DB::connection();
+        $connection = $this->app['db'];
         collect(self::$extensions)->each(function ($extension, $key) use ($connection) {
             /** @var AbstractExtension $extension */
             $extension::register();

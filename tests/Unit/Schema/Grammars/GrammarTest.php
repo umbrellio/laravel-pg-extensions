@@ -17,7 +17,7 @@ class GrammarTest extends TestCase
     {
         $blueprint = new Blueprint('test');
         $blueprint->gin('foo');
-        $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
+        $statements = $blueprint->toSql($this->getConnectionMock(), $this->getGrammar());
         $this->assertCount(1, $statements);
         $this->assertStringContainsString('CREATE INDEX', $statements[0]);
         $this->assertStringContainsString('GIN("foo")', $statements[0]);
@@ -28,16 +28,13 @@ class GrammarTest extends TestCase
     {
         $blueprint = new Blueprint('test');
         $blueprint->gist('foo');
-        $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
+        $statements = $blueprint->toSql($this->getConnectionMock(), $this->getGrammar());
         $this->assertCount(1, $statements);
         $this->assertStringContainsString('CREATE INDEX', $statements[0]);
         $this->assertStringContainsString('GIST("foo")', $statements[0]);
     }
 
-    /**
-     * @return PostgresConnection
-     */
-    protected function getConnection()
+    protected function getConnectionMock()
     {
         return Mockery::mock(PostgresConnection::class);
     }

@@ -138,13 +138,13 @@ class SomeExtension extends AbstractExtension
 
 ```php
 use Illuminate\Support\ServiceProvider;
-use Umbrellio\Postgres\UmbrellioPostgresProvider;
+use Umbrellio\Postgres\PostgresConnection;
 
 class SomeServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        UmbrellioPostgresProvider::registerExtension(SomeExtension::class);
+        PostgresConnection::registerExtension(SomeExtension::class);
     }
 }
 ```

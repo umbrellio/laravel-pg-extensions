@@ -97,13 +97,9 @@ Schema::table('some_table', function (Blueprint $table) {
 
 1). Create a repository for your extension.
 
-2).  Add this package as a dependency in composer, ex:
+2). Add this package as a dependency in composer.
 
-`composer require umbrellio/laravel-pg-extensions 2.*`
-   
-3). Inherit the classes you intend to extend from abstract classes with namespace: 
-
-`namespace Umbrellio\Postgres\Schema\Extensions`
+3). Inherit the classes you intend to extend from abstract classes with namespace: `namespace Umbrellio\Postgres\Extensions`
 
 4). Implement extension methods in closures, example:
 
@@ -159,13 +155,13 @@ class SomeExtension extends AbstractExtension
 
 ```php
 use Illuminate\Support\ServiceProvider;
-use Umbrellio\Postgres\UmbrellioPostgresProvider;
+use Umbrellio\Postgres\PostgresConnection;
 
 class SomeServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        UmbrellioPostgresProvider::registerExtension(SomeExtension::class);
+        PostgresConnection::registerExtension(SomeExtension::class);
     }
 }
 ```

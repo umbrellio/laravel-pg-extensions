@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres;
 
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\DatabaseServiceProvider;
 use Illuminate\Support\Facades\DB;
@@ -13,30 +14,9 @@ use Umbrellio\Postgres\Extensions\Exceptions\ExtensionInvalidException;
 
 class UmbrellioPostgresProvider extends DatabaseServiceProvider
 {
-    private static $extensions = [];
-
     /**
-     * @param AbstractExtension|string $extension
      * @codeCoverageIgnore
      */
-    final public static function registerExtension(string $extension): void
-    {
-        if (!is_subclass_of($extension, AbstractExtension::class)) {
-            throw new ExtensionInvalidException(sprintf(
-                'Class %s must be implemented from %s',
-                $extension,
-                AbstractExtension::class
-            ));
-        }
-        self::$extensions[$extension::getName()] = $extension;
-    }
-
-    public function boot()
-    {
-        parent::boot();
-        self::registerExtensions();
-    }
-
     protected function registerConnectionServices(): void
     {
         $this->app->singleton('db.factory', function ($app) {
@@ -46,21 +26,9 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
         $this->app->singleton('db', function ($app) {
             return new DatabaseManager($app, $app['db.factory']);
         });
-    }
 
-    /**
-     * @codeCoverageIgnore
-     */
-    final private static function registerExtensions(): void
-    {
-        /** @var PostgresConnection $connection */
-        $connection = DB::connection();
-        collect(self::$extensions)->each(function ($extension, $key) use ($connection) {
-            /** @var AbstractExtension $extension */
-            $extension::register();
-            foreach ($extension::getTypes() as $type => $typeClass) {
-                $connection->getSchemaBuilder()->registerCustomDoctrineType($typeClass, $type, $type);
-            }
+        $this->app->bind('db.connection', function ($app) {
+            return $app['db']->connection();
         });
     }
 }

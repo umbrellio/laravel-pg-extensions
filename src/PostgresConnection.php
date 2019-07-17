@@ -33,6 +33,25 @@ class PostgresConnection extends BasePostgresConnection
         self::$extensions[$extension::getName()] = $extension;
     }
 
+    public function getSchemaBuilder()
+    {
+        if ($this->schemaGrammar === null) {
+            $this->useDefaultSchemaGrammar();
+        }
+        return new Builder($this);
+    }
+
+    public function useDefaultPostProcessor()
+    {
+        parent::useDefaultPostProcessor();
+        $this->registerExtensions();
+    }
+
+    protected function getDefaultSchemaGrammar()
+    {
+        return $this->withTablePrefix(new PostgresGrammar());
+    }
+
     /**
      * @codeCoverageIgnore
      */
@@ -45,24 +64,5 @@ class PostgresConnection extends BasePostgresConnection
                 $this->getSchemaBuilder()->registerCustomDoctrineType($typeClass, $type, $type);
             }
         });
-    }
-
-    public function getSchemaBuilder()
-    {
-        if ($this->schemaGrammar === null) {
-            $this->useDefaultSchemaGrammar();
-        }
-        return new Builder($this);
-    }
-
-    protected function getDefaultSchemaGrammar()
-    {
-        return $this->withTablePrefix(new PostgresGrammar());
-    }
-    
-    public function useDefaultPostProcessor()
-    {
-        parent::useDefaultPostProcessor();
-        $this->registerExtensions();
     }
 }

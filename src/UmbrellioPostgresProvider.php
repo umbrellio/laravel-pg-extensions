@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres;
 
-use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\DatabaseServiceProvider;
-use Illuminate\Support\Facades\DB;
 use Umbrellio\Postgres\Connectors\ConnectionFactory;
-use Umbrellio\Postgres\Extensions\AbstractExtension;
-use Umbrellio\Postgres\Extensions\Exceptions\ExtensionInvalidException;
 
 class UmbrellioPostgresProvider extends DatabaseServiceProvider
 {

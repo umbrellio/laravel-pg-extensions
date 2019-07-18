@@ -8,37 +8,11 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use function explode;
 use Illuminate\Support\Facades\DB;
-use Umbrellio\Postgres\PostgresConnection;
 
-/**
- * TestUtil is a class with static utility methods used during tests.
- */
 class TestUtil
 {
-    /** @var bool Whether the database schema is initialized. */
     private static $initialized = false;
 
-    /**
-     * Gets a <b>real</b> database connection using the following parameters
-     * of the $GLOBALS array:
-     *
-     * 'db_type' : The name of the Doctrine DBAL database driver to use.
-     * 'db_username' : The username to use for connecting.
-     * 'db_password' : The password to use for connecting.
-     * 'db_host' : The hostname of the database to connect to.
-     * 'db_server' : The server name of the database to connect to
-     *               (optional, some vendors allow multiple server instances with different names on the same host).
-     * 'db_name' : The name of the database to connect to.
-     * 'db_port' : The port of the database to connect to.
-     *
-     * Usually these variables of the $GLOBALS array are filled by PHPUnit based
-     * on an XML configuration file. If no such parameters exist, an SQLite
-     * in-memory database is used.
-     *
-     * IMPORTANT: Each invocation of this method returns a NEW database connection.
-     *
-     * @return Connection The database connection instance.
-     */
     public static function getConnection(): Connection
     {
         if (self::hasRequiredConnectionParams() && !self::$initialized) {
@@ -60,8 +34,9 @@ class TestUtil
 
     public static function getParamsForMainConnection(): array
     {
+        print_r($GLOBALS);
         $connectionParams = [
-            'driver' => $GLOBALS['db_type'],
+            'driver' => $GLOBALS['db_type'] ?? 'pdo_pgsql',
             'user' => $GLOBALS['db_username'],
             'password' => $GLOBALS['db_password'],
             'host' => $GLOBALS['db_host'],
@@ -80,9 +55,6 @@ class TestUtil
         return $connectionParams;
     }
 
-    /**
-     * @return mixed[]
-     */
     public static function getParamsForTemporaryConnection(): array
     {
         $connectionParams = [
@@ -143,7 +115,6 @@ class TestUtil
 
             $tmpConn->close();
         } else {
-            //UPDATE pg_database SET datallowconn = true WHERE datname = 'my_database';
             $sm = $realConn->getSchemaManager();
 
             $schema = $sm->createSchema();
@@ -170,7 +141,6 @@ class TestUtil
 
     private static function getDoctrineConnection(string $name = null): Connection
     {
-        /** @var PostgresConnection $connection */
         $connection = DB::connection($name);
         return $connection->getDoctrineConnection();
     }

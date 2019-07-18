@@ -1,5 +1,6 @@
 {
   "name": "umbrellio/laravel-pg-extensions",
+  "description": "",
   "type": "library",
   "minimum-stability": "stable",
   "authors": [
@@ -10,12 +11,14 @@
   ],
   "require": {
     "php": "^7.2",
+    "doctrine/dbal": "^2.9",
     "laravel/framework": "^5.8"
   },
   "require-dev": {
     "umbrellio/code-style-php": "^1.0",
     "orchestra/testbench": "^3.5",
-    "php-coveralls/php-coveralls": "^2.1"
+    "php-coveralls/php-coveralls": "^2.1",
+    "symfony/phpunit-bridge": "^3.4.5|^4.0.5|^5.0"
   },
   "scripts": {
     "lint": [

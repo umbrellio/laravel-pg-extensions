@@ -2,13 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests\Functional;
+namespace Umbrellio\Postgres\Tests\Functional\Schema;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 use Umbrellio\Postgres\Schema\Blueprint;
+use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class SchemaTest extends FunctionalTestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function create(): void
     {

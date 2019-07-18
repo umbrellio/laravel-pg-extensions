@@ -9,6 +9,7 @@ use Illuminate\Support\Traits\Macroable;
 use Umbrellio\Postgres\Extensions\AbstractExtension;
 use Umbrellio\Postgres\Extensions\Exceptions\ExtensionInvalidException;
 use Umbrellio\Postgres\Schema\Builder;
+use Umbrellio\Postgres\Schema\Drivers\DoctrineDriver;
 use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 
 class PostgresConnection extends BasePostgresConnection
@@ -45,6 +46,11 @@ class PostgresConnection extends BasePostgresConnection
     {
         parent::useDefaultPostProcessor();
         $this->registerExtensions();
+    }
+
+    protected function getDoctrineDriver()
+    {
+        return new DoctrineDriver();
     }
 
     protected function getDefaultSchemaGrammar()

@@ -10,6 +10,7 @@ parameters:
   cache_directory: .ecs_cache
   exclude_files:
     - vendor/*
+    - src/Schema/Drivers/Traits/*
 
   skip:
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:

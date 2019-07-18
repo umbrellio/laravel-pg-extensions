@@ -2,15 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests\Functional;
+namespace Umbrellio\Postgres\Tests\Functional\Schema;
 
 use Generator;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Umbrellio\Postgres\Schema\Blueprint;
+use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class UniqueIndexTest extends FunctionalTestCase
 {
+    use RefreshDatabase;
+
     /**
      * @test
      * @dataProvider provideIndexes

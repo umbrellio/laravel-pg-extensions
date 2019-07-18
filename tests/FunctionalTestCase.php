@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Tests;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Umbrellio\Postgres\Tests\Functional\TestUtil;
 
 abstract class FunctionalTestCase extends TestCase

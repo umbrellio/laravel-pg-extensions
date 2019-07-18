@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Umbrellio\Postgres\Schema\Drivers\Platforms;
 
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;

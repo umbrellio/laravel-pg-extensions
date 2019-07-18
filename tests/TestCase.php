@@ -4,18 +4,12 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Tests;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Facade;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Umbrellio\Postgres\UmbrellioPostgresProvider;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected function getPackageProviders($app)
-    {
-        return [UmbrellioPostgresProvider::class];
-    }
-
     protected function setUp(): void
     {
         if (!$this->app) {
@@ -26,5 +20,9 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         Facade::clearResolvedInstances();
+    }
+    protected function getPackageProviders($app)
+    {
+        return [UmbrellioPostgresProvider::class];
     }
 }

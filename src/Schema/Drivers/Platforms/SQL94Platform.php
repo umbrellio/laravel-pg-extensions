@@ -14,7 +14,7 @@ class SQL94Platform extends SQL92Platform
      */
     public function getJsonTypeDeclarationSQL(array $field)
     {
-        if (! empty($field['jsonb'])) {
+        if (!empty($field['jsonb'])) {
             return 'JSONB';
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Umbrellio\Postgres\Extensions\Schema\Drivers;
 
 use Doctrine\DBAL\Driver\PDOPgSql\Driver;

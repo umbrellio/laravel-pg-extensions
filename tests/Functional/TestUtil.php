@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Umbrellio\Postgres\Tests\Functional;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
-use Illuminate\Support\Facades\DB;
 use function explode;
+use Illuminate\Support\Facades\DB;
 use Umbrellio\Postgres\PostgresConnection;
 
 /**
@@ -37,9 +39,9 @@ class TestUtil
      *
      * @return Connection The database connection instance.
      */
-    public static function getConnection() : Connection
+    public static function getConnection(): Connection
     {
-        if (self::hasRequiredConnectionParams() && ! self::$initialized) {
+        if (self::hasRequiredConnectionParams() && !self::$initialized) {
             self::initializeDatabase();
             self::$initialized = true;
         }
@@ -51,84 +53,12 @@ class TestUtil
         return $conn;
     }
 
-    private static function hasRequiredConnectionParams() : bool
-    {
-        return isset(
-            $GLOBALS['db_type'],
-            $GLOBALS['db_username'],
-            $GLOBALS['db_password'],
-            $GLOBALS['db_host'],
-            $GLOBALS['db_name'],
-            $GLOBALS['db_port']
-        )
-        && isset(
-            $GLOBALS['tmpdb_type'],
-            $GLOBALS['tmpdb_username'],
-            $GLOBALS['tmpdb_password'],
-            $GLOBALS['tmpdb_host'],
-            $GLOBALS['tmpdb_port']
-        );
-    }
-
-    private static function initializeDatabase() : void
-    {
-        $realConn = static::createDoctrineConnection(self::getParamsForMainConnection());
-        $tmpConn = static::createDoctrineConnection(self::getParamsForTemporaryConnection());
-
-
-        $platform = $tmpConn->getDatabasePlatform();
-
-        if ($platform->supportsCreateDropDatabase()) {
-            $dbname = $realConn->getDatabase();
-            $realConn->close();
-
-            $tmpConn->getSchemaManager()->dropAndCreateDatabase($dbname);
-
-            $tmpConn->close();
-        } else {
-            //UPDATE pg_database SET datallowconn = true WHERE datname = 'my_database';
-            $sm = $realConn->getSchemaManager();
-
-            $schema = $sm->createSchema();
-            $stmts  = $schema->toDropSql($realConn->getDatabasePlatform());
-
-            foreach ($stmts as $stmt) {
-                $realConn->exec($stmt);
-            }
-        }
-    }
-
-    private static function addDbEventSubscribers(Connection $conn) : void
-    {
-        if (! isset($GLOBALS['db_event_subscribers'])) {
-            return;
-        }
-
-        $evm = $conn->getEventManager();
-        foreach (explode(',', $GLOBALS['db_event_subscribers']) as $subscriberClass) {
-            $subscriberInstance = new $subscriberClass();
-            $evm->addEventSubscriber($subscriberInstance);
-        }
-    }
-
-    public static function getTempConnection() : Connection
+    public static function getTempConnection(): Connection
     {
         return static::getDoctrineConnection('temporary');
     }
 
-    private static function getDoctrineConnection(string $name = null): Connection
-    {
-        /** @var PostgresConnection $connection */
-        $connection = DB::connection($name);
-        return $connection->getDoctrineConnection();
-    }
-
-    private static function createDoctrineConnection($params): Connection
-    {
-        return DriverManager::getConnection($params);
-    }
-
-    public static function getParamsForMainConnection() : array
+    public static function getParamsForMainConnection(): array
     {
         $connectionParams = [
             'driver' => $GLOBALS['db_type'],
@@ -153,7 +83,7 @@ class TestUtil
     /**
      * @return mixed[]
      */
-    public static function getParamsForTemporaryConnection() : array
+    public static function getParamsForTemporaryConnection(): array
     {
         $connectionParams = [
             'driver' => $GLOBALS['tmpdb_type'],
@@ -177,5 +107,76 @@ class TestUtil
         }
 
         return $connectionParams;
+    }
+
+    private static function hasRequiredConnectionParams(): bool
+    {
+        return isset(
+            $GLOBALS['db_type'],
+            $GLOBALS['db_username'],
+            $GLOBALS['db_password'],
+            $GLOBALS['db_host'],
+            $GLOBALS['db_name'],
+            $GLOBALS['db_port']
+        )
+        && isset(
+            $GLOBALS['tmpdb_type'],
+            $GLOBALS['tmpdb_username'],
+            $GLOBALS['tmpdb_password'],
+            $GLOBALS['tmpdb_host'],
+            $GLOBALS['tmpdb_port']
+        );
+    }
+
+    private static function initializeDatabase(): void
+    {
+        $realConn = static::createDoctrineConnection(self::getParamsForMainConnection());
+        $tmpConn = static::createDoctrineConnection(self::getParamsForTemporaryConnection());
+
+        $platform = $tmpConn->getDatabasePlatform();
+
+        if ($platform->supportsCreateDropDatabase()) {
+            $dbname = $realConn->getDatabase();
+            $realConn->close();
+
+            $tmpConn->getSchemaManager()->dropAndCreateDatabase($dbname);
+
+            $tmpConn->close();
+        } else {
+            //UPDATE pg_database SET datallowconn = true WHERE datname = 'my_database';
+            $sm = $realConn->getSchemaManager();
+
+            $schema = $sm->createSchema();
+            $stmts = $schema->toDropSql($realConn->getDatabasePlatform());
+
+            foreach ($stmts as $stmt) {
+                $realConn->exec($stmt);
+            }
+        }
+    }
+
+    private static function addDbEventSubscribers(Connection $conn): void
+    {
+        if (!isset($GLOBALS['db_event_subscribers'])) {
+            return;
+        }
+
+        $evm = $conn->getEventManager();
+        foreach (explode(',', $GLOBALS['db_event_subscribers']) as $subscriberClass) {
+            $subscriberInstance = new $subscriberClass();
+            $evm->addEventSubscriber($subscriberInstance);
+        }
+    }
+
+    private static function getDoctrineConnection(string $name = null): Connection
+    {
+        /** @var PostgresConnection $connection */
+        $connection = DB::connection($name);
+        return $connection->getDoctrineConnection();
+    }
+
+    private static function createDoctrineConnection($params): Connection
+    {
+        return DriverManager::getConnection($params);
     }
 }

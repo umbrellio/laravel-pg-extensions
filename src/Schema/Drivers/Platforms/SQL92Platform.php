@@ -22,7 +22,7 @@ class SQL92Platform extends SQL91Platform
      */
     public function getSmallIntTypeDeclarationSQL(array $field)
     {
-        if (! empty($field['autoincrement'])) {
+        if (!empty($field['autoincrement'])) {
             return 'SMALLSERIAL';
         }
 
@@ -35,6 +35,17 @@ class SQL92Platform extends SQL91Platform
     public function hasNativeJsonType()
     {
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCloseActiveDatabaseConnectionsSQL($database)
+    {
+        return sprintf(
+            'SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = %s',
+            $this->quoteStringLiteral($database)
+        );
     }
 
     /**
@@ -53,16 +64,5 @@ class SQL92Platform extends SQL91Platform
         parent::initializeDoctrineTypeMappings();
 
         $this->doctrineTypeMapping['json'] = Types::JSON;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCloseActiveDatabaseConnectionsSQL($database)
-    {
-        return sprintf(
-            'SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = %s',
-            $this->quoteStringLiteral($database)
-        );
     }
 }

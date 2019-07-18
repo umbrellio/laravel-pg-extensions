@@ -11,9 +11,6 @@ class ConnectionFactory extends ConnectionFactoryBase
 {
     protected function createConnection($driver, $connection, $database, $prefix = '', array $config = [])
     {
-        //dd($driver, $connection, $database, $prefix, $config);
-        $connection = new PostgresConnection($connection, $database, $prefix, $config);
-//        dd($connection->getName());
-        return $connection;
+        return new PostgresConnection($connection, $database, $prefix, $config);
     }
 }

@@ -9,9 +9,6 @@ use Doctrine\DBAL\Types\Types;
 
 class SQL94Platform extends SQL92Platform
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getJsonTypeDeclarationSQL(array $field)
     {
         if (!empty($field['jsonb'])) {
@@ -21,17 +18,11 @@ class SQL94Platform extends SQL92Platform
         return 'JSON';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getReservedKeywordsClass()
     {
         return PostgreSQL94Keywords::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function initializeDoctrineTypeMappings()
     {
         parent::initializeDoctrineTypeMappings();

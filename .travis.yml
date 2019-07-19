@@ -101,7 +101,7 @@ matrix:
         - bash ./tests/travis/install-postgres-11.sh
     - stage: Test
       php: "7.4snapshot"
-      env: DB=pgsql POSTGRESQL_VERSION=11.0 COVERAGE=yes
+      env: DB=pgsql POSTGRESQL_VERSION=11.0
       sudo: required
       services:
         - docker

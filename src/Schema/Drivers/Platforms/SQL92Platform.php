@@ -9,17 +9,11 @@ use Doctrine\DBAL\Types\Types;
 
 class SQL92Platform extends SQL91Platform
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getJsonTypeDeclarationSQL(array $field)
     {
         return 'JSON';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSmallIntTypeDeclarationSQL(array $field)
     {
         if (!empty($field['autoincrement'])) {
@@ -29,17 +23,11 @@ class SQL92Platform extends SQL91Platform
         return parent::getSmallIntTypeDeclarationSQL($field);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasNativeJsonType()
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCloseActiveDatabaseConnectionsSQL($database)
     {
         return sprintf(
@@ -48,17 +36,11 @@ class SQL92Platform extends SQL91Platform
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getReservedKeywordsClass()
     {
         return PostgreSQL92Keywords::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function initializeDoctrineTypeMappings()
     {
         parent::initializeDoctrineTypeMappings();

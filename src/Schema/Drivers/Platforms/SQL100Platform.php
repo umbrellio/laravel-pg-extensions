@@ -19,9 +19,7 @@ class SQL100Platform extends SQL94Platform
                 AND    sequence_schema NOT LIKE 'pg\_%'
                 AND    sequence_schema != 'information_schema'";
     }
-    /**
-     * {@inheritdoc}
-     */
+
     protected function getReservedKeywordsClass(): string
     {
         return PostgreSQL100Keywords::class;

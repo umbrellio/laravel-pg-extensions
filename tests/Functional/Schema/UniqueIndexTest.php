@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Tests\Functional\Schema;
 
 use Generator;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Umbrellio\Postgres\Schema\Blueprint;
@@ -13,7 +13,7 @@ use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class UniqueIndexTest extends FunctionalTestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /**
      * @test
@@ -37,7 +37,7 @@ class UniqueIndexTest extends FunctionalTestCase
         $indexes = $this->getIndexByName('test_table_name_unique');
 
         $this->assertTrue(isset($indexes->indexdef));
-        $this->assertSame($this->getDummyIndex() . $expected, $indexes->indexdef);
+        $this->assertRegExp('/' . $this->getDummyIndex() . $expected . '/', $indexes->indexdef);
     }
 
     /** @test */
@@ -49,8 +49,8 @@ class UniqueIndexTest extends FunctionalTestCase
 
         $this->assertTrue(Schema::hasTable('test_table'));
 
-        $this->assertSame(
-            'CREATE INDEX specify_index_name ON public.test_table USING btree (name)',
+        $this->assertRegExp(
+            '/CREATE INDEX specify_index_name ON (public.)?test_table USING btree \(name\)/',
             $this->getIndexByName('specify_index_name')->indexdef
         );
     }
@@ -61,73 +61,73 @@ class UniqueIndexTest extends FunctionalTestCase
             $table->uniquePartial('name');
         }];
         yield [
-            ' WHERE (deleted_at IS NULL)',
+            ' WHERE \(deleted_at IS NULL\)',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereNull('deleted_at');
             },
         ];
         yield [
-            ' WHERE (deleted_at IS NOT NULL)',
+            ' WHERE \(deleted_at IS NOT NULL\)',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereNotNull('deleted_at');
             },
         ];
         yield [
-            ' WHERE (phone = 1234)',
+            ' WHERE \(phone = 1234\)',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->where('phone', '=', 1234);
             },
         ];
         yield [
-            " WHERE ((code)::text = 'test'::text)",
+            " WHERE \(\(code\)::text = 'test'::text\)",
             function (Blueprint $table) {
                 $table->uniquePartial('name')->where('code', '=', 'test');
             },
         ];
         yield [
-            ' WHERE ((phone >= 1) AND (phone <= 2))',
+            ' WHERE \(\(phone >= 1\) AND \(phone <= 2\)\)',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereBetween('phone', [1, 2]);
             },
         ];
         yield [
-            ' WHERE ((phone < 1) OR (phone > 2))',
+            ' WHERE \(\(phone < 1\) OR \(phone > 2\)\)',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereNotBetween('phone', [1, 2]);
             },
         ];
         yield [
-            ' WHERE (phone <> icq)',
+            ' WHERE \(phone <> icq\)',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereColumn('phone', '<>', 'icq');
             },
         ];
         yield [
-            ' WHERE ((phone = 1) AND (icq < 2))',
+            ' WHERE \(\(phone = 1\) AND \(icq < 2\)\)',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereRaw('phone = ? and icq < ?', [1, 2]);
             },
         ];
         yield [
-            ' WHERE (phone = ANY (ARRAY[1, 2, 4]))',
+            ' WHERE \(phone = ANY \(ARRAY\[1, 2, 4\]\)\)',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereIn('phone', [1, 2, 4]);
             },
         ];
         yield [
-            ' WHERE (0 = 1)',
+            ' WHERE \(0 = 1\)',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereIn('phone', []);
             },
         ];
         yield [
-            ' WHERE (phone <> ALL (ARRAY[1, 2, 4]))',
+            ' WHERE \(phone <> ALL \(ARRAY\[1, 2, 4\]\)\)',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereNotIn('phone', [1, 2, 4]);
             },
         ];
         yield [
-            ' WHERE (1 = 1)',
+            ' WHERE \(1 = 1\)',
             function (Blueprint $table) {
                 $table->uniquePartial('name')->whereNotIn('phone', []);
             },
@@ -136,7 +136,7 @@ class UniqueIndexTest extends FunctionalTestCase
 
     protected function getDummyIndex()
     {
-        return 'CREATE UNIQUE INDEX test_table_name_unique ON public.test_table USING btree (name)';
+        return 'CREATE UNIQUE INDEX test_table_name_unique ON (public.)?test_table USING btree \(name\)';
     }
 
     protected function getIndexByName($name)

@@ -28,12 +28,15 @@ script:
     fi
 
 after_success:
-  - travis_retry vendor/bin/php-coveralls -v
+  - |
+    if [ "x$COVERAGE" == "xyes" ]; then
+      travis_retry vendor/bin/php-coveralls -v
+    fi
 
-jobs:
+matrix:
+  fast_finish: true
   allow_failures:
     - php: "7.4snapshot"
-
   include:
     - stage: Test
       php: "7.2"
@@ -98,7 +101,7 @@ jobs:
         - bash ./tests/travis/install-postgres-11.sh
     - stage: Test
       php: "7.4snapshot"
-      env: DB=pgsql POSTGRESQL_VERSION=11.0
+      env: DB=pgsql POSTGRESQL_VERSION=11.0 COVERAGE=yes
       sudo: required
       services:
         - docker

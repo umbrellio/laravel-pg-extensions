@@ -7,7 +7,6 @@ namespace Umbrellio\Postgres\Tests\Functional;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use function explode;
-use const PHP_EOL;
 use Illuminate\Support\Facades\DB;
 
 class TestUtil

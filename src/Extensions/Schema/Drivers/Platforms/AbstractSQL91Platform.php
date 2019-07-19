@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Umbrellio\Postgres\Extensions\Schema\Drivers\Platforms;
 
 use Umbrellio\Postgres\Extensions\AbstractComponent;

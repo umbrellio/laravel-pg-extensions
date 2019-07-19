@@ -18,16 +18,13 @@ install:
   - rm composer.lock
   - travis_retry composer -n update --prefer-dist
 
-before_script:
-  - cp phpunit.travis.xml phpunit.xml
-
 script:
   - vendor/bin/ecs check --config=ecs.yml .
   - |
     if [ "x$COVERAGE" == "xyes" ]; then
-       php -d pcov.directory='.' vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+       ./vendor/bin/phpunit --configuration phpunit.travis.xml --coverage-clover build/logs/clover.xml
     else
-       ./vendor/bin/phpunit
+       ./vendor/bin/phpunit --configuration phpunit.travis.xml
     fi
 
 after_success:

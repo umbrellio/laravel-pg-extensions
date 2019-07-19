@@ -11,9 +11,34 @@ use Illuminate\Support\Facades\Schema;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
-class UniqueIndexTest extends FunctionalTestCase
+class BlueprintTest extends FunctionalTestCase
 {
     use DatabaseTransactions;
+
+    /** @test */
+    public function createIndexIfNotExists(): void
+    {
+        Schema::create('test_table', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+
+            if (!$table->hasIndex(['name'], true)) {
+                $table->unique(['name']);
+            }
+        });
+
+        $this->assertTrue(Schema::hasTable('test_table'));
+
+        $indexes = $this->getIndexByName('test_table_name_unique');
+
+        Schema::table('test_table', function (Blueprint $table) {
+            if (!$table->hasIndex(['name'], true)) {
+                $table->unique(['name']);
+            }
+        });
+
+        $this->assertTrue(isset($indexes->indexdef));
+    }
 
     /**
      * @test

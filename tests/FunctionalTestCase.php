@@ -13,12 +13,10 @@ abstract class FunctionalTestCase extends TestCase
         parent::getEnvironmentSetUp($app);
 
         $app['config']->set('database.default', 'main');
-
         $this->setConnectionConfig($app, 'main', TestUtil::getParamsForMainConnection());
-        $this->setConnectionConfig($app, 'temporary', TestUtil::getParamsForTemporaryConnection());
     }
 
-    private function setConnectionConfig($app, $name, $params)
+    private function setConnectionConfig($app, $name, $params): void
     {
         $app['config']->set('database.connections.' . $name, [
             'driver' => 'pgsql',

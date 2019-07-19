@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
-class SchemaTest extends FunctionalTestCase
+class BuilderTest extends FunctionalTestCase
 {
     use DatabaseTransactions;
 

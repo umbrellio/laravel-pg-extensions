@@ -13,12 +13,17 @@ class TestUtil
 {
     private static $initialized = false;
 
-    public static function getConnection(): Connection
+    public static function createDatabase()
     {
         if (self::hasRequiredConnectionParams() && !self::$initialized) {
             self::initializeDatabase();
             self::$initialized = true;
         }
+    }
+
+    public static function getConnection(): Connection
+    {
+        static::createDatabase();
 
         $conn = static::getDoctrineConnection();
 
@@ -34,7 +39,6 @@ class TestUtil
 
     public static function getParamsForMainConnection(): array
     {
-        print_r($GLOBALS);
         $connectionParams = [
             'driver' => $GLOBALS['db_type'] ?? 'pdo_pgsql',
             'user' => $GLOBALS['db_username'],

@@ -16,7 +16,10 @@ class BlueprintTest extends FunctionalTestCase
 {
     use DatabaseTransactions;
 
-    public function testAlterTableUsing(): void
+    /**
+     * @test
+     */
+    public function alterTableUsing(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
             $table->increments('id');
@@ -41,7 +44,10 @@ class BlueprintTest extends FunctionalTestCase
         $this->assertSame('[1]', DB::table('test_table')->first()->code);
     }
 
-    public function testAlterTableDefault(): void
+    /**
+     * @test
+     */
+    public function alterTableDefault(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
             $table->increments('id');

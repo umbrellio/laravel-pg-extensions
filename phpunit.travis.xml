@@ -2,8 +2,8 @@
 <phpunit bootstrap="vendor/autoload.php"
          colors="true"
          convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
+         convertNoticesToExceptions="false"
+         convertWarningsToExceptions="false"
          processIsolation="false"
          stopOnFailure="true">
     <php>
@@ -12,7 +12,7 @@
         <var name="db_host" value="localhost" />
         <var name="db_username" value="postgres" />
         <var name="db_password" value="" />
-        <var name="db_name" value="testing" />
+        <var name="db_database" value="testing" />
         <var name="db_port" value="5432"/>
     </php>
     <testsuites>
@@ -25,7 +25,6 @@
             <directory suffix=".php">./src</directory>
             <exclude>
                 <file>./src/.meta.php</file>
-                <directory>./src/Commands</directory>
             </exclude>
         </whitelist>
     </filter>

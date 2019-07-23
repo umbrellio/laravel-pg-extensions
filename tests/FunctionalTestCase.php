@@ -54,7 +54,7 @@ abstract class FunctionalTestCase extends TestCase
             'driver' => 'pgsql',
             'host' => $params['host'],
             'port' => (int) $params['port'],
-            'database' => $params['dbname'],
+            'database' => $params['database'],
             'username' => $params['user'],
             'password' => $params['password'],
             'charset' => 'utf8',
@@ -70,7 +70,7 @@ abstract class FunctionalTestCase extends TestCase
             'user' => $GLOBALS['db_username'],
             'password' => $GLOBALS['db_password'],
             'host' => $GLOBALS['db_host'],
-            'dbname' => $GLOBALS['db_name'],
+            'database' => $GLOBALS['db_database'],
             'port' => $GLOBALS['db_port'],
         ];
 

@@ -16,6 +16,7 @@ php composer.phar require umbrellio/laravel-pg-extensions
 
  - [Extended `Schema::create()`](#extended-table-creation)
  - [Extended `Schema` with GIST/GIN indexes](#create-gist/gin-indexes)
+ - [Extended `Schema` with USING](#extended-schema-using)
  - [Working with unique indexes](#extended-unique-indexes-creation)
  - [Working with partitions](#partitions)
  - [Check existing index before manipulation](#check-existing-index)
@@ -27,6 +28,24 @@ Example:
 Schema::create('table', function (Blueprint $table) {
     $table->like('other_table')->includingAll(); 
     $table->ifNotExists();
+});
+```
+
+### Extended Schema USING
+
+Example:
+```php
+Schema::create('table', function (Blueprint $table) {
+    $table->integer('number');
+});
+
+//modifications with data...
+
+Schema::table('table', function (Blueprint $table) {
+    $table
+        ->string('number')
+        ->using("('[' || number || ']')::character varyiing")
+        ->change();
 });
 ```
 

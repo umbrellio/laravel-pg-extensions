@@ -110,27 +110,20 @@ trait AlterTableChangeColumnTrait
         string $oldColumnName,
         &$sql
     ): void {
-        if ($columnDiff->hasChanged('autoincrement')) {
-            if ($column->getAutoincrement()) {
-                $seqName = $platform->getIdentitySequenceName($diff->name, $oldColumnName);
-
-                $sql[] = sprintf('CREATE SEQUENCE %s', $seqName);
-                $sql[] = sprintf(
-                    "SELECT setval('%s', (SELECT MAX(%s) FROM %s))",
-                    $seqName,
-                    $oldColumnName,
-                    $quoteName
-                );
-                $sql[] = sprintf(
-                    "ALTER TABLE %s ALTER %s SET DEFAULT nextval('%s')",
-                    $quoteName,
-                    $oldColumnName,
-                    $seqName
-                );
-            } else {
-                $sql[] = sprintf('ALTER TABLE %s ALTER %s DROP DEFAULT', $quoteName, $oldColumnName);
-            }
+        if (!$columnDiff->hasChanged('autoincrement')) {
+            return;
         }
+
+        if (!$column->getAutoincrement()) {
+            $sql[] = sprintf('ALTER TABLE %s ALTER %s DROP DEFAULT', $quoteName, $oldColumnName);
+            return;
+        }
+
+        $seqName = $platform->getIdentitySequenceName($diff->name, $oldColumnName);
+
+        $sql[] = sprintf('CREATE SEQUENCE %s', $seqName);
+        $sql[] = sprintf("SELECT setval('%s', (SELECT MAX(%s) FROM %s))", $seqName, $oldColumnName, $quoteName);
+        $sql[] = sprintf("ALTER TABLE %s ALTER %s SET DEFAULT nextval('%s')", $quoteName, $oldColumnName, $seqName);
     }
 
     private function compileAlterColumnType(
@@ -157,7 +150,6 @@ trait AlterTableChangeColumnTrait
 
             $typeName = $type->getSQLDeclaration($columnDefinition, $platform);
 
-            $using = '';
             if ($columnDiff->hasChanged('type')) {
                 $using = sprintf('USING %s::%s', $oldColumnName, $typeName);
 
@@ -171,7 +163,7 @@ trait AlterTableChangeColumnTrait
                 $quoteName,
                 $oldColumnName,
                 $typeName,
-                $using
+                $using ?? ''
             ));
         }
     }

@@ -5,15 +5,27 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Tests;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Facade;
 
 abstract class FunctionalTestCase extends TestCase
 {
+    protected function setUp(): void
+    {
+        if (!$this->app) {
+            putenv('APP_ENV=testing');
+            $this->app = $this->createApplication();
+        }
+
+        parent::setUp();
+
+        Facade::clearResolvedInstances();
+    }
     protected function getEnvironmentSetUp($app)
     {
         parent::getEnvironmentSetUp($app);
 
         $app['config']->set('database.default', 'main');
-        $this->setConnectionConfig($app, 'main', TestUtil::getParamsForMainConnection());
+        $this->setConnectionConfig($app, 'main', $this->getParamsForConnection());
     }
 
     protected function assertCommentOnColumn(string $table, string $column, ?string $expected = null): void
@@ -49,6 +61,28 @@ abstract class FunctionalTestCase extends TestCase
             'prefix' => '',
             'schema' => 'public',
         ]);
+    }
+
+    private function getParamsForConnection(): array
+    {
+        $connectionParams = [
+            'driver' => $GLOBALS['db_type'] ?? 'pdo_pgsql',
+            'user' => $GLOBALS['db_username'],
+            'password' => $GLOBALS['db_password'],
+            'host' => $GLOBALS['db_host'],
+            'dbname' => $GLOBALS['db_name'],
+            'port' => $GLOBALS['db_port'],
+        ];
+
+        if (isset($GLOBALS['db_server'])) {
+            $connectionParams['server'] = $GLOBALS['db_server'];
+        }
+
+        if (isset($GLOBALS['db_unix_socket'])) {
+            $connectionParams['unix_socket'] = $GLOBALS['db_unix_socket'];
+        }
+
+        return $connectionParams;
     }
 
     private function getCommentListing(string $table, string $column)

@@ -15,12 +15,12 @@ class SchemaAlterTableChangeColumnListener
     {
         $event->preventDefault();
 
-        $sql = array_unique(array_merge($event->getSql(), $this->getAlterTableChangeColumnSQL(
-            $event->getPlatform(),
-            $event->getTableDiff(),
-            $event->getColumnDiff()
-        )));
-
-        $event->addSql($sql);
+        $event->addSql(
+            $this->getAlterTableChangeColumnSQL(
+                $event->getPlatform(),
+                $event->getTableDiff(),
+                $event->getColumnDiff()
+            )
+        );
     }
 }

@@ -5,86 +5,15 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Tests\Functional\Schema;
 
 use Generator;
-use Illuminate\Database\Query\Expression;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
-class BlueprintTest extends FunctionalTestCase
+class CreateIndexTest extends FunctionalTestCase
 {
     use DatabaseTransactions;
-
-    /**
-     * @test
-     */
-    public function alterTableUsing(): void
-    {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('code');
-        });
-
-        DB::table('test_table')->insert([
-            ['code' => '1'],
-        ]);
-
-        Schema::table('test_table', function (Blueprint $table) {
-            $table->integer('code')->change();
-        });
-
-        $this->assertSame('integer', Schema::getColumnType('test_table', 'code'));
-
-        Schema::table('test_table', function (Blueprint $table) {
-            $table->string('code')->using("('[' || code || ']')::character varying")->change();
-        });
-
-        $this->assertSame('string', Schema::getColumnType('test_table', 'code'));
-        $this->assertSame('[1]', DB::table('test_table')->first()->code);
-    }
-
-    /**
-     * @test
-     */
-    public function alterTableDefault(): void
-    {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('code')->default('test_string');
-        });
-
-        DB::table('test_table')->insert(['id' => 1]);
-
-        $this->assertSame('test_string', DB::table('test_table')->first()->code);
-
-        Schema::table('test_table', function (Blueprint $table) {
-            $table->string('code')->nullable()->default(null)->change();
-        });
-
-        DB::table('test_table')->truncate();
-        DB::table('test_table')->insert(['id' => 1]);
-
-        $this->assertNull(DB::table('test_table')->first()->code);
-
-        Schema::table('test_table', function (Blueprint $table) {
-            $table->string('code')->default(new Expression("''::character varying"))->change();
-        });
-
-        DB::table('test_table')->truncate();
-        DB::table('test_table')->insert(['id' => 1]);
-
-        $this->assertSame('', DB::table('test_table')->first()->code);
-
-        Schema::table('test_table', function (Blueprint $table) {
-            $table->string('code')->default('')->change();
-        });
-
-        DB::table('test_table')->truncate();
-        DB::table('test_table')->insert(['id' => 1]);
-
-        $this->assertSame('', DB::table('test_table')->first()->code);
-    }
 
     /** @test */
     public function createIndexIfNotExists(): void

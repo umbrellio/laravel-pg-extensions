@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Schema;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
-class BuilderTest extends FunctionalTestCase
+class CreateTableTest extends FunctionalTestCase
 {
     use DatabaseTransactions;
 
     /** @test */
-    public function create(): void
+    public function createSimple(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
             $table->increments('id');
@@ -26,7 +26,7 @@ class BuilderTest extends FunctionalTestCase
     }
 
     /** @test */
-    public function createLikeSimple(): void
+    public function createViaLike(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
             $table->increments('id');
@@ -44,7 +44,7 @@ class BuilderTest extends FunctionalTestCase
     }
 
     /** @test */
-    public function createLikeFull(): void
+    public function createViaLikeIncludingAll(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
             $table->increments('id');

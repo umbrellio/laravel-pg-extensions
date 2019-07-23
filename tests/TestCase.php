@@ -6,7 +6,6 @@ namespace Umbrellio\Postgres\Tests;
 
 use Illuminate\Support\Facades\Facade;
 use Orchestra\Testbench\TestCase as BaseTestCase;
-use Umbrellio\Postgres\Tests\Functional\TestUtil;
 use Umbrellio\Postgres\UmbrellioPostgresProvider;
 
 abstract class TestCase extends BaseTestCase
@@ -24,6 +23,7 @@ abstract class TestCase extends BaseTestCase
 
         Facade::clearResolvedInstances();
     }
+
     protected function getPackageProviders($app)
     {
         return [UmbrellioPostgresProvider::class];

@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Events;
 use Illuminate\Database\PostgresConnection as BasePostgresConnection;
 use Illuminate\Support\Traits\Macroable;
 use Umbrellio\Postgres\Extensions\AbstractExtension;
 use Umbrellio\Postgres\Extensions\Exceptions\ExtensionInvalidException;
 use Umbrellio\Postgres\Schema\Builder;
-use Umbrellio\Postgres\Schema\Drivers\DoctrineDriver;
 use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
+use Umbrellio\Postgres\Schema\Listeners\SchemaAlterTableChangeColumnListener;
 
 class PostgresConnection extends BasePostgresConnection
 {
@@ -20,6 +22,7 @@ class PostgresConnection extends BasePostgresConnection
 
     /**
      * @param AbstractExtension|string $extension
+     * @throws ExtensionInvalidException
      * @codeCoverageIgnore
      */
     final public static function registerExtension(string $extension): void
@@ -42,15 +45,15 @@ class PostgresConnection extends BasePostgresConnection
         return new Builder($this);
     }
 
-    public function useDefaultPostProcessor()
+    public function useDefaultPostProcessor(): void
     {
         parent::useDefaultPostProcessor();
         $this->registerExtensions();
     }
 
-    protected function getDoctrineDriver()
+    public function getDoctrineConnection(): Connection
     {
-        return new DoctrineDriver();
+        return $this->fixDoctrineConnection(parent::getDoctrineConnection());
     }
 
     protected function getDefaultSchemaGrammar()
@@ -61,14 +64,27 @@ class PostgresConnection extends BasePostgresConnection
     /**
      * @codeCoverageIgnore
      */
-    final private function registerExtensions(): void
+    private function registerExtensions(): void
     {
-        collect(self::$extensions)->each(function ($extension, $key) {
+        collect(self::$extensions)->each(function ($extension) {
             /** @var AbstractExtension $extension */
             $extension::register();
             foreach ($extension::getTypes() as $type => $typeClass) {
                 $this->getSchemaBuilder()->registerCustomDoctrineType($typeClass, $type, $type);
             }
         });
+    }
+
+    private function fixDoctrineConnection(Connection $connection): Connection
+    {
+        $eventManager = $connection->getEventManager();
+        if (!$eventManager->hasListeners(Events::onSchemaAlterTableChangeColumn)) {
+            $eventManager->addEventListener(
+                Events::onSchemaAlterTableChangeColumn,
+                new SchemaAlterTableChangeColumnListener()
+            );
+        }
+        $connection->getDatabasePlatform()->setEventManager($eventManager);
+        return $connection;
     }
 }

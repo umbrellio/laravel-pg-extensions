@@ -15,3 +15,5 @@ parameters:
   skip:
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
       - src/Schema/Blueprint.php
+    Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenReferenceSniff:
+      - src/Schema/Traits/AlterTableChangeColumnTrait.php

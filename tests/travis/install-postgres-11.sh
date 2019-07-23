@@ -11,12 +11,4 @@ sudo docker exec -i postgres11 bash <<< 'until pg_isready -U postgres > /dev/nul
 
 echo "Postgres 11 ready"
 
-ps ax | grep postgres
-
-sudo netstat -plunt | grep postgres
-
-sudo service postgresql start || true
-
-sudo service postgres11 start
-
-sudo service postgres start
+#sudo service postgres restart

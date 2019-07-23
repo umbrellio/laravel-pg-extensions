@@ -96,6 +96,7 @@ matrix:
       sudo: required
       services:
         - docker
+        - postgresql
       addons:
         postgresql: "9.6"
       before_script:
@@ -106,5 +107,6 @@ matrix:
       sudo: required
       services:
         - docker
+        - postgresql
       before_script:
         - bash ./tests/travis/install-postgres-11.sh

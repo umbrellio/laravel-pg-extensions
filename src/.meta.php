@@ -15,6 +15,7 @@ namespace Illuminate\Database\Schema {
      * @method UniqueDefinition uniquePartial($columns, ?string $index = null, ?string $algorithm = null)
      * @method Fluent gin($columns, ?string $name = null)
      * @method Fluent gist($columns, ?string $name = null)
+     * @method ColumnDefinition range(string $name, string $format = 'tsrange')
      */
     class Blueprint
     {
@@ -22,6 +23,8 @@ namespace Illuminate\Database\Schema {
 
     /**
      * @method ColumnDefinition using($expression)
+     * @method ColumnDefinition gist()
+     * @method ColumnDefinition gin()
      */
     class ColumnDefinition
     {

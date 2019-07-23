@@ -60,7 +60,6 @@ class PostgresGrammar extends BasePostgresGrammar
         );
     }
 
-
     public function compileGist(Blueprint $blueprint, Fluent $command): string
     {
         return sprintf(
@@ -69,5 +68,10 @@ class PostgresGrammar extends BasePostgresGrammar
             $this->wrapTable($blueprint),
             $this->columnize($command->columns)
         );
+    }
+
+    protected function typeTsrange()
+    {
+        return 'tsrange';
     }
 }

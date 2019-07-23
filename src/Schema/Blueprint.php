@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Schema;
 
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
+use Illuminate\Database\Schema\ColumnDefinition;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Schema\Builders\UniquePartialBuilder;
@@ -84,6 +85,14 @@ class Blueprint extends BaseBlueprint
         }
 
         return array_key_exists($index, $this->getSchemaManager()->listTableIndexes($this->getTable()));
+    }
+
+    /**
+     * @return Fluent|ColumnDefinition
+     */
+    public function range(string $column, string $format = 'tsrange')
+    {
+        return $this->addColumn($format, $column);
     }
 
     protected function addFluentIndexes(): void

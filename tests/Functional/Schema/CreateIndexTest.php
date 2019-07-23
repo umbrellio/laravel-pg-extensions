@@ -6,7 +6,6 @@ namespace Umbrellio\Postgres\Tests\Functional\Schema;
 
 use Generator;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
@@ -14,6 +13,46 @@ use Umbrellio\Postgres\Tests\FunctionalTestCase;
 class CreateIndexTest extends FunctionalTestCase
 {
     use DatabaseTransactions;
+
+    /** @test */
+    public function createGistIndex(): void
+    {
+        Schema::create('test_table', function (Blueprint $table) {
+            $table->range('code')->gist();
+        });
+
+        $this->seeIndex('test_table_code_gist');
+
+        Schema::table('test_table', function (Blueprint $table) {
+            $table->range('some_id');
+            $table->range('some_key');
+            $table->gist('some_key', 'specify_gist_key');
+            $table->gist('some_id');
+        });
+
+        $this->seeIndex('specify_gist_key');
+        $this->seeIndex('test_table_some_id_gist');
+    }
+
+    /** @test */
+    public function createGinIndex(): void
+    {
+        Schema::create('test_table', function (Blueprint $table) {
+            $table->jsonb('id')->gin();
+        });
+
+        $this->seeIndex('test_table_id_gin');
+
+        Schema::table('test_table', function (Blueprint $table) {
+            $table->jsonb('some_id');
+            $table->jsonb('some_key');
+            $table->gin('some_key', 'specify_gin_key');
+            $table->gin('some_id');
+        });
+
+        $this->seeIndex('specify_gin_key');
+        $this->seeIndex('test_table_some_id_gin');
+    }
 
     /** @test */
     public function createIndexIfNotExists(): void
@@ -29,15 +68,13 @@ class CreateIndexTest extends FunctionalTestCase
 
         $this->assertTrue(Schema::hasTable('test_table'));
 
-        $indexes = $this->getIndexByName('test_table_name_unique');
-
         Schema::table('test_table', function (Blueprint $table) {
             if (!$table->hasIndex(['name'], true)) {
                 $table->unique(['name']);
             }
         });
 
-        $this->assertTrue(isset($indexes->indexdef));
+        $this->seeIndex('test_table_name_unique');
     }
 
     /**
@@ -58,11 +95,7 @@ class CreateIndexTest extends FunctionalTestCase
         });
 
         $this->assertTrue(Schema::hasTable('test_table'));
-
-        $indexes = $this->getIndexByName('test_table_name_unique');
-
-        $this->assertTrue(isset($indexes->indexdef));
-        $this->assertRegExp('/' . $this->getDummyIndex() . $expected . '/', $indexes->indexdef);
+        $this->assertRegExpIndex('test_table_name_unique', '/' . $this->getDummyIndex() . $expected . '/');
     }
 
     /** @test */
@@ -74,9 +107,9 @@ class CreateIndexTest extends FunctionalTestCase
 
         $this->assertTrue(Schema::hasTable('test_table'));
 
-        $this->assertRegExp(
-            '/CREATE INDEX specify_index_name ON (public.)?test_table USING btree \(name\)/',
-            $this->getIndexByName('specify_index_name')->indexdef
+        $this->assertRegExpIndex(
+            'specify_index_name',
+            '/CREATE INDEX specify_index_name ON (public.)?test_table USING btree \(name\)/'
         );
     }
 
@@ -162,10 +195,5 @@ class CreateIndexTest extends FunctionalTestCase
     protected function getDummyIndex()
     {
         return 'CREATE UNIQUE INDEX test_table_name_unique ON (public.)?test_table USING btree \(name\)';
-    }
-
-    protected function getIndexByName($name)
-    {
-        return collect(DB::select("SELECT indexdef FROM pg_indexes WHERE  indexname = '{$name}'"))->first();
     }
 }

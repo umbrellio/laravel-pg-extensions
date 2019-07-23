@@ -48,6 +48,27 @@ abstract class FunctionalTestCase extends TestCase
         $this->assertSame($expected, $defaultValue);
     }
 
+    protected function seeIndex(string $index): void
+    {
+        $this->assertNotNull($this->getIndexListing($index));
+    }
+
+    protected function assertSameIndex(string $index, string $expectedDef): void
+    {
+        $definition = $this->getIndexListing($index);
+
+        $this->seeIndex($index);
+        $this->assertSame($expectedDef, $definition);
+    }
+
+    protected function assertRegExpIndex(string $index, string $expectedDef): void
+    {
+        $definition = $this->getIndexListing($index);
+
+        $this->seeIndex($index);
+        $this->assertRegExp($expectedDef, $definition);
+    }
+
     private function setConnectionConfig($app, $name, $params): void
     {
         $app['config']->set('database.connections.' . $name, [
@@ -108,5 +129,12 @@ abstract class FunctionalTestCase extends TestCase
         );
 
         return $definition ? $definition->column_default : null;
+    }
+
+    private function getIndexListing($index): ?string
+    {
+        $definition = DB::selectOne('SELECT indexdef FROM pg_indexes WHERE indexname = ?', [$index]);
+
+        return $definition ? $definition->indexdef : null;
     }
 }

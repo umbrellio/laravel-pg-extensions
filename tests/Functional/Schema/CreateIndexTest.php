@@ -18,14 +18,14 @@ class CreateIndexTest extends FunctionalTestCase
     public function createGistIndex(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
-            $table->range('code')->gist();
+            $table->tsRange('code')->gist();
         });
 
         $this->seeIndex('test_table_code_gist');
 
         Schema::table('test_table', function (Blueprint $table) {
-            $table->range('some_id');
-            $table->range('some_key');
+            $table->tsRange('some_id');
+            $table->tsRange('some_key');
             $table->gist('some_key', 'specify_gist_key');
             $table->gist('some_id');
         });
@@ -38,14 +38,14 @@ class CreateIndexTest extends FunctionalTestCase
     public function createGinIndex(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
-            $table->jsonb('id')->gin();
+            $table->tsVector('id')->gin();
         });
 
         $this->seeIndex('test_table_id_gin');
 
         Schema::table('test_table', function (Blueprint $table) {
-            $table->jsonb('some_id');
-            $table->jsonb('some_key');
+            $table->tsVector('some_id');
+            $table->tsVector('some_key');
             $table->gin('some_key', 'specify_gin_key');
             $table->gin('some_id');
         });

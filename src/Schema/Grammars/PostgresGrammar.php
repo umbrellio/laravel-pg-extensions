@@ -69,9 +69,4 @@ class PostgresGrammar extends BasePostgresGrammar
             $this->columnize($command->columns)
         );
     }
-
-    protected function typeTsrange()
-    {
-        return 'tsrange';
-    }
 }

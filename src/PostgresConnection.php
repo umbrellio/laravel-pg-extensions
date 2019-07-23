@@ -53,7 +53,9 @@ class PostgresConnection extends BasePostgresConnection
 
     public function getDoctrineConnection(): Connection
     {
-        return $this->fixDoctrineConnection(parent::getDoctrineConnection());
+        $doctrineConnection = parent::getDoctrineConnection();
+        $this->overrideDoctrineBehavior($doctrineConnection);
+        return $doctrineConnection;
     }
 
     protected function getDefaultSchemaGrammar()
@@ -61,9 +63,6 @@ class PostgresConnection extends BasePostgresConnection
         return $this->withTablePrefix(new PostgresGrammar());
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     private function registerExtensions(): void
     {
         collect(self::$extensions)->each(function ($extension) {
@@ -75,7 +74,7 @@ class PostgresConnection extends BasePostgresConnection
         });
     }
 
-    private function fixDoctrineConnection(Connection $connection): Connection
+    private function overrideDoctrineBehavior(Connection $connection): Connection
     {
         $eventManager = $connection->getEventManager();
         if (!$eventManager->hasListeners(Events::onSchemaAlterTableChangeColumn)) {

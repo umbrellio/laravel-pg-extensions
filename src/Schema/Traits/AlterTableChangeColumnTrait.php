@@ -58,8 +58,8 @@ trait AlterTableChangeColumnTrait
         string $quoteName,
         &$sql
     ): void {
-        $newComment = $this->getColumnComment($platform, $column);
-        $oldComment = $this->getOldColumnComment($platform, $columnDiff);
+        $newComment = $this->getColumnComment($column);
+        $oldComment = $this->getOldColumnComment($columnDiff);
 
         if (($columnDiff->fromColumn !== null && $oldComment !== $newComment)
             || $columnDiff->hasChanged('comment')
@@ -196,19 +196,13 @@ trait AlterTableChangeColumnTrait
         return $diff->getName($platform)->getQuotedName($platform);
     }
 
-    private function getOldColumnComment(AbstractPlatform $platform, ColumnDiff $columnDiff): ?string
+    private function getOldColumnComment(ColumnDiff $columnDiff): ?string
     {
-        return $columnDiff->fromColumn ? $this->getColumnComment($platform, $columnDiff->fromColumn) : null;
+        return $columnDiff->fromColumn ? $this->getColumnComment($columnDiff->fromColumn) : null;
     }
 
-    private function getColumnComment(AbstractPlatform $platform, Column $column): ?string
+    private function getColumnComment(Column $column): ?string
     {
-        $comment = $column->getComment();
-
-        if ($platform->isCommentedDoctrineType($column->getType())) {
-            $comment .= $platform->getDoctrineTypeComment($column->getType());
-        }
-
-        return $comment;
+        return $column->getComment();
     }
 }

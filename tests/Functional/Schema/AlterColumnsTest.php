@@ -21,22 +21,25 @@ class AlterColumnsTest extends FunctionalTestCase
         Schema::create('test_table', function (Blueprint $table) {
             $table->string('code')->default('1');
         });
+        $this->assertDefaultOnColumn('test_table', 'code', "'1'::character varying");
         Schema::table('test_table', function (Blueprint $table) {
             $table->string('code')->comment('some comment')->change();
         });
         $this->assertCommentOnColumn('test_table', 'code', 'some comment');
+        $this->assertDefaultOnColumn('test_table', 'code', "'1'::character varying");
     }
 
     /** @test */
     public function alterTableJsonSetComment(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
-            $table->json('myjson')->comment('(DC2Type:json_array)');
+            $table->string('json_field');
         });
+        $this->assertCommentOnColumn('test_table', 'json_field');
         Schema::table('test_table', function (Blueprint $table) {
-            $table->json('myjson')->comment('(DC2Type:json_array)')->change();
+            $table->json('json_field')->comment('(DC2Type:json_array)')->change();
         });
-        $this->assertCommentOnColumn('test_table', 'myjson', '(DC2Type:json_array)');
+        $this->assertCommentOnColumn('test_table', 'json_field', '(DC2Type:json_array)');
     }
 
     /** @test */
@@ -45,9 +48,12 @@ class AlterColumnsTest extends FunctionalTestCase
         Schema::create('test_table', function (Blueprint $table) {
             $table->string('code')->default('1');
         });
+        $this->assertDefaultOnColumn('test_table', 'code', "'1'::character varying");
+        $this->assertCommentOnColumn('test_table', 'code');
         Schema::table('test_table', function (Blueprint $table) {
             $table->string('code')->comment('(DC2Type:string)')->change();
         });
+        $this->assertDefaultOnColumn('test_table', 'code', "'1'::character varying");
         $this->assertCommentOnColumn('test_table', 'code', '(DC2Type:string)');
     }
 
@@ -72,10 +78,13 @@ class AlterColumnsTest extends FunctionalTestCase
         Schema::create('test_table', function (Blueprint $table) {
             $table->integer('number')->comment('(DC2Type:integer)')->default(1);
         });
+        $this->assertDefaultOnColumn('test_table', 'number', '1');
+
         Schema::table('test_table', function (Blueprint $table) {
             $table->string('number')->comment('some comment')->change();
         });
         $this->assertCommentOnColumn('test_table', 'number', 'some comment');
+        $this->assertDefaultOnColumn('test_table', 'number', "'1'::character varying");
     }
 
     /** @test */
@@ -84,6 +93,7 @@ class AlterColumnsTest extends FunctionalTestCase
         Schema::create('test_table', function (Blueprint $table) {
             $table->string('code')->default('1');
         });
+        $this->assertDefaultOnColumn('test_table', 'code', "'1'::character varying");
         Schema::table('test_table', function (Blueprint $table) {
             $table->integer('code')->default(null)->change();
         });
@@ -100,6 +110,8 @@ class AlterColumnsTest extends FunctionalTestCase
             $table->integer('number')->default('1')->nullable();
         });
 
+        $this->assertDefaultOnColumn('test_table', 'number', '1');
+
         DB::table('test_table')->insert([['id' => 1]]);
         $this->assertDatabaseHas('test_table', ['id' => 1]);
         $this->assertSame('integer', Schema::getColumnType('test_table', 'number'));
@@ -110,6 +122,7 @@ class AlterColumnsTest extends FunctionalTestCase
                 ->change();
         });
 
+        $this->assertDefaultOnColumn('test_table', 'number', "'1'::character varying");
         $this->assertSame('string', Schema::getColumnType('test_table', 'number'));
         $this->assertDatabaseHas('test_table', [
             'id' => 1,

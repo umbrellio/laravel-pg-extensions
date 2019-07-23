@@ -21,8 +21,8 @@ install:
 script:
   - vendor/bin/ecs check --config=ecs.yml .
   - |
-    if [ "x$PG11" == "xyes" ]; then
-      sudo docker exec -i postgres11 bash <<< 'psql -c 'CREATE DATABASE testing;' -U postgres'
+    if [ "x$DOCKER_POSTGRES" == "xyes" ]; then
+      sudo docker exec -ti postgres11 psql postgres -U postgres -c "CREATE DATABASE testing"
     else
       psql -c 'CREATE DATABASE testing;' -U postgres
     fi
@@ -97,7 +97,7 @@ matrix:
         - bash ./tests/travis/install-postgres-10.sh
     - stage: Test
       php: "7.3"
-      env: DB=pgsql PG11=yes POSTGRESQL_VERSION=11.0 COVERAGE=yes
+      env: DB=pgsql DOCKER_POSTGRES=yes POSTGRESQL_VERSION=11.0 COVERAGE=yes
       sudo: required
       services:
         - docker
@@ -108,7 +108,7 @@ matrix:
         - bash ./tests/travis/install-postgres-11.sh
     - stage: Test
       php: "7.4snapshot"
-      env: DB=pgsql PG11=yes POSTGRESQL_VERSION=11.0
+      env: DB=pgsql DOCKER_POSTGRES=yes POSTGRESQL_VERSION=11.0
       sudo: required
       services:
         - docker

@@ -21,6 +21,10 @@ install:
 script:
   - vendor/bin/ecs check --config=ecs.yml .
   - |
+    if [ "v$POSTGRESQL_VERSION" == "v11.0"]; then
+      psql -c 'CREATE DATABASE testing;' -U postgres
+    fi
+  - |
     if [ "x$COVERAGE" == "xyes" ]; then
        ./vendor/bin/phpunit --configuration phpunit.travis.xml --coverage-clover build/logs/clover.xml
     else
@@ -44,8 +48,6 @@ matrix:
       sudo: required
       services:
         - docker
-      before_script:
-        - psql -c 'CREATE DATABASE testing;' -U postgres
     - stage: Test
       php: "7.3"
       env: DB=pgsql POSTGRESQL_VERSION=9.2 COVERAGE=yes

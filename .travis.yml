@@ -39,57 +39,57 @@ matrix:
   allow_failures:
     - php: "7.4snapshot"
   include:
-    - stage: Test
-      php: "7.2"
-      env: DB=pgsql POSTGRESQL_VERSION=11.0
-      sudo: required
-      services:
-        - docker
-    - stage: Test
-      php: "7.3"
-      env: DB=pgsql POSTGRESQL_VERSION=9.2 COVERAGE=yes
-      services:
-        - postgresql
-      addons:
-        postgresql: "9.2"
-    - stage: Test
-      php: "7.3"
-      env: DB=pgsql POSTGRESQL_VERSION=9.3 COVERAGE=yes
-      services:
-        - postgresql
-      addons:
-        postgresql: "9.3"
-    - stage: Test
-      php: "7.3"
-      env: DB=pgsql POSTGRESQL_VERSION=9.4 COVERAGE=yes
-      services:
-        - postgresql
-      addons:
-        postgresql: "9.4"
-    - stage: Test
-      php: "7.3"
-      env: DB=pgsql POSTGRESQL_VERSION=9.5 COVERAGE=yes
-      services:
-        - postgresql
-      addons:
-        postgresql: "9.5"
-    - stage: Test
-      php: "7.3"
-      env: DB=pgsql POSTGRESQL_VERSION=9.6 COVERAGE=yes
-      services:
-        - postgresql
-      addons:
-        postgresql: "9.6"
-    - stage: Test
-      php: "7.3"
-      env: DB=pgsql POSTGRESQL_VERSION=10.0 COVERAGE=yes
-      sudo: required
-      services:
-        - postgresql
-      addons:
-        postgresql: "9.6"
-      before_script:
-        - bash ./tests/travis/install-postgres-10.sh
+#    - stage: Test
+#      php: "7.2"
+#      env: DB=pgsql POSTGRESQL_VERSION=11.0
+#      sudo: required
+#      services:
+#        - docker
+#    - stage: Test
+#      php: "7.3"
+#      env: DB=pgsql POSTGRESQL_VERSION=9.2 COVERAGE=yes
+#      services:
+#        - postgresql
+#      addons:
+#        postgresql: "9.2"
+#    - stage: Test
+#      php: "7.3"
+#      env: DB=pgsql POSTGRESQL_VERSION=9.3 COVERAGE=yes
+#      services:
+#        - postgresql
+#      addons:
+#        postgresql: "9.3"
+#    - stage: Test
+#      php: "7.3"
+#      env: DB=pgsql POSTGRESQL_VERSION=9.4 COVERAGE=yes
+#      services:
+#        - postgresql
+#      addons:
+#        postgresql: "9.4"
+#    - stage: Test
+#      php: "7.3"
+#      env: DB=pgsql POSTGRESQL_VERSION=9.5 COVERAGE=yes
+#      services:
+#        - postgresql
+#      addons:
+#        postgresql: "9.5"
+#    - stage: Test
+#      php: "7.3"
+#      env: DB=pgsql POSTGRESQL_VERSION=9.6 COVERAGE=yes
+#      services:
+#        - postgresql
+#      addons:
+#        postgresql: "9.6"
+#    - stage: Test
+#      php: "7.3"
+#      env: DB=pgsql POSTGRESQL_VERSION=10.0 COVERAGE=yes
+#      sudo: required
+#      services:
+#        - postgresql
+#      addons:
+#        postgresql: "9.6"
+#      before_script:
+#        - bash ./tests/travis/install-postgres-10.sh
     - stage: Test
       php: "7.3"
       env: DB=pgsql POSTGRESQL_VERSION=11.0 COVERAGE=yes

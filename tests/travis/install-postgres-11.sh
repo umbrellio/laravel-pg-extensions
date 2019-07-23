@@ -11,6 +11,4 @@ sudo docker exec -i postgres11 bash <<< 'until pg_isready -U postgres > /dev/nul
 
 echo "Postgres 11 ready"
 
-rm /usr/local/var/postgres/postmaster.pid
-
 pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start

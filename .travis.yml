@@ -108,15 +108,17 @@ matrix:
       sudo: required
       services:
         - docker
+      addons:
+        postgresql: "9.6"
       before_script:
         - bash ./tests/travis/install-postgres-11.sh
-        - psql -c 'CREATE DATABASE testing;' -U postgres -p 5432:5432
     - stage: Test
       php: "7.4snapshot"
       env: DB=pgsql POSTGRESQL_VERSION=11.0
       sudo: required
       services:
         - docker
+      addons:
+        postgresql: "9.6"
       before_script:
         - bash ./tests/travis/install-postgres-11.sh
-        - psql -c 'CREATE DATABASE testing;' -U postgres

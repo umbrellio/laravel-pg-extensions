@@ -20,7 +20,12 @@ install:
 
 script:
   - vendor/bin/ecs check --config=ecs.yml .
-  - psql -c 'CREATE DATABASE testing;' -U postgres
+  - |
+    if [ "x$PG11" == "xyes" ]; then
+      sudo docker exec -i postgres11 bash <<< 'psql -c 'CREATE DATABASE testing;' -U postgres'
+    else
+      psql -c 'CREATE DATABASE testing;' -U postgres
+    fi
   - |
     if [ "x$COVERAGE" == "xyes" ]; then
        ./vendor/bin/phpunit --configuration phpunit.travis.xml --coverage-clover build/logs/clover.xml
@@ -39,19 +44,19 @@ matrix:
   allow_failures:
     - php: "7.4snapshot"
   include:
-#    - stage: Test
-#      php: "7.2"
-#      env: DB=pgsql POSTGRESQL_VERSION=11.0
-#      sudo: required
-#      services:
-#        - docker
-#    - stage: Test
-#      php: "7.3"
-#      env: DB=pgsql POSTGRESQL_VERSION=9.2 COVERAGE=yes
-#      services:
-#        - postgresql
-#      addons:
-#        postgresql: "9.2"
+    - stage: Test
+      php: "7.2"
+      env: DB=pgsql POSTGRESQL_VERSION=11.0
+      sudo: required
+      services:
+        - docker
+    - stage: Test
+      php: "7.3"
+      env: DB=pgsql POSTGRESQL_VERSION=9.2 COVERAGE=yes
+      services:
+        - postgresql
+      addons:
+        postgresql: "9.2"
 #    - stage: Test
 #      php: "7.3"
 #      env: DB=pgsql POSTGRESQL_VERSION=9.3 COVERAGE=yes
@@ -80,19 +85,19 @@ matrix:
 #        - postgresql
 #      addons:
 #        postgresql: "9.6"
-#    - stage: Test
-#      php: "7.3"
-#      env: DB=pgsql POSTGRESQL_VERSION=10.0 COVERAGE=yes
-#      sudo: required
-#      services:
-#        - postgresql
-#      addons:
-#        postgresql: "9.6"
-#      before_script:
-#        - bash ./tests/travis/install-postgres-10.sh
     - stage: Test
       php: "7.3"
-      env: DB=pgsql POSTGRESQL_VERSION=11.0 COVERAGE=yes
+      env: DB=pgsql POSTGRESQL_VERSION=10.0 COVERAGE=yes
+      sudo: required
+      services:
+        - postgresql
+      addons:
+        postgresql: "9.6"
+      before_script:
+        - bash ./tests/travis/install-postgres-10.sh
+    - stage: Test
+      php: "7.3"
+      env: DB=pgsql PG11=yes POSTGRESQL_VERSION=11.0 COVERAGE=yes
       sudo: required
       services:
         - docker
@@ -103,7 +108,7 @@ matrix:
         - bash ./tests/travis/install-postgres-11.sh
     - stage: Test
       php: "7.4snapshot"
-      env: DB=pgsql POSTGRESQL_VERSION=11.0
+      env: DB=pgsql PG11=yes POSTGRESQL_VERSION=11.0
       sudo: required
       services:
         - docker

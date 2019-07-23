@@ -73,8 +73,6 @@ matrix:
         - postgresql
       addons:
         postgresql: "9.5"
-      before_script:
-        - psql -c 'CREATE DATABASE testing;' -U postgres
     - stage: Test
       php: "7.3"
       env: DB=pgsql POSTGRESQL_VERSION=9.6 COVERAGE=yes

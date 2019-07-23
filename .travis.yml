@@ -20,10 +20,7 @@ install:
 
 script:
   - vendor/bin/ecs check --config=ecs.yml .
-  - |
-    if [ "v$POSTGRESQL_VERSION" == "v11.0"]; then
-      psql -c 'CREATE DATABASE testing;' -U postgres
-    fi
+  - psql -c 'CREATE DATABASE testing;' -U postgres
   - |
     if [ "x$COVERAGE" == "xyes" ]; then
        ./vendor/bin/phpunit --configuration phpunit.travis.xml --coverage-clover build/logs/clover.xml
@@ -55,8 +52,6 @@ matrix:
         - postgresql
       addons:
         postgresql: "9.2"
-      before_script:
-        - psql -c 'CREATE DATABASE testing;' -U postgres
     - stage: Test
       php: "7.3"
       env: DB=pgsql POSTGRESQL_VERSION=9.3 COVERAGE=yes
@@ -64,8 +59,6 @@ matrix:
         - postgresql
       addons:
         postgresql: "9.3"
-      before_script:
-        - psql -c 'CREATE DATABASE testing;' -U postgres
     - stage: Test
       php: "7.3"
       env: DB=pgsql POSTGRESQL_VERSION=9.4 COVERAGE=yes
@@ -73,8 +66,6 @@ matrix:
         - postgresql
       addons:
         postgresql: "9.4"
-      before_script:
-        - psql -c 'CREATE DATABASE testing;' -U postgres
     - stage: Test
       php: "7.3"
       env: DB=pgsql POSTGRESQL_VERSION=9.5 COVERAGE=yes
@@ -91,8 +82,6 @@ matrix:
         - postgresql
       addons:
         postgresql: "9.6"
-      before_script:
-          - psql -c 'CREATE DATABASE testing;' -U postgres
     - stage: Test
       php: "7.3"
       env: DB=pgsql POSTGRESQL_VERSION=10.0 COVERAGE=yes
@@ -103,7 +92,6 @@ matrix:
         postgresql: "9.6"
       before_script:
         - bash ./tests/travis/install-postgres-10.sh
-        - psql -c 'CREATE DATABASE testing;' -U postgres
     - stage: Test
       php: "7.3"
       env: DB=pgsql POSTGRESQL_VERSION=11.0 COVERAGE=yes
@@ -120,7 +108,5 @@ matrix:
       sudo: required
       services:
         - docker
-      addons:
-        postgresql: "9.6"
       before_script:
         - bash ./tests/travis/install-postgres-11.sh

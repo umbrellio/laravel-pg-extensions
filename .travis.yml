@@ -45,8 +45,7 @@ matrix:
       services:
         - docker
       before_script:
-        - bash ./tests/travis/install-postgres-11.sh
-        - bash ./tests/travis/create-database.sh
+        - psql -c 'CREATE DATABASE testing;' -U postgres
     - stage: Test
       php: "7.3"
       env: DB=pgsql POSTGRESQL_VERSION=9.2 COVERAGE=yes
@@ -55,7 +54,7 @@ matrix:
       addons:
         postgresql: "9.2"
       before_script:
-        - bash ./tests/travis/create-database.sh
+        - psql -c 'CREATE DATABASE testing;' -U postgres
     - stage: Test
       php: "7.3"
       env: DB=pgsql POSTGRESQL_VERSION=9.3 COVERAGE=yes
@@ -73,7 +72,7 @@ matrix:
       addons:
         postgresql: "9.4"
       before_script:
-        - bash ./tests/travis/create-database.sh
+        - psql -c 'CREATE DATABASE testing;' -U postgres
     - stage: Test
       php: "7.3"
       env: DB=pgsql POSTGRESQL_VERSION=9.5 COVERAGE=yes
@@ -82,7 +81,7 @@ matrix:
       addons:
         postgresql: "9.5"
       before_script:
-        - bash ./tests/travis/create-database.sh
+        - psql -c 'CREATE DATABASE testing;' -U postgres
     - stage: Test
       php: "7.3"
       env: DB=pgsql POSTGRESQL_VERSION=9.6 COVERAGE=yes
@@ -91,7 +90,7 @@ matrix:
       addons:
         postgresql: "9.6"
       before_script:
-          - bash ./tests/travis/create-database.sh
+          - psql -c 'CREATE DATABASE testing;' -U postgres
     - stage: Test
       php: "7.3"
       env: DB=pgsql POSTGRESQL_VERSION=10.0 COVERAGE=yes
@@ -111,7 +110,7 @@ matrix:
         - docker
       before_script:
         - bash ./tests/travis/install-postgres-11.sh
-        - bash ./tests/travis/create-database.sh
+        - psql -c 'CREATE DATABASE testing;' -U postgres
     - stage: Test
       php: "7.4snapshot"
       env: DB=pgsql POSTGRESQL_VERSION=11.0
@@ -120,4 +119,4 @@ matrix:
         - docker
       before_script:
         - bash ./tests/travis/install-postgres-11.sh
-        - bash ./tests/travis/create-database.sh
+        - psql -c 'CREATE DATABASE testing;' -U postgres

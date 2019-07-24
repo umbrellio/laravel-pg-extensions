@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Tests\Functional\Schema;
 
+use Closure;
 use Generator;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
 use Umbrellio\Postgres\Schema\Blueprint;
+use Umbrellio\Postgres\Tests\Functional\Helpers\IndexAssertions;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class CreateIndexTest extends FunctionalTestCase
 {
-    use DatabaseTransactions;
+    use DatabaseTransactions, IndexAssertions;
 
     /** @test */
     public function createGistIndex(): void
@@ -81,7 +83,7 @@ class CreateIndexTest extends FunctionalTestCase
      * @test
      * @dataProvider provideIndexes
      */
-    public function createPartialUniqueWithNull($expected, $callback): void
+    public function createPartialUniqueWithNull(string $expected, Closure $callback): void
     {
         Schema::create('test_table', function (Blueprint $table) use ($callback) {
             $table->increments('id');
@@ -91,6 +93,7 @@ class CreateIndexTest extends FunctionalTestCase
             $table->boolean('enabled');
             $table->integer('icq');
             $table->softDeletes();
+
             $callback($table);
         });
 
@@ -192,7 +195,7 @@ class CreateIndexTest extends FunctionalTestCase
         ];
     }
 
-    protected function getDummyIndex()
+    protected function getDummyIndex(): string
     {
         return 'CREATE UNIQUE INDEX test_table_name_unique ON (public.)?test_table USING btree \(name\)';
     }

@@ -9,11 +9,12 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Umbrellio\Postgres\Schema\Blueprint;
+use Umbrellio\Postgres\Tests\Functional\Helpers\ColumnAssertions;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class AlterColumnsTest extends FunctionalTestCase
 {
-    use DatabaseTransactions;
+    use DatabaseTransactions, ColumnAssertions;
 
     /** @test */
     public function alterTableSetSimpleComment(): void
@@ -21,10 +22,13 @@ class AlterColumnsTest extends FunctionalTestCase
         Schema::create('test_table', function (Blueprint $table) {
             $table->string('code')->default('1');
         });
+
         $this->assertDefaultOnColumn('test_table', 'code', "'1'::character varying");
+
         Schema::table('test_table', function (Blueprint $table) {
             $table->string('code')->comment('some comment')->change();
         });
+
         $this->assertCommentOnColumn('test_table', 'code', 'some comment');
         $this->assertDefaultOnColumn('test_table', 'code', "'1'::character varying");
     }
@@ -35,10 +39,13 @@ class AlterColumnsTest extends FunctionalTestCase
         Schema::create('test_table', function (Blueprint $table) {
             $table->string('json_field');
         });
+
         $this->assertCommentOnColumn('test_table', 'json_field');
+
         Schema::table('test_table', function (Blueprint $table) {
             $table->json('json_field')->comment('(DC2Type:json_array)')->change();
         });
+
         $this->assertCommentOnColumn('test_table', 'json_field', '(DC2Type:json_array)');
     }
 
@@ -48,11 +55,14 @@ class AlterColumnsTest extends FunctionalTestCase
         Schema::create('test_table', function (Blueprint $table) {
             $table->string('code')->default('1');
         });
+
         $this->assertDefaultOnColumn('test_table', 'code', "'1'::character varying");
         $this->assertCommentOnColumn('test_table', 'code');
+
         Schema::table('test_table', function (Blueprint $table) {
             $table->string('code')->comment('(DC2Type:string)')->change();
         });
+
         $this->assertDefaultOnColumn('test_table', 'code', "'1'::character varying");
         $this->assertCommentOnColumn('test_table', 'code', '(DC2Type:string)');
     }
@@ -63,6 +73,7 @@ class AlterColumnsTest extends FunctionalTestCase
         Schema::create('test_table', function (Blueprint $table) {
             $table->integer('number')->comment('(DC2Type:integer)')->default(1);
         });
+
         $this->assertCommentOnColumn('test_table', 'number', '(DC2Type:integer)');
 
         Schema::table('test_table', function (Blueprint $table) {
@@ -78,11 +89,13 @@ class AlterColumnsTest extends FunctionalTestCase
         Schema::create('test_table', function (Blueprint $table) {
             $table->integer('number')->comment('(DC2Type:integer)')->default(1);
         });
+
         $this->assertDefaultOnColumn('test_table', 'number', '1');
 
         Schema::table('test_table', function (Blueprint $table) {
             $table->string('number')->comment('some comment')->change();
         });
+
         $this->assertCommentOnColumn('test_table', 'number', 'some comment');
         $this->assertDefaultOnColumn('test_table', 'number', "'1'::character varying");
     }
@@ -93,12 +106,14 @@ class AlterColumnsTest extends FunctionalTestCase
         Schema::create('test_table', function (Blueprint $table) {
             $table->string('code')->default('1');
         });
+
         $this->assertDefaultOnColumn('test_table', 'code', "'1'::character varying");
+
         Schema::table('test_table', function (Blueprint $table) {
             $table->integer('code')->default(null)->change();
         });
 
-        $this->assertSame('integer', Schema::getColumnType('test_table', 'code'));
+        $this->assertTypeColumn('test_table', 'code', 'integer');
         $this->assertDefaultOnColumn('test_table', 'code');
     }
 
@@ -113,8 +128,9 @@ class AlterColumnsTest extends FunctionalTestCase
         $this->assertDefaultOnColumn('test_table', 'number', '1');
 
         DB::table('test_table')->insert([['id' => 1]]);
+
         $this->assertDatabaseHas('test_table', ['id' => 1]);
-        $this->assertSame('integer', Schema::getColumnType('test_table', 'number'));
+        $this->assertTypeColumn('test_table', 'number', 'integer');
 
         Schema::table('test_table', function (Blueprint $table) {
             $table->string('number')
@@ -123,7 +139,7 @@ class AlterColumnsTest extends FunctionalTestCase
         });
 
         $this->assertDefaultOnColumn('test_table', 'number', "'1'::character varying");
-        $this->assertSame('string', Schema::getColumnType('test_table', 'number'));
+        $this->assertTypeColumn('test_table', 'number', 'string');
         $this->assertDatabaseHas('test_table', [
             'id' => 1,
             'number' => '[1]',
@@ -137,14 +153,14 @@ class AlterColumnsTest extends FunctionalTestCase
             $table->integer('code')->nullable();
         });
 
-        $this->assertSame('integer', Schema::getColumnType('test_table', 'code'));
+        $this->assertTypeColumn('test_table', 'code', 'integer');
         $this->assertDefaultOnColumn('test_table', 'code');
 
         Schema::table('test_table', function (Blueprint $table) {
             $table->string('code')->default('test_string')->change();
         });
 
-        $this->assertSame('string', Schema::getColumnType('test_table', 'code'));
+        $this->assertTypeColumn('test_table', 'code', 'string');
         $this->assertDefaultOnColumn('test_table', 'code', "'test_string'::character varying");
     }
 
@@ -158,7 +174,7 @@ class AlterColumnsTest extends FunctionalTestCase
         $this->assertDefaultOnColumn('test_table', 'description', "'default1'::character varying");
 
         Schema::table('test_table', function (Blueprint $table) {
-            $table->text('description', 25)->default('default2')->change();
+            $table->text('description')->default('default2')->change();
         });
 
         $this->assertDefaultOnColumn('test_table', 'description', "'default2'::text");

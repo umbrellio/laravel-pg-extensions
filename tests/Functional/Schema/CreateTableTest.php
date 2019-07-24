@@ -7,11 +7,12 @@ namespace Umbrellio\Postgres\Tests\Functional\Schema;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
 use Umbrellio\Postgres\Schema\Blueprint;
+use Umbrellio\Postgres\Tests\Functional\Helpers\TableAssertions;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class CreateTableTest extends FunctionalTestCase
 {
-    use DatabaseTransactions;
+    use DatabaseTransactions, TableAssertions;
 
     /** @test */
     public function createSimple(): void
@@ -21,8 +22,8 @@ class CreateTableTest extends FunctionalTestCase
             $table->string('name');
         });
 
-        $this->assertTrue(Schema::hasTable('test_table'));
-        $this->assertSame(['id', 'name'], Schema::getColumnListing('test_table'));
+        $this->seeTable('test_table');
+        $this->assertSameTable(['id', 'name'], 'test_table');
     }
 
     /** @test */
@@ -37,10 +38,9 @@ class CreateTableTest extends FunctionalTestCase
             $table->like('test_table');
         });
 
-        $this->assertTrue(Schema::hasTable('test_table'));
-        $this->assertTrue(Schema::hasTable('test_table2'));
-
-        $this->assertSame(Schema::getColumnListing('test_table'), Schema::getColumnListing('test_table2'));
+        $this->seeTable('test_table');
+        $this->seeTable('test_table2');
+        $this->assertCompareTables('test_table', 'test_table2');
     }
 
     /** @test */
@@ -56,8 +56,8 @@ class CreateTableTest extends FunctionalTestCase
             $table->ifNotExists();
         });
 
-        $this->assertTrue(Schema::hasTable('test_table'));
-        $this->assertTrue(Schema::hasTable('test_table2'));
-        $this->assertSame(Schema::getColumnListing('test_table'), Schema::getColumnListing('test_table2'));
+        $this->seeTable('test_table');
+        $this->seeTable('test_table2');
+        $this->assertCompareTables('test_table', 'test_table2');
     }
 }

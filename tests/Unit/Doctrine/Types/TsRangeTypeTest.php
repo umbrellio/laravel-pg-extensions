@@ -9,12 +9,13 @@ use Generator;
 use Umbrellio\Postgres\Doctrine\Types\TsRangeType;
 use Umbrellio\Postgres\Tests\TestCase;
 
+/**
+ * @property AbstractPlatform $abstractPlatform
+ * @property TsRangeType $type
+ */
 class TsRangeTypeTest extends TestCase
 {
-    /** @var AbstractPlatform */
     private $abstractPlatform;
-
-    /** @var TsRangeType */
     private $type;
 
     protected function setUp(): void
@@ -29,9 +30,7 @@ class TsRangeTypeTest extends TestCase
         $this->abstractPlatform = $this->getMockForAbstractClass(AbstractPlatform::class);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function getSQLDeclaration(): void
     {
         $this->assertSame(TsRangeType::TYPE_NAME, $this->type->getSQLDeclaration([], $this->abstractPlatform));

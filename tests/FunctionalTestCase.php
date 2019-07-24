@@ -4,74 +4,25 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Tests;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Facade;
 
 abstract class FunctionalTestCase extends TestCase
 {
     protected function setUp(): void
     {
-        if (!$this->app) {
-            putenv('APP_ENV=testing');
-            $this->app = $this->createApplication();
-        }
-
         parent::setUp();
 
         Facade::clearResolvedInstances();
     }
-    protected function getEnvironmentSetUp($app)
+
+    protected function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
 
+        $params = $this->getConnectionParams();
+
         $app['config']->set('database.default', 'main');
-        $this->setConnectionConfig($app, 'main', $this->getParamsForConnection());
-    }
-
-    protected function assertCommentOnColumn(string $table, string $column, ?string $expected = null): void
-    {
-        $comment = $this->getCommentListing($table, $column);
-
-        if ($expected === null) {
-            $this->assertNull($comment);
-        }
-        $this->assertSame($expected, $comment);
-    }
-
-    protected function assertDefaultOnColumn(string $table, string $column, ?string $expected = null): void
-    {
-        $defaultValue = $this->getDefaultListing($table, $column);
-
-        if ($expected === null) {
-            $this->assertNull($defaultValue);
-        }
-        $this->assertSame($expected, $defaultValue);
-    }
-
-    protected function seeIndex(string $index): void
-    {
-        $this->assertNotNull($this->getIndexListing($index));
-    }
-
-    protected function assertSameIndex(string $index, string $expectedDef): void
-    {
-        $definition = $this->getIndexListing($index);
-
-        $this->seeIndex($index);
-        $this->assertSame($expectedDef, $definition);
-    }
-
-    protected function assertRegExpIndex(string $index, string $expectedDef): void
-    {
-        $definition = $this->getIndexListing($index);
-
-        $this->seeIndex($index);
-        $this->assertRegExp($expectedDef, $definition);
-    }
-
-    private function setConnectionConfig($app, $name, $params): void
-    {
-        $app['config']->set('database.connections.' . $name, [
+        $app['config']->set('database.connections.main', [
             'driver' => 'pgsql',
             'host' => $params['host'],
             'port' => (int) $params['port'],
@@ -84,9 +35,9 @@ abstract class FunctionalTestCase extends TestCase
         ]);
     }
 
-    private function getParamsForConnection(): array
+    private function getConnectionParams(): array
     {
-        $connectionParams = [
+        return [
             'driver' => $GLOBALS['db_type'] ?? 'pdo_pgsql',
             'user' => $GLOBALS['db_username'],
             'password' => $GLOBALS['db_password'],
@@ -94,47 +45,5 @@ abstract class FunctionalTestCase extends TestCase
             'database' => $GLOBALS['db_database'],
             'port' => $GLOBALS['db_port'],
         ];
-
-        if (isset($GLOBALS['db_server'])) {
-            $connectionParams['server'] = $GLOBALS['db_server'];
-        }
-
-        if (isset($GLOBALS['db_unix_socket'])) {
-            $connectionParams['unix_socket'] = $GLOBALS['db_unix_socket'];
-        }
-
-        return $connectionParams;
-    }
-
-    private function getCommentListing(string $table, string $column)
-    {
-        $definition = DB::selectOne(
-            '
-                SELECT pgd.description FROM pg_catalog.pg_statio_all_tables AS st
-                INNER JOIN pg_catalog.pg_description pgd ON (pgd.objoid = st.relid)
-                INNER JOIN information_schema.columns c ON pgd.objsubid = c.ordinal_position AND c.table_schema = st.schemaname AND c.table_name = st.relname
-                WHERE c.table_name = ? AND c.column_name = ?
-            ',
-            [$table, $column]
-        );
-
-        return $definition ? $definition->description : null;
-    }
-
-    private function getDefaultListing(string $table, string $column)
-    {
-        $definition = DB::selectOne(
-            'SELECT column_default FROM information_schema.columns WHERE table_name = ? and column_name = ?',
-            [$table, $column]
-        );
-
-        return $definition ? $definition->column_default : null;
-    }
-
-    private function getIndexListing($index): ?string
-    {
-        $definition = DB::selectOne('SELECT indexdef FROM pg_indexes WHERE indexname = ?', [$index]);
-
-        return $definition ? $definition->indexdef : null;
     }
 }

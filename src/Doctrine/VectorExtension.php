@@ -30,8 +30,8 @@ class VectorExtension extends AbstractExtension
 
     public static function getTypes(): array
     {
-        return [
+        return array_merge(parent::getTypes(), [
             TsVectorType::TYPE_NAME => TsVectorType::class,
-        ];
+        ]);
     }
 }

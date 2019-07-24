@@ -9,12 +9,13 @@ use Generator;
 use Umbrellio\Postgres\Doctrine\Types\TsVectorType;
 use Umbrellio\Postgres\Tests\TestCase;
 
+/**
+ * @property AbstractPlatform $abstractPlatform
+ * @property TsVectorType $type
+ */
 class TsVectorTypeTest extends TestCase
 {
-    /** @var AbstractPlatform */
     private $abstractPlatform;
-
-    /** @var TsVectorType */
     private $type;
 
     protected function setUp(): void
@@ -29,9 +30,7 @@ class TsVectorTypeTest extends TestCase
         $this->abstractPlatform = $this->getMockForAbstractClass(AbstractPlatform::class);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function getSQLDeclaration(): void
     {
         $this->assertSame(TsVectorType::TYPE_NAME, $this->type->getSQLDeclaration([], $this->abstractPlatform));

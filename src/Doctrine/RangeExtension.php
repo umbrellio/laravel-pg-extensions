@@ -30,8 +30,8 @@ class RangeExtension extends AbstractExtension
 
     public static function getTypes(): array
     {
-        return [
+        return array_merge(parent::getTypes(), [
             TsRangeType::TYPE_NAME => TsRangeType::class,
-        ];
+        ]);
     }
 }

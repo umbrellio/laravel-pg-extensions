@@ -6,10 +6,21 @@ namespace Umbrellio\Postgres\Unit\Schema\Blueprint;
 
 use Illuminate\Support\Carbon;
 use InvalidArgumentException;
-use Umbrellio\Postgres\Tests\Unit\BlueprintTestCase;
+use Umbrellio\Postgres\Tests\TestCase;
+use Umbrellio\Postgres\Tests\Unit\Helpers\BlueprintAssertions;
 
-class PartitionTest extends BlueprintTestCase
+class PartitionTest extends TestCase
 {
+    use BlueprintAssertions;
+
+    private const TABLE = 'test_table';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->initializeMock(static::TABLE);
+    }
+
     /** @test */
     public function detachPartition(): void
     {

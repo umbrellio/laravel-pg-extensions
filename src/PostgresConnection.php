@@ -12,7 +12,7 @@ use Umbrellio\Postgres\Extensions\AbstractExtension;
 use Umbrellio\Postgres\Extensions\Exceptions\ExtensionInvalidException;
 use Umbrellio\Postgres\Schema\Builder;
 use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
-use Umbrellio\Postgres\Schema\Listeners\SchemaAlterTableChangeColumnListener;
+use Umbrellio\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber;
 
 class PostgresConnection extends BasePostgresConnection
 {
@@ -78,10 +78,7 @@ class PostgresConnection extends BasePostgresConnection
     {
         $eventManager = $connection->getEventManager();
         if (!$eventManager->hasListeners(Events::onSchemaAlterTableChangeColumn)) {
-            $eventManager->addEventListener(
-                Events::onSchemaAlterTableChangeColumn,
-                new SchemaAlterTableChangeColumnListener()
-            );
+            $eventManager->addEventSubscriber(new SchemaAlterTableChangeColumnSubscriber());
         }
         $connection->getDatabasePlatform()->setEventManager($eventManager);
         return $connection;

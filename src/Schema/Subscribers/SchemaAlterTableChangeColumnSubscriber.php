@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Schema\Traits;
+namespace Umbrellio\Postgres\Schema\Subscribers;
 
+use Doctrine\Common\EventSubscriber;
+use Doctrine\DBAL\Event\SchemaAlterTableChangeColumnEventArgs;
+use Doctrine\DBAL\Events;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\ColumnDiff;
@@ -12,15 +15,34 @@ use Doctrine\DBAL\Types\BigIntType;
 use Doctrine\DBAL\Types\IntegerType;
 use Doctrine\DBAL\Types\Type;
 use Illuminate\Database\Query\Expression;
+use Illuminate\Support\Collection;
 
-trait AlterTableChangeColumnTrait
+final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
 {
+    public function onSchemaAlterTableChangeColumn(SchemaAlterTableChangeColumnEventArgs $event): void
+    {
+        $event->preventDefault();
+
+        $sql = $this->getAlterTableChangeColumnSQL(
+            $event->getPlatform(),
+            $event->getTableDiff(),
+            $event->getColumnDiff()
+        );
+
+        $event->addSql($sql->toArray());
+    }
+
+    public function getSubscribedEvents(): array
+    {
+        return [Events::onSchemaAlterTableChangeColumn];
+    }
+
     public function getAlterTableChangeColumnSQL(
         AbstractPlatform $platform,
         TableDiff $diff,
         ColumnDiff $columnDiff
-    ): array {
-        $sql = [];
+    ): Collection {
+        $sql = new Collection();
 
         $quoteName = $this->quoteName($platform, $diff);
 
@@ -41,22 +63,22 @@ trait AlterTableChangeColumnTrait
             return $sql;
         }
 
-        $sql[] = sprintf(
+        $sql->add(sprintf(
             'ALTER TABLE %s ALTER %s TYPE %s',
             $quoteName,
             $oldColumnName,
             $column->getType()->getSQLDeclaration($column->toArray(), $platform)
-        );
+        ));
 
         return $sql;
     }
 
-    private function compileAlterColumnComment(
+    public function compileAlterColumnComment(
         AbstractPlatform $platform,
         ColumnDiff $columnDiff,
         Column $column,
         string $quoteName,
-        &$sql
+        Collection $sql
     ): void {
         $newComment = $this->getColumnComment($column);
         $oldComment = $this->getOldColumnComment($columnDiff);
@@ -64,111 +86,113 @@ trait AlterTableChangeColumnTrait
         if (($columnDiff->fromColumn !== null && $oldComment !== $newComment)
             || $columnDiff->hasChanged('comment')
         ) {
-            $sql[] = $platform->getCommentOnColumnSQL($quoteName, $column->getQuotedName($platform), $newComment);
+            $sql->add($platform->getCommentOnColumnSQL($quoteName, $column->getQuotedName($platform), $newComment));
         }
     }
 
-    private function compileAlterColumnNull(
+    public function compileAlterColumnNull(
         ColumnDiff $columnDiff,
         Column $column,
         string $quoteName,
         string $oldColumnName,
-        &$sql
+        Collection $sql
     ): void {
         if ($columnDiff->hasChanged('notnull')) {
-            $sql[] = sprintf(
+            $sql->add(sprintf(
                 'ALTER TABLE %s ALTER %s %s NOT NULL',
                 $quoteName,
                 $oldColumnName,
                 ($column->getNotnull() ? 'SET' : 'DROP')
-            );
+            ));
         }
     }
 
-    private function compileAlterColumnDefault(
+    public function compileAlterColumnDefault(
         AbstractPlatform $platform,
         ColumnDiff $columnDiff,
         Column $column,
         string $quoteName,
         string $oldColumnName,
-        &$sql
+        Collection $sql
     ): void {
         if ($columnDiff->hasChanged('default') || $this->typeChangeBreaksDefaultValue($columnDiff)) {
             $defaultClause = $column->getDefault() === null
                 ? ' DROP DEFAULT'
                 : ' SET' . $this->getDefaultValueDeclarationSQL($platform, $column);
-            $sql[] = sprintf('ALTER TABLE %s ALTER %s %s', $quoteName, $oldColumnName, trim($defaultClause));
+            $sql->add(sprintf('ALTER TABLE %s ALTER %s %s', $quoteName, $oldColumnName, trim($defaultClause)));
         }
     }
 
-    private function compileAlterColumnSequence(
+    public function compileAlterColumnSequence(
         AbstractPlatform $platform,
         ColumnDiff $columnDiff,
         TableDiff $diff,
         Column $column,
         string $quoteName,
         string $oldColumnName,
-        &$sql
+        Collection $sql
     ): void {
         if (!$columnDiff->hasChanged('autoincrement')) {
             return;
         }
 
         if (!$column->getAutoincrement()) {
-            $sql[] = sprintf('ALTER TABLE %s ALTER %s DROP DEFAULT', $quoteName, $oldColumnName);
+            $sql->add(sprintf('ALTER TABLE %s ALTER %s DROP DEFAULT', $quoteName, $oldColumnName));
             return;
         }
 
         $seqName = $platform->getIdentitySequenceName($diff->name, $oldColumnName);
 
-        $sql[] = sprintf('CREATE SEQUENCE %s', $seqName);
-        $sql[] = sprintf("SELECT setval('%s', (SELECT MAX(%s) FROM %s))", $seqName, $oldColumnName, $quoteName);
-        $sql[] = sprintf("ALTER TABLE %s ALTER %s SET DEFAULT nextval('%s')", $quoteName, $oldColumnName, $seqName);
+        $sql->add(sprintf('CREATE SEQUENCE %s', $seqName));
+        $sql->add(sprintf("SELECT setval('%s', (SELECT MAX(%s) FROM %s))", $seqName, $oldColumnName, $quoteName));
+        $sql->add(sprintf("ALTER TABLE %s ALTER %s SET DEFAULT nextval('%s')", $quoteName, $oldColumnName, $seqName));
     }
 
-    private function compileAlterColumnType(
+    public function compileAlterColumnType(
         AbstractPlatform $platform,
         ColumnDiff $columnDiff,
         Column $column,
         string $quoteName,
         string $oldColumnName,
-        &$sql
+        Collection $sql
     ): void {
-        if ($columnDiff->hasChanged('type')
-            || $columnDiff->hasChanged('precision')
-            || $columnDiff->hasChanged('scale')
-            || $columnDiff->hasChanged('fixed')
+        if (!$columnDiff->hasChanged('type')
+            && !$columnDiff->hasChanged('precision')
+            && !$columnDiff->hasChanged('scale')
+            && !$columnDiff->hasChanged('fixed')
         ) {
-            $type = $column->getType();
-
-            $columnDefinition = $column->toArray();
-            $columnDefinition['autoincrement'] = false;
-
-            if ($this->typeChangeBreaksDefaultValue($columnDiff)) {
-                $sql[] = sprintf('ALTER TABLE %s ALTER %s DROP DEFAULT', $quoteName, $oldColumnName);
-            }
-
-            $typeName = $type->getSQLDeclaration($columnDefinition, $platform);
-
-            if ($columnDiff->hasChanged('type')) {
-                $using = sprintf('USING %s::%s', $oldColumnName, $typeName);
-
-                if ($columnDefinition['using'] ?? false) {
-                    $using = 'USING ' . $columnDefinition['using'];
-                }
-            }
-
-            $sql[] = trim(sprintf(
-                'ALTER TABLE %s ALTER %s TYPE %s %s',
-                $quoteName,
-                $oldColumnName,
-                $typeName,
-                $using ?? ''
-            ));
+            return;
         }
+
+        $type = $column->getType();
+
+        $columnDefinition = $column->toArray();
+        $columnDefinition['autoincrement'] = false;
+
+        if ($this->typeChangeBreaksDefaultValue($columnDiff)) {
+            $sql->add(sprintf('ALTER TABLE %s ALTER %s DROP DEFAULT', $quoteName, $oldColumnName));
+        }
+
+        $typeName = $type->getSQLDeclaration($columnDefinition, $platform);
+
+        if ($columnDiff->hasChanged('type')) {
+            $using = sprintf('USING %s::%s', $oldColumnName, $typeName);
+
+            if ($columnDefinition['using'] ?? false) {
+                $using = 'USING ' . $columnDefinition['using'];
+            }
+        }
+
+        $sql->add(trim(sprintf(
+            'ALTER TABLE %s ALTER %s TYPE %s %s',
+            $quoteName,
+            $oldColumnName,
+            $typeName,
+            $using ?? ''
+        )));
     }
 
-    private function getDefaultValueDeclarationSQL(AbstractPlatform $platform, Column $column): string
+    public function getDefaultValueDeclarationSQL(AbstractPlatform $platform, Column $column): string
     {
         if ($column->getDefault() instanceof Expression) {
             return ' DEFAULT ' . $column->getDefault();
@@ -177,31 +201,32 @@ trait AlterTableChangeColumnTrait
         return $platform->getDefaultValueDeclarationSQL($column->toArray());
     }
 
-    private function typeChangeBreaksDefaultValue(ColumnDiff $columnDiff): bool
+    public function typeChangeBreaksDefaultValue(ColumnDiff $columnDiff): bool
     {
         $oldTypeIsNumeric = $this->isNumericType($columnDiff->fromColumn->getType());
         $newTypeIsNumeric = $this->isNumericType($columnDiff->column->getType());
 
-        return $columnDiff->hasChanged('type')
-            && !($oldTypeIsNumeric && $newTypeIsNumeric && $columnDiff->column->getAutoincrement());
+        $isNumeric = !($oldTypeIsNumeric && $newTypeIsNumeric && $columnDiff->column->getAutoincrement());
+
+        return $columnDiff->hasChanged('type') && $isNumeric;
     }
 
-    private function isNumericType(Type $type): bool
+    public function isNumericType(Type $type): bool
     {
         return $type instanceof IntegerType || $type instanceof BigIntType;
     }
 
-    private function quoteName(AbstractPlatform $platform, TableDiff $diff): string
+    public function quoteName(AbstractPlatform $platform, TableDiff $diff): string
     {
         return $diff->getName($platform)->getQuotedName($platform);
     }
 
-    private function getOldColumnComment(ColumnDiff $columnDiff): ?string
+    public function getOldColumnComment(ColumnDiff $columnDiff): ?string
     {
         return $columnDiff->fromColumn ? $this->getColumnComment($columnDiff->fromColumn) : null;
     }
 
-    private function getColumnComment(Column $column): ?string
+    public function getColumnComment(Column $column): ?string
     {
         return $column->getComment();
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Schema;
 
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
+use Illuminate\Database\Schema\ColumnDefinition;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Schema\Builders\UniquePartialBuilder;
@@ -91,9 +92,9 @@ class Blueprint extends BaseBlueprint
      * @param string $column
      * @param int|null $precision
      * @param int|null $scale
-     * @return \Illuminate\Database\Schema\ColumnDefinition
+     * @return ColumnDefinition
      */
-    public function numeric(string $column, ?int $precision = null, ?int $scale = null)
+    public function numeric(string $column, ?int $precision = null, ?int $scale = null): ColumnDefinition
     {
         return $this->addColumn('numeric', $column, compact('precision', 'scale'));
     }

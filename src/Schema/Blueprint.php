@@ -86,6 +86,18 @@ class Blueprint extends BaseBlueprint
         return array_key_exists($index, $this->getSchemaManager()->listTableIndexes($this->getTable()));
     }
 
+    /**
+     * Almost like 'decimal' type, but can be with variable precision (by default)
+     * @param string $column
+     * @param int|null $precision
+     * @param int|null $scale
+     * @return \Illuminate\Database\Schema\ColumnDefinition
+     */
+    public function numeric(string $column, ?int $precision = null, ?int $scale = null)
+    {
+        return $this->addColumn('numeric', $column, compact('precision', 'scale'));
+    }
+
     protected function addFluentIndexes(): void
     {
         foreach ($this->columns as $column) {

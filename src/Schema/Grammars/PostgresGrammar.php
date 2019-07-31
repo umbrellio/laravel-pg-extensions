@@ -70,4 +70,16 @@ class PostgresGrammar extends BasePostgresGrammar
             $this->columnize($command->columns)
         );
     }
+
+    protected function typeNumeric(Fluent $column): string
+    {
+        $type = 'numeric';
+        if ($column->precision && $column->scale) {
+            return "${type}({$column->precision}, {$column->scale})";
+        }
+        if ($column->precision) {
+            return "${type}({$column->precision})";
+        }
+        return $type;
+    }
 }

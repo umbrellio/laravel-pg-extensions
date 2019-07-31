@@ -89,10 +89,6 @@ class Blueprint extends BaseBlueprint
 
     /**
      * Almost like 'decimal' type, but can be with variable precision (by default)
-     * @param string $column
-     * @param int|null $precision
-     * @param int|null $scale
-     * @return ColumnDefinition
      */
     public function numeric(string $column, ?int $precision = null, ?int $scale = null): ColumnDefinition
     {

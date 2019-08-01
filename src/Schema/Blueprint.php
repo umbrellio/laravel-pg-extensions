@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Schema;
 
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
+use Illuminate\Database\Schema\ColumnDefinition;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Schema\Builders\UniquePartialBuilder;
@@ -98,6 +99,14 @@ class Blueprint extends BaseBlueprint
     public function dropView(string $view): Fluent
     {
         return $this->addCommand('dropView', compact('view'));
+    }
+  
+    /**
+     * Almost like 'decimal' type, but can be with variable precision (by default)
+     */
+    public function numeric(string $column, ?int $precision = null, ?int $scale = null): ColumnDefinition
+    {
+        return $this->addColumn('numeric', $column, compact('precision', 'scale'));
     }
 
     protected function addFluentIndexes(): void

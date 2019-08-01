@@ -93,6 +93,16 @@ Schema::table('some_table', function (Blueprint $table) {
 });
 ```
 
+### Numeric column type
+Unlike standard laravel `decimal` type, this type can be with [variable precision](https://www.postgresql.org/docs/current/datatype-numeric.html) 
+```php
+Schema::table('some_table', function (Blueprint $table) {
+   $table->numeric('column_with_variable_precision');
+   $table->numeric('column_with_defined_precision', 8);
+   $table->numeric('column_with_defined_precision_and_scale', 8, 2);
+});
+```
+
 ## Custom Extensions
 
 1). Create a repository for your extension.

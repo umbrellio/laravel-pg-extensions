@@ -18,6 +18,7 @@ namespace Illuminate\Database\Schema {
      * @method Fluent dropView(string $view)
      * @method Fluent gin($columns, ?string $name = null)
      * @method Fluent gist($columns, ?string $name = null)
+     * @method ColumnDefinition numeric(string $column, ?int $precision = null, ?int $scale = null):
      */
     class Blueprint
     {

@@ -17,46 +17,6 @@ class CreateIndexTest extends FunctionalTestCase
     use DatabaseTransactions, IndexAssertions;
 
     /** @test */
-    public function createGistIndex(): void
-    {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->tsRange('code')->gist();
-        });
-
-        $this->seeIndex('test_table_code_gist');
-
-        Schema::table('test_table', function (Blueprint $table) {
-            $table->tsRange('some_id');
-            $table->tsRange('some_key');
-            $table->gist('some_key', 'specify_gist_key');
-            $table->gist('some_id');
-        });
-
-        $this->seeIndex('specify_gist_key');
-        $this->seeIndex('test_table_some_id_gist');
-    }
-
-    /** @test */
-    public function createGinIndex(): void
-    {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->tsVector('id')->gin();
-        });
-
-        $this->seeIndex('test_table_id_gin');
-
-        Schema::table('test_table', function (Blueprint $table) {
-            $table->tsVector('some_id');
-            $table->tsVector('some_key');
-            $table->gin('some_key', 'specify_gin_key');
-            $table->gin('some_id');
-        });
-
-        $this->seeIndex('specify_gin_key');
-        $this->seeIndex('test_table_some_id_gin');
-    }
-
-    /** @test */
     public function createIndexIfNotExists(): void
     {
         Schema::create('test_table', function (Blueprint $table) {

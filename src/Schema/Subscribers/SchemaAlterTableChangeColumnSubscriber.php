@@ -29,7 +29,7 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
             $event->getColumnDiff()
         );
 
-        $event->addSql($sql->toArray());
+        $event->addSql($sql->unique()->toArray());
     }
 
     public function getSubscribedEvents(): array

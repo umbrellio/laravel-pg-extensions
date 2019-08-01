@@ -17,90 +17,6 @@ class AlterColumnsTest extends FunctionalTestCase
     use DatabaseTransactions, ColumnAssertions;
 
     /** @test */
-    public function alterTableSetSimpleComment(): void
-    {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->string('code')->default('1');
-        });
-
-        $this->assertDefaultOnColumn('test_table', 'code', "'1'::character varying");
-
-        Schema::table('test_table', function (Blueprint $table) {
-            $table->string('code')->comment('some comment')->change();
-        });
-
-        $this->assertCommentOnColumn('test_table', 'code', 'some comment');
-        $this->assertDefaultOnColumn('test_table', 'code', "'1'::character varying");
-    }
-
-    /** @test */
-    public function alterTableJsonSetComment(): void
-    {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->string('json_field');
-        });
-
-        $this->assertCommentOnColumn('test_table', 'json_field');
-
-        Schema::table('test_table', function (Blueprint $table) {
-            $table->json('json_field')->comment('(DC2Type:json_array)')->change();
-        });
-
-        $this->assertCommentOnColumn('test_table', 'json_field', '(DC2Type:json_array)');
-    }
-
-    /** @test */
-    public function alterTableSetDCComment(): void
-    {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->string('code')->default('1');
-        });
-
-        $this->assertDefaultOnColumn('test_table', 'code', "'1'::character varying");
-        $this->assertCommentOnColumn('test_table', 'code');
-
-        Schema::table('test_table', function (Blueprint $table) {
-            $table->string('code')->comment('(DC2Type:string)')->change();
-        });
-
-        $this->assertDefaultOnColumn('test_table', 'code', "'1'::character varying");
-        $this->assertCommentOnColumn('test_table', 'code', '(DC2Type:string)');
-    }
-
-    /** @test */
-    public function alterTableDropDCComment(): void
-    {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->integer('number')->comment('(DC2Type:integer)')->default(1);
-        });
-
-        $this->assertCommentOnColumn('test_table', 'number', '(DC2Type:integer)');
-
-        Schema::table('test_table', function (Blueprint $table) {
-            $table->integer('number')->comment('test')->change();
-        });
-
-        $this->assertCommentOnColumn('test_table', 'number', 'test');
-    }
-
-    /** @test */
-    public function alterTableChangeSimpleComment(): void
-    {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->integer('number')->comment('(DC2Type:integer)')->default(1);
-        });
-
-        $this->assertDefaultOnColumn('test_table', 'number', '1');
-
-        Schema::table('test_table', function (Blueprint $table) {
-            $table->string('number')->comment('some comment')->change();
-        });
-
-        $this->assertCommentOnColumn('test_table', 'number', 'some comment');
-        $this->assertDefaultOnColumn('test_table', 'number', "'1'::character varying");
-    }
-
-    /** @test */
     public function alterTableUsingByDefault(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -210,37 +126,5 @@ class AlterColumnsTest extends FunctionalTestCase
         });
 
         $this->assertDefaultOnColumn('test_table', 'code', "''::character varying");
-    }
-
-    /** @test */
-    public function alterTableCreateSequence(): void
-    {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->integer('id')->default(1);
-        });
-
-        $this->assertDefaultOnColumn('test_table', 'id', '1');
-
-        Schema::table('test_table', function (Blueprint $table) {
-            $table->increments('id')->change();
-        });
-
-        $this->assertDefaultOnColumn('test_table', 'id', "nextval('test_table_id_seq'::regclass)");
-    }
-
-    /** @test */
-    public function alterTableDropSequence(): void
-    {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->increments('id');
-        });
-
-        $this->assertDefaultOnColumn('test_table', 'id', "nextval('test_table_id_seq'::regclass)");
-
-        Schema::table('test_table', function (Blueprint $table) {
-            $table->integer('id')->change();
-        });
-
-        $this->assertDefaultOnColumn('test_table', 'id');
     }
 }

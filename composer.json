@@ -16,6 +16,7 @@
   },
   "require-dev": {
     "umbrellio/code-style-php": "^1.0",
+    "codeception/codeception": "^3.0",
     "orchestra/testbench": "^3.5",
     "php-coveralls/php-coveralls": "^2.1"
   },

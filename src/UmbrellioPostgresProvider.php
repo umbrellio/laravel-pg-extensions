@@ -7,18 +7,9 @@ namespace Umbrellio\Postgres;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\DatabaseServiceProvider;
 use Umbrellio\Postgres\Connectors\ConnectionFactory;
-use Umbrellio\Postgres\Doctrine\RangeExtension;
-use Umbrellio\Postgres\Doctrine\VectorExtension;
 
 class UmbrellioPostgresProvider extends DatabaseServiceProvider
 {
-    public function register()
-    {
-        parent::register();
-        PostgresConnection::registerExtension(RangeExtension::class);
-        PostgresConnection::registerExtension(VectorExtension::class);
-    }
-
     /**
      * @codeCoverageIgnore
      */

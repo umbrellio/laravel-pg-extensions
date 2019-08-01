@@ -16,6 +16,7 @@ php composer.phar require umbrellio/laravel-pg-extensions
 
  - [Extended `Schema::create()`](#extended-table-creation)
  - [Extended `Schema` with GIST/GIN indexes](#create-gist/gin-indexes)
+ - [Extended `Schema` for views](#create-views)
  - [Working with unique indexes](#extended-unique-indexes-creation)
  - [Working with partitions](#partitions)
  - [Check existing index before manipulation](#check-existing-index)
@@ -36,6 +37,22 @@ Schema::create('table', function (Blueprint $table) {
 Schema::create('table', function (Blueprint $table) {
     $table->gist(['column1', 'column2']); 
     $table->gin('column1');
+});
+```
+
+### Create views
+
+Example:
+```php
+// Facade methods:
+Schema::createView('active_users', "SELECT * FROM users WHERE active = 1");
+Schema::dropView('active_users')
+
+// Schema methods:
+Schema::create('users', function (Blueprint $table) {
+    $table
+        ->createView('active_users', , "SELECT * FROM users WHERE active = 1")
+        ->materialize();
 });
 ```
 

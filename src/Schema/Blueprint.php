@@ -100,7 +100,7 @@ class Blueprint extends BaseBlueprint
     {
         return $this->addCommand('dropView', compact('view'));
     }
-  
+
     /**
      * Almost like 'decimal' type, but can be with variable precision (by default)
      */

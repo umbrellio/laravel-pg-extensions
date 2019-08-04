@@ -1,6 +1,5 @@
 {
   "name": "umbrellio/laravel-pg-extensions",
-  "description": "",
   "type": "library",
   "minimum-stability": "stable",
   "authors": [

@@ -14,9 +14,12 @@ use Doctrine\DBAL\Schema\Comparator;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\TableDiff;
 use Doctrine\DBAL\Types\Type;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Grammars\ChangeColumn;
 use Illuminate\Support\Collection;
+use Closure;
 use Illuminate\Support\Facades\DB;
+use Generator;
 use ReflectionMethod;
 use Umbrellio\Postgres\PostgresConnection;
 use Umbrellio\Postgres\Schema\Blueprint;
@@ -38,13 +41,11 @@ use Umbrellio\Postgres\Tests\FunctionalTestCase;
 class ChangeColumnSubscriberTest extends FunctionalTestCase
 {
     private const TABLE = 'some_table';
-    private const COLUMN = 'some_field';
 
     private $subscriber;
     private $platform;
     private $tableDiff;
     private $columnDiff;
-    private $eventArgs;
     private $columns;
     private $table;
 
@@ -55,7 +56,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
     {
         parent::setUp();
 
-        $this->blueprint = new Blueprint(static::TABLE);
+        $this->blueprint = new Blueprint('some_table');
         $this->postgresGrammar = new PostgresGrammar();
         $this->subscriber = new SchemaAlterTableChangeColumnSubscriber();
         $this->platform = new PostgreSqlPlatform();
@@ -67,183 +68,152 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         $this->assertSame([Events::onSchemaAlterTableChangeColumn], $this->subscriber->getSubscribedEvents());
     }
 
-//    /** @test */
-//    public function onSchemaAlterTableChangeColumn(): void
-//    {
-//
-//
-//        $this->subscriber->onSchemaAlterTableChangeColumn($eventArgs);
-//        $this->assertTrue($eventArgs->isDefaultPrevented());
-//    }
-
-//    /**
-//     * @test
-//     * @todo Допилить тесты
-//     */
-//    public function getAlterTableChangeColumnSQL(): void
-//    {
-//        $this->subscriber->onSchemaAlterTableChangeColumn($this->eventArgs);
-//        $this->markTestIncomplete();
-//    }
-//
-//    /**
-//     * @test
-//     * @todo Допилить тесты
-//     */
-//    public function compileAlterColumnComment(): void
-//    {
-//        $this->subscriber->compileAlterColumnComment(
-//            $this->platform,
-//            $this->columnDiff,
-//            $this->column,
-//            static::COLUMN,
-//            new Collection()
-//        );
-//        $this->markTestIncomplete();
-//    }
-//
-//    /**
-//     * @test
-//     * @todo Допилить тесты
-//     */
-//    public function compileAlterColumnNull(): void
-//    {
-//        $this->subscriber->compileAlterColumnNull(
-//            $this->columnDiff,
-//            $this->column,
-//            static::COLUMN,
-//            static::COLUMN,
-//            new Collection()
-//        );
-//        $this->markTestIncomplete();
-//    }
-//
-//    /**
-//     * @test
-//     * @todo Допилить тесты
-//     */
-//    public function compileAlterColumnDefault(): void
-//    {
-//        $this->subscriber->compileAlterColumnDefault(
-//            $this->platform,
-//            $this->columnDiff,
-//            $this->column,
-//            static::COLUMN,
-//            static::COLUMN,
-//            new Collection()
-//        );
-//        $this->markTestIncomplete();
-//    }
-
-    /** @test */
-    public function dropSequence(): void
+    /**
+     * @test
+     * @dataProvider provideSchemas
+     */
+    public function changeSchema(string $column, Closure $callback, array $expectedSQL): void
     {
-        $this->blueprint->integer('some_key')->change();
-        $eventArgs = $this->getEventArgsForColumn('some_key');
-
+        $callback($this->blueprint, $column);
+        $eventArgs = $this->getEventArgsForColumn($column);
         $this->subscriber->onSchemaAlterTableChangeColumn($eventArgs);
 
-        $this->assertSame(
+        $this->assertSame($expectedSQL, $eventArgs->getSql());
+    }
+
+    public function provideSchemas(): Generator
+    {
+        yield $this->dropCommentCase();
+        yield $this->changeCommentCase();
+        yield $this->dropNotNullCase();
+        yield $this->createSequenceCase();
+        yield $this->dropDefaultCase();
+        yield $this->setSimpleDefaultCase();
+        yield $this->setExpressionDefaultCase();
+        yield $this->changeTypeWithUsingCase();
+        yield $this->changeLengthCase();
+    }
+
+    private function changeTypeWithUsingCase(): array
+    {
+        return [
+            'some_integer_default',
+            function (Blueprint $table, string $column) {
+                $table
+                    ->text($column)
+                    ->default(null)
+                    ->using(sprintf("('[some_exp:' || %s || ']')::character varying", $column))
+                    ->change();
+            },
+            [
+                'ALTER TABLE some_table ALTER some_integer_default DROP DEFAULT',
+                "ALTER TABLE some_table ALTER some_integer_default TYPE TEXT USING ('[some_exp:' || some_integer_default || ']')::character varying",
+            ]
+        ];
+    }
+
+    private function setSimpleDefaultCase(): array
+    {
+        return [
+            'some_comment',
+            function (Blueprint $table, string $column) {
+                $table->string($column)->default('some_default')->change();
+            },
+            [
+               "ALTER TABLE some_table ALTER some_comment SET DEFAULT 'some_default'"
+            ]
+        ];
+    }
+
+    private function setExpressionDefaultCase(): array
+    {
+        return [
+            'some_comment',
+            function (Blueprint $table, string $column) {
+                $table->string($column)->default(new Expression("('some_string:' || some_comment)::character varying"))->change();
+            },
+            [
+                "ALTER TABLE some_table ALTER some_comment SET DEFAULT ('some_string:' || some_comment)::character varying"
+            ]
+        ];
+    }
+
+    private function changeLengthCase(): array
+    {
+        return [
+            'some_comment',
+            function (Blueprint $table, string $column) {
+                $table->string($column, 75)->change();
+            },
+            [
+                'ALTER TABLE some_table ALTER some_comment TYPE VARCHAR(75)',
+            ]
+        ];
+    }
+
+    private function dropDefaultCase(): array
+    {
+        return [
+            'some_key',
+            function (Blueprint $table, string $column) {
+                $table->integer($column)->change();
+            },
             [
                 'ALTER TABLE some_table ALTER some_key DROP DEFAULT',
                 'ALTER TABLE some_table ALTER some_key TYPE INT USING some_key::INT',
-            ],
-            $eventArgs->getSql()
-        );
+            ]
+        ];
     }
 
-    /** @test */
-    public function createSequence(): void
+    private function dropNotNullCase(): array
     {
-        $this->blueprint->integer('some_key')->change();
-        $this->blueprint->increments('some_integer_default')->change();
+        return [
+            'some_integer_default',
+            function (Blueprint $table, string $column) {
+                $table->integer($column)->nullable()->change();
+            },
+            ['ALTER TABLE some_table ALTER some_integer_default DROP NOT NULL']
+        ];
+    }
 
-        $eventArgs = $this->getEventArgsForColumn('some_integer_default');
-        $this->subscriber->onSchemaAlterTableChangeColumn($eventArgs);
-
-        $this->assertSame(
+    private function createSequenceCase(): array
+    {
+        return [
+            'some_integer_default',
+            function (Blueprint $table, string $column) {
+                $table->increments($column)->change();
+            },
             [
                 'CREATE SEQUENCE some_table_some_integer_default_seq',
                 "SELECT setval('some_table_some_integer_default_seq', (SELECT MAX(some_integer_default) FROM some_table))",
                 "ALTER TABLE some_table ALTER some_integer_default SET DEFAULT nextval('some_table_some_integer_default_seq')",
-            ],
-            $eventArgs->getSql()
-        );
+            ]
+        ];
     }
 
-//    /**
-//     * @test
-//     * @todo Допилить тесты
-//     */
-//    public function compileAlterColumnType(): void
-//    {
-//        $this->subscriber->compileAlterColumnType(
-//            $this->platform,
-//            $this->columnDiff,
-//            $this->column,
-//            static::COLUMN,
-//            static::COLUMN,
-//            new Collection()
-//        );
-//        $this->markTestIncomplete();
-//    }
+    private function dropCommentCase(): array
+    {
+        return [
+            'some_comment',
+            function (Blueprint $table, string $column) {
+                $table->string($column)->nullable(false)->change();
+            },
+            ['ALTER TABLE some_table ALTER some_comment SET NOT NULL']
+        ];
+    }
 
-//    /**
-//     * @test
-//     * @todo Допилить тесты
-//     */
-//    public function getDefaultValueDeclarationSQL(): void
-//    {
-//        $this->subscriber->getDefaultValueDeclarationSQL($this->platform, $this->column);
-//        $this->markTestIncomplete();
-//    }
-//
-//    /**
-//     * @test
-//     * @todo Допилить тесты
-//     */
-//    public function typeChangeBreaksDefaultValue(): void
-//    {
-//        $this->subscriber->typeChangeBreaksDefaultValue($this->columnDiff);
-//        $this->markTestIncomplete();
-//    }
-//
-//    /** @test */
-//    public function isNumericType(): void
-//    {
-//        $this->assertTrue($this->subscriber->isNumericType(Type::getType('integer')));
-//        $this->assertFalse($this->subscriber->isNumericType(Type::getType('string')));
-//    }
-//
-//    /**
-//     * @test
-//     * @todo Допилить тесты
-//     */
-//    public function quoteName(): void
-//    {
-//        $this->subscriber->quoteName($this->platform, $this->tableDiff);
-//        $this->markTestIncomplete();
-//    }
-//
-//    /**
-//     * @test
-//     * @todo Допилить тесты
-//     */
-//    public function getOldColumnComment(): void
-//    {
-//        $this->subscriber->getOldColumnComment($this->columnDiff);
-//        $this->markTestIncomplete();
-//    }
-//
-//    /**
-//     * @test
-//     * @todo Допилить тесты
-//     */
-//    public function getColumnComment(): void
-//    {
-//        $this->subscriber->getColumnComment($this->column);
-//        $this->markTestIncomplete();
-//    }
+    private function changeCommentCase(): array
+    {
+        return [
+            'some_comment',
+            function (Blueprint $table, string $column) {
+                $table->string($column)
+                    ->comment('new_comment')
+                    ->change();
+            },
+            ["COMMENT ON COLUMN some_table.some_comment IS 'new_comment'"]
+        ];
+    }
 
     private function getEventArgsForColumn(string $columnName): SchemaAlterTableChangeColumnEventArgs
     {
@@ -260,7 +230,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
             );
         }
 
-        $this->table = new Table(static::TABLE, $this->columns);
+        $this->table = new Table('some_table', $this->columns);
 
         $this->tableDiff = (new Comparator())->diffTable(
             $this->table,
@@ -282,13 +252,9 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
     private function getListColumns(): array
     {
         return [
-            //            $this->getDefinitionLastValue(),
             $this->getDefinitionSomeKeySequence(),
-            //            $this->getDefinitionSomeKey(),
             $this->getDefinitionSomeString(),
-            //            $this->getDefinitionLogCnt(),
             $this->getDefinitionSomeStringDefault(),
-            //            $this->getDefinitionIsCalled(),
             $this->getDefinitionSomeIntegerDefault(),
             $this->getDefinitionSomeComment(),
         ];
@@ -300,22 +266,6 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         $method->setAccessible(true);
 
         return $method;
-    }
-
-    private function getDefinitionLastValue(): array
-    {
-        return [
-            'attnum' => 1,
-            'field' => 'last_value',
-            'type' => 'int8',
-            'complete_type' => 'bigint',
-            'domain_type' => null,
-            'domain_complete_type' => null,
-            'isnotnull' => true,
-            'pri' => null,
-            'default' => null,
-            'comment' => null,
-        ];
     }
 
     private function getDefinitionSomeKeySequence(): array
@@ -330,22 +280,6 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
             'isnotnull' => true,
             'pri' => 't',
             'default' => "nextval('some_table_some_key_seq'::regclass)",
-            'comment' => null,
-        ];
-    }
-
-    private function getDefinitionSomeKey(): array
-    {
-        return [
-            'attnum' => 1,
-            'field' => 'some_key',
-            'type' => 'int8',
-            'complete_type' => 'bigint',
-            'domain_type' => null,
-            'domain_complete_type' => null,
-            'isnotnull' => false,
-            'pri' => null,
-            'default' => null,
             'comment' => null,
         ];
     }
@@ -366,22 +300,6 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         ];
     }
 
-    private function getDefinitionLogCnt(): array
-    {
-        return [
-            'attnum' => 2,
-            'field' => 'log_cnt',
-            'type' => 'int8',
-            'complete_type' => 'bigint',
-            'domain_type' => null,
-            'domain_complete_type' => null,
-            'isnotnull' => true,
-            'pri' => null,
-            'default' => null,
-            'comment' => null,
-        ];
-    }
-
     private function getDefinitionSomeStringDefault(): array
     {
         return [
@@ -394,22 +312,6 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
             'isnotnull' => true,
             'pri' => null,
             'default' => "'some_default_value'::character varying",
-            'comment' => null,
-        ];
-    }
-
-    private function getDefinitionIsCalled(): array
-    {
-        return [
-            'attnum' => 2,
-            'field' => 'is_called',
-            'type' => 'bool',
-            'complete_type' => 'boolean',
-            'domain_type' => null,
-            'domain_complete_type' => null,
-            'isnotnull' => true,
-            'pri' => null,
-            'default' => null,
             'comment' => null,
         ];
     }

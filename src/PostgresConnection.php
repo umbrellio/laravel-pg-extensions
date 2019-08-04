@@ -63,6 +63,9 @@ class PostgresConnection extends BasePostgresConnection
         return $this->withTablePrefix(new PostgresGrammar());
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     private function registerExtensions(): void
     {
         collect(self::$extensions)->each(function ($extension) {

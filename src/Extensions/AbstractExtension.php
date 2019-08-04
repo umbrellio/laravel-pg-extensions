@@ -8,6 +8,9 @@ use Illuminate\Support\Traits\Macroable;
 use Umbrellio\Postgres\Extensions\Exceptions\MacroableMissedException;
 use Umbrellio\Postgres\Extensions\Exceptions\MixinInvalidException;
 
+/**
+ * @codeCoverageIgnore
+ */
 abstract class AbstractExtension extends AbstractComponent
 {
     abstract public static function getMixins(): array;

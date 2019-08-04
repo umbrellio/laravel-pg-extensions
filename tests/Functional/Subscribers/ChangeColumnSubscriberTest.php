@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Tests\Unit\Subscribers;
 
+use Closure;
 use Codeception\Util\ReflectionHelper;
 use Doctrine\DBAL\Event\SchemaAlterTableChangeColumnEventArgs;
 use Doctrine\DBAL\Events;
@@ -13,13 +14,10 @@ use Doctrine\DBAL\Schema\ColumnDiff;
 use Doctrine\DBAL\Schema\Comparator;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\TableDiff;
-use Doctrine\DBAL\Types\Type;
+use Generator;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Grammars\ChangeColumn;
-use Illuminate\Support\Collection;
-use Closure;
 use Illuminate\Support\Facades\DB;
-use Generator;
 use ReflectionMethod;
 use Umbrellio\Postgres\PostgresConnection;
 use Umbrellio\Postgres\Schema\Blueprint;
@@ -94,127 +92,6 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         yield $this->changeLengthCase();
     }
 
-    private function changeTypeWithUsingCase(): array
-    {
-        return [
-            'some_integer_default',
-            function (Blueprint $table, string $column) {
-                $table
-                    ->text($column)
-                    ->default(null)
-                    ->using(sprintf("('[some_exp:' || %s || ']')::character varying", $column))
-                    ->change();
-            },
-            [
-                'ALTER TABLE some_table ALTER some_integer_default DROP DEFAULT',
-                "ALTER TABLE some_table ALTER some_integer_default TYPE TEXT USING ('[some_exp:' || some_integer_default || ']')::character varying",
-            ]
-        ];
-    }
-
-    private function setSimpleDefaultCase(): array
-    {
-        return [
-            'some_comment',
-            function (Blueprint $table, string $column) {
-                $table->string($column)->default('some_default')->change();
-            },
-            [
-               "ALTER TABLE some_table ALTER some_comment SET DEFAULT 'some_default'"
-            ]
-        ];
-    }
-
-    private function setExpressionDefaultCase(): array
-    {
-        return [
-            'some_comment',
-            function (Blueprint $table, string $column) {
-                $table->string($column)->default(new Expression("('some_string:' || some_comment)::character varying"))->change();
-            },
-            [
-                "ALTER TABLE some_table ALTER some_comment SET DEFAULT ('some_string:' || some_comment)::character varying"
-            ]
-        ];
-    }
-
-    private function changeLengthCase(): array
-    {
-        return [
-            'some_comment',
-            function (Blueprint $table, string $column) {
-                $table->string($column, 75)->change();
-            },
-            [
-                'ALTER TABLE some_table ALTER some_comment TYPE VARCHAR(75)',
-            ]
-        ];
-    }
-
-    private function dropDefaultCase(): array
-    {
-        return [
-            'some_key',
-            function (Blueprint $table, string $column) {
-                $table->integer($column)->change();
-            },
-            [
-                'ALTER TABLE some_table ALTER some_key DROP DEFAULT',
-                'ALTER TABLE some_table ALTER some_key TYPE INT USING some_key::INT',
-            ]
-        ];
-    }
-
-    private function dropNotNullCase(): array
-    {
-        return [
-            'some_integer_default',
-            function (Blueprint $table, string $column) {
-                $table->integer($column)->nullable()->change();
-            },
-            ['ALTER TABLE some_table ALTER some_integer_default DROP NOT NULL']
-        ];
-    }
-
-    private function createSequenceCase(): array
-    {
-        return [
-            'some_integer_default',
-            function (Blueprint $table, string $column) {
-                $table->increments($column)->change();
-            },
-            [
-                'CREATE SEQUENCE some_table_some_integer_default_seq',
-                "SELECT setval('some_table_some_integer_default_seq', (SELECT MAX(some_integer_default) FROM some_table))",
-                "ALTER TABLE some_table ALTER some_integer_default SET DEFAULT nextval('some_table_some_integer_default_seq')",
-            ]
-        ];
-    }
-
-    private function dropCommentCase(): array
-    {
-        return [
-            'some_comment',
-            function (Blueprint $table, string $column) {
-                $table->string($column)->nullable(false)->change();
-            },
-            ['ALTER TABLE some_table ALTER some_comment SET NOT NULL']
-        ];
-    }
-
-    private function changeCommentCase(): array
-    {
-        return [
-            'some_comment',
-            function (Blueprint $table, string $column) {
-                $table->string($column)
-                    ->comment('new_comment')
-                    ->change();
-            },
-            ["COMMENT ON COLUMN some_table.some_comment IS 'new_comment'"]
-        ];
-    }
-
     private function getEventArgsForColumn(string $columnName): SchemaAlterTableChangeColumnEventArgs
     {
         /** @var PostgresConnection $connection */
@@ -247,6 +124,125 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         }
 
         return new SchemaAlterTableChangeColumnEventArgs($this->columnDiff, $this->tableDiff, $this->platform);
+    }
+
+    private function dropCommentCase(): array
+    {
+        return [
+            'some_comment',
+            function (Blueprint $table, string $column) {
+                $table->string($column)->nullable(false)->change();
+            },
+            ['ALTER TABLE some_table ALTER some_comment SET NOT NULL'],
+        ];
+    }
+
+    private function changeCommentCase(): array
+    {
+        return [
+            'some_comment',
+            function (Blueprint $table, string $column) {
+                $table->string($column)
+                    ->comment('new_comment')
+                    ->change();
+            },
+            ["COMMENT ON COLUMN some_table.some_comment IS 'new_comment'"],
+        ];
+    }
+
+    private function dropNotNullCase(): array
+    {
+        return [
+            'some_integer_default',
+            function (Blueprint $table, string $column) {
+                $table->integer($column)->nullable()->change();
+            },
+            ['ALTER TABLE some_table ALTER some_integer_default DROP NOT NULL'],
+        ];
+    }
+
+    private function createSequenceCase(): array
+    {
+        return [
+            'some_integer_default',
+            function (Blueprint $table, string $column) {
+                $table->increments($column)->change();
+            },
+            [
+                'CREATE SEQUENCE some_table_some_integer_default_seq',
+                "SELECT setval('some_table_some_integer_default_seq', (SELECT MAX(some_integer_default) FROM some_table))",
+                "ALTER TABLE some_table ALTER some_integer_default SET DEFAULT nextval('some_table_some_integer_default_seq')",
+            ],
+        ];
+    }
+
+    private function dropDefaultCase(): array
+    {
+        return [
+            'some_key',
+            function (Blueprint $table, string $column) {
+                $table->integer($column)->change();
+            },
+            [
+                'ALTER TABLE some_table ALTER some_key DROP DEFAULT',
+                'ALTER TABLE some_table ALTER some_key TYPE INT USING some_key::INT',
+            ],
+        ];
+    }
+
+    private function setSimpleDefaultCase(): array
+    {
+        return [
+            'some_comment',
+            function (Blueprint $table, string $column) {
+                $table->string($column)->default('some_default')->change();
+            },
+            ["ALTER TABLE some_table ALTER some_comment SET DEFAULT 'some_default'"],
+        ];
+    }
+
+    private function setExpressionDefaultCase(): array
+    {
+        return [
+            'some_comment',
+            function (Blueprint $table, string $column) {
+                $table->string($column)->default(
+                    new Expression("('some_string:' || some_comment)::character varying")
+                )->change();
+            },
+            [
+                "ALTER TABLE some_table ALTER some_comment SET DEFAULT ('some_string:' || some_comment)::character varying",
+            ],
+        ];
+    }
+
+    private function changeTypeWithUsingCase(): array
+    {
+        return [
+            'some_integer_default',
+            function (Blueprint $table, string $column) {
+                $table
+                    ->text($column)
+                    ->default(null)
+                    ->using(sprintf("('[some_exp:' || %s || ']')::character varying", $column))
+                    ->change();
+            },
+            [
+                'ALTER TABLE some_table ALTER some_integer_default DROP DEFAULT',
+                "ALTER TABLE some_table ALTER some_integer_default TYPE TEXT USING ('[some_exp:' || some_integer_default || ']')::character varying",
+            ],
+        ];
+    }
+
+    private function changeLengthCase(): array
+    {
+        return [
+            'some_comment',
+            function (Blueprint $table, string $column) {
+                $table->string($column, 75)->change();
+            },
+            ['ALTER TABLE some_table ALTER some_comment TYPE VARCHAR(75)'],
+        ];
     }
 
     private function getListColumns(): array

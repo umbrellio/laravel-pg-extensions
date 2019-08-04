@@ -15,7 +15,7 @@ php composer.phar require umbrellio/laravel-pg-extensions
 ## Features
 
  - [Extended `Schema::create()`](#extended-table-creation)
- - [Extended `Schema` with GIST/GIN indexes](#create-gist/gin-indexes)
+ - [Added Support Numeric Type](#numeric-column-type)
  - [Extended `Schema` with USING](#extended-schema-using)
  - [Extended `Schema` for views](#create-views)
  - [Working with unique indexes](#extended-unique-indexes-creation)
@@ -47,15 +47,6 @@ Schema::table('table', function (Blueprint $table) {
         ->string('number')
         ->using("('[' || number || ']')::character varyiing")
         ->change();
-});
-```
-
-### Create gist/gin indexes
-
-```php
-Schema::create('table', function (Blueprint $table) {
-    $table->gist(['column1', 'column2']); 
-    $table->gin('column1');
 });
 ```
 

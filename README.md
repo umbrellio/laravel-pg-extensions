@@ -17,6 +17,7 @@ php composer.phar require umbrellio/laravel-pg-extensions
  - [Extended `Schema::create()`](#extended-table-creation)
  - [Extended `Schema` with GIST/GIN indexes](#create-gist/gin-indexes)
  - [Extended `Schema` with USING](#extended-schema-using)
+ - [Extended `Schema` for views](#create-views)
  - [Working with unique indexes](#extended-unique-indexes-creation)
  - [Working with partitions](#partitions)
  - [Check existing index before manipulation](#check-existing-index)
@@ -58,6 +59,22 @@ Schema::create('table', function (Blueprint $table) {
 });
 ```
 
+### Create views
+
+Example:
+```php
+// Facade methods:
+Schema::createView('active_users', "SELECT * FROM users WHERE active = 1");
+Schema::dropView('active_users')
+
+// Schema methods:
+Schema::create('users', function (Blueprint $table) {
+    $table
+        ->createView('active_users', , "SELECT * FROM users WHERE active = 1")
+        ->materialize();
+});
+```
+
 ### Extended unique indexes creation
 
 Example:
@@ -92,6 +109,16 @@ Schema::table('some_table', function (Blueprint $table) {
       $table->dropUnique(['column']);
    }
    $table->uniquePartial('column')->whereNull('deleted_at');
+});
+```
+
+### Numeric column type
+Unlike standard laravel `decimal` type, this type can be with [variable precision](https://www.postgresql.org/docs/current/datatype-numeric.html) 
+```php
+Schema::table('some_table', function (Blueprint $table) {
+   $table->numeric('column_with_variable_precision');
+   $table->numeric('column_with_defined_precision', 8);
+   $table->numeric('column_with_defined_precision_and_scale', 8, 2);
 });
 ```
 

@@ -62,4 +62,25 @@ class PartitionTest extends TestCase
             $tomorrow->toDateTimeString()
         ));
     }
+
+    /** @test */
+    public function addingNumericColumnWithVariablePrecicion()
+    {
+        $this->blueprint->numeric('foo');
+        $this->assertSameSql('alter table "test_table" add column "foo" numeric not null');
+    }
+
+    /** @test */
+    public function addingNumericColumnWithDefinedPrecicion()
+    {
+        $this->blueprint->numeric('foo', 8);
+        $this->assertSameSql('alter table "test_table" add column "foo" numeric(8) not null');
+    }
+
+    /** @test */
+    public function addingNumericColumnWithDefinedPrecicionAndScope()
+    {
+        $this->blueprint->numeric('foo', 8, 2);
+        $this->assertSameSql('alter table "test_table" add column "foo" numeric(8, 2) not null');
+    }
 }

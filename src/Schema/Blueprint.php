@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Schema;
 
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
+use Illuminate\Database\Schema\ColumnDefinition;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Schema\Builders\UniquePartialBuilder;
 use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
 use Umbrellio\Postgres\Schema\Definitions\LikeDefinition;
 use Umbrellio\Postgres\Schema\Definitions\UniqueDefinition;
+use Umbrellio\Postgres\Schema\Definitions\ViewDefinition;
 
 class Blueprint extends BaseBlueprint
 {
@@ -84,6 +86,27 @@ class Blueprint extends BaseBlueprint
         }
 
         return array_key_exists($index, $this->getSchemaManager()->listTableIndexes($this->getTable()));
+    }
+
+    /**
+     * @return ViewDefinition|Fluent
+     */
+    public function createView(string $view, string $select, bool $materialize = false): Fluent
+    {
+        return $this->addCommand('createView', compact('view', 'select', 'materialize'));
+    }
+
+    public function dropView(string $view): Fluent
+    {
+        return $this->addCommand('dropView', compact('view'));
+    }
+
+    /**
+     * Almost like 'decimal' type, but can be with variable precision (by default)
+     */
+    public function numeric(string $column, ?int $precision = null, ?int $scale = null): ColumnDefinition
+    {
+        return $this->addColumn('numeric', $column, compact('precision', 'scale'));
     }
 
     protected function addFluentIndexes(): void

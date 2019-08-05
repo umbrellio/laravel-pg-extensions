@@ -16,11 +16,16 @@ namespace Illuminate\Database\Schema {
      * @method UniqueDefinition uniquePartial($columns, ?string $index = null, ?string $algorithm = null)
      * @method ViewDefinition createView(string $view, string $select, bool $materialize = false)
      * @method Fluent dropView(string $view)
-     * @method Fluent gin($columns, ?string $name = null)
-     * @method Fluent gist($columns, ?string $name = null)
      * @method ColumnDefinition numeric(string $column, ?int $precision = null, ?int $scale = null):
      */
     class Blueprint
+    {
+    }
+
+    /**
+     * @method ColumnDefinition using($expression)
+     */
+    class ColumnDefinition
     {
     }
 }

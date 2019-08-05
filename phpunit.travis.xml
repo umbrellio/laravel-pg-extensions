@@ -2,11 +2,12 @@
 <phpunit bootstrap="vendor/autoload.php"
          colors="true"
          convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
+         convertNoticesToExceptions="false"
+         convertWarningsToExceptions="false"
          processIsolation="false"
          stopOnFailure="true">
     <php>
+        <ini name="error_reporting" value="-1" />
         <var name="db_type" value="pdo_pgsql"/>
         <var name="db_host" value="localhost" />
         <var name="db_username" value="postgres" />
@@ -14,6 +15,11 @@
         <var name="db_database" value="testing" />
         <var name="db_port" value="5432"/>
     </php>
+    <testsuites>
+        <testsuite name="Test suite">
+            <directory suffix="Test.php">./tests</directory>
+        </testsuite>
+    </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
@@ -22,9 +28,4 @@
             </exclude>
         </whitelist>
     </filter>
-    <testsuites>
-        <testsuite name="Test suite">
-            <directory suffix="Test.php">./tests</directory>
-        </testsuite>
-    </testsuites>
 </phpunit>

@@ -2,32 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Unit\Schema;
+namespace Umbrellio\Postgres\Unit\Schema\Blueprint;
 
 use Illuminate\Support\Carbon;
 use InvalidArgumentException;
-use Umbrellio\Postgres\PostgresConnection;
-use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 use Umbrellio\Postgres\Tests\TestCase;
+use Umbrellio\Postgres\Tests\Unit\Helpers\BlueprintAssertions;
 
-class BlueprintTest extends TestCase
+class PartitionTest extends TestCase
 {
-    /** @var Blueprint */
-    private $blueprint;
+    use BlueprintAssertions;
+
+    private const TABLE = 'test_table';
 
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->blueprint = new Blueprint('test_table');
+        $this->initializeMock(static::TABLE);
     }
 
     /** @test */
     public function detachPartition(): void
     {
         $this->blueprint->detachPartition('some_partition');
-
         $this->assertSameSql('alter table "test_table" detach partition some_partition');
     }
 
@@ -38,7 +35,6 @@ class BlueprintTest extends TestCase
             'from' => 10,
             'to' => 100,
         ]);
-
         $this->assertSameSql('alter table "test_table" attach partition some_partition for values from (10) to (100)');
     }
 
@@ -46,7 +42,6 @@ class BlueprintTest extends TestCase
     public function attachPartitionFailedWithoutForValuesPart(): void
     {
         $this->blueprint->attachPartition('some_partition');
-
         $this->expectException(InvalidArgumentException::class);
         $this->runToSql();
     }
@@ -61,9 +56,11 @@ class BlueprintTest extends TestCase
             'to' => $tomorrow,
         ]);
 
-        $this->assertSameSql(
-            'alter table "test_table" attach partition some_partition '
-            . "for values from ('{$today->toDateTimeString()}') to ('{$tomorrow->toDateTimeString()}')");
+        $this->assertSameSql(sprintf(
+            'alter table "test_table" attach partition some_partition for values from (\'%s\') to (\'%s\')',
+            $today->toDateTimeString(),
+            $tomorrow->toDateTimeString()
+        ));
     }
 
     /** @test */
@@ -85,15 +82,5 @@ class BlueprintTest extends TestCase
     {
         $this->blueprint->numeric('foo', 8, 2);
         $this->assertSameSql('alter table "test_table" add column "foo" numeric(8, 2) not null');
-    }
-
-    private function assertSameSql(string $sql): void
-    {
-        $this->assertSame([$sql], $this->runToSql());
-    }
-
-    private function runToSql(): array
-    {
-        return $this->blueprint->toSql($this->createMock(PostgresConnection::class), new PostgresGrammar());
     }
 }

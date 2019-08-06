@@ -65,7 +65,7 @@ class Blueprint extends BaseBlueprint
 
     /**
      * @param array|string $columns
-     * @return ExcludeDefinition|ExcludeBuilder
+     * @return ExcludeDefinition
      */
     public function exclude($columns, ?string $index = null)
     {
@@ -78,7 +78,7 @@ class Blueprint extends BaseBlueprint
 
     /**
      * @param array|string $columns
-     * @return CheckDefinition|CheckBuilder
+     * @return CheckDefinition
      */
     public function check($columns, ?string $index = null)
     {

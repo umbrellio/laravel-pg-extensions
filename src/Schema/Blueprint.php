@@ -59,6 +59,11 @@ class Blueprint extends BaseBlueprint
         );
     }
 
+    public function dropUniquePartial($index): Fluent
+    {
+        return $this->dropIndexCommand('dropIndex', 'unique', $index);
+    }
+
     public function hasIndex($index, bool $unique = false): bool
     {
         if (is_array($index)) {

@@ -10,11 +10,12 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\Functional\Helpers\IndexAssertions;
+use Umbrellio\Postgres\Tests\Functional\Helpers\TableAssertions;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class CreateIndexTest extends FunctionalTestCase
 {
-    use DatabaseTransactions, IndexAssertions;
+    use DatabaseTransactions, IndexAssertions, TableAssertions;
 
     /** @test */
     public function createIndexIfNotExists(): void
@@ -28,7 +29,7 @@ class CreateIndexTest extends FunctionalTestCase
             }
         });
 
-        $this->assertTrue(Schema::hasTable('test_table'));
+        $this->seeTable('test_table');
 
         Schema::table('test_table', function (Blueprint $table) {
             if (!$table->hasIndex(['name'], true)) {
@@ -43,7 +44,7 @@ class CreateIndexTest extends FunctionalTestCase
      * @test
      * @dataProvider provideIndexes
      */
-    public function createPartialUniqueWithNull(string $expected, Closure $callback): void
+    public function createPartialUnique(string $expected, Closure $callback): void
     {
         Schema::create('test_table', function (Blueprint $table) use ($callback) {
             $table->increments('id');
@@ -57,8 +58,18 @@ class CreateIndexTest extends FunctionalTestCase
             $callback($table);
         });
 
-        $this->assertTrue(Schema::hasTable('test_table'));
+        $this->seeTable('test_table');
         $this->assertRegExpIndex('test_table_name_unique', '/' . $this->getDummyIndex() . $expected . '/');
+
+        Schema::table('test_table', function (Blueprint $table) {
+            if (!$this->existConstraintOnTable($table->getTable(), 'test_table_name_unique')) {
+                $table->dropUniquePartial(['name']);
+            } else {
+                $table->dropUnique(['name']);
+            }
+        });
+
+        $this->notSeeIndex('test_table_name_unique');
     }
 
     /** @test */
@@ -68,7 +79,7 @@ class CreateIndexTest extends FunctionalTestCase
             $table->string('name')->index('specify_index_name');
         });
 
-        $this->assertTrue(Schema::hasTable('test_table'));
+        $this->seeTable('test_table');
 
         $this->assertRegExpIndex(
             'specify_index_name',

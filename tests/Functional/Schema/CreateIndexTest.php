@@ -5,17 +5,19 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Tests\Functional\Schema;
 
 use Closure;
-use DB;
 use Generator;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Laravel\BrowserKitTesting\Concerns\InteractsWithDatabase;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\Functional\Helpers\IndexAssertions;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class CreateIndexTest extends FunctionalTestCase
 {
-    use DatabaseTransactions, IndexAssertions;
+    use DatabaseTransactions, IndexAssertions, InteractsWithDatabase;
 
     /** @test */
     public function createIndexIfNotExists(): void
@@ -186,8 +188,72 @@ class CreateIndexTest extends FunctionalTestCase
         $this->dontSeeConstraint('test_table', 'test_table_period_start_period_end_excl');
     }
 
+    /** @test */
+    public function addCheckConstraints(): void
+    {
+        Schema::create('test_table', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('period_type_id');
+            $table->date('period_start');
+            $table->date('period_end');
+            $table->softDeletes();
+
+            $table
+                ->check(['period_start', 'period_end'])
+                ->whereColumn('period_end', '>', 'period_start')
+                ->whereIn('period_type_id', [1, 2, 3]);
+        });
+
+        foreach ($this->provideSuccessData() as [$period_type_id, $period_start, $period_end]) {
+            $data = compact('period_type_id', 'period_start', 'period_end');
+            DB::table('test_table')->insert($data);
+            $this->seeInDatabase('test_table', $data);
+        }
+
+        foreach ($this->provideWrongData() as [$period_type_id, $period_start, $period_end]) {
+            $data = compact('period_type_id', 'period_start', 'period_end');
+            $this->expectException(QueryException::class);
+            DB::table('test_table')->insert($data);
+            $this->dontSeeInDatabase('test_table', $data);
+        }
+    }
+
+    /** @test */
+    public function dropCheckConstraints(): void
+    {
+        Schema::create('test_table', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('period_type_id');
+            $table
+                ->check(['period_type_id'])
+                ->whereNotNull('period_type_id');
+        });
+
+        $this->seeConstraint('test_table', 'test_table_period_type_id_chk');
+
+        Schema::table('test_table', function (Blueprint $table) {
+            $table->dropCheck(['period_type_id']);
+        });
+
+        $this->dontSeeConstraint('test_table', 'test_table_period_type_id_chk');
+    }
+
     protected function getDummyIndex(): string
     {
         return 'CREATE UNIQUE INDEX test_table_name_unique ON (public.)?test_table USING btree \(name\)';
+    }
+
+    private function provideSuccessData(): Generator
+    {
+        yield [1, '2019-01-01', '2019-01-31'];
+        yield [2, '2019-02-15', '2019-04-20'];
+        yield [3, '2019-03-07', '2019-06-24'];
+    }
+
+    private function provideWrongData(): Generator
+    {
+        yield [4, '2019-01-01', '2019-01-31'];
+        yield [1, '2019-07-15', '2019-04-20'];
+        yield [2, '2019-12-07', '2019-06-24'];
     }
 }

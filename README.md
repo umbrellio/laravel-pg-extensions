@@ -15,11 +15,12 @@ php composer.phar require umbrellio/laravel-pg-extensions
 ## Features
 
  - [Extended `Schema::create()`](#extended-table-creation)
- - [Added Support Numeric Type](#numeric-column-type)
+ - [Added Support NUMERIC Type](#numeric-column-type)
  - [Extended `Schema` with USING](#extended-schema-using)
  - [Extended `Schema` for views](#create-views)
- - [Working with unique indexes](#extended-unique-indexes-creation)
- - [Working with exclude constraints](#exclude-constraints-creation)
+ - [Working with UNIQUE indexes](#extended-unique-indexes-creation)
+ - [Working with EXCLUDE constraints](#exclude-constraints-creation)
+ - [Working with CHECK constraints](#check-constraints-creation)
  - [Working with partitions](#partitions)
  - [Check existing index before manipulation](#check-existing-index)
 
@@ -105,6 +106,28 @@ ALTER TABLE test_table
         EXCLUDE USING gist (type_id WITH =, daterange(date_start, date_end) WITH &&)
         WITH (some_arg = 1, any_arg = 'some_value')
         WHERE ("deleted_at" is null)
+```
+
+### Check constraints creation
+
+Using the example below:
+```php
+Schema::create('table', function (Blueprint $table) {
+    $table->integer('type_id'); 
+    $table->date('date_start'); 
+    $table->date('date_end'); 
+    $table
+        ->check(['date_start', 'date_end'])
+        ->whereColumn('date_end', '>', 'date_end')
+        ->whereIn('type_id', [1, 2, 3]);
+});
+```
+
+An Check Constraint will be generated for your table:
+```SQL
+ALTER TABLE test_table
+    ADD CONSTRAINT test_table_date_start_date_end_chk
+        CHECK ("date_end" > "date_start" AND "type_id" IN [1, 2, 3])
 ```
 
 ### Partitions

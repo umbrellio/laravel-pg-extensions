@@ -8,9 +8,11 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\PostgresGrammar as BasePostgresGrammar;
 use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Compilers\AttachPartitionCompiler;
+use Umbrellio\Postgres\Compilers\CheckCompiler;
 use Umbrellio\Postgres\Compilers\CreateCompiler;
 use Umbrellio\Postgres\Compilers\ExcludeCompiler;
 use Umbrellio\Postgres\Compilers\UniqueCompiler;
+use Umbrellio\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
 use Umbrellio\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
 use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
 use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniquePartialBuilder;
@@ -80,6 +82,11 @@ class PostgresGrammar extends BasePostgresGrammar
     public function compileExclude(Blueprint $blueprint, ExcludeBuilder $command): string
     {
         return ExcludeCompiler::compile($this, $blueprint, $command);
+    }
+
+    public function compileCheck(Blueprint $blueprint, CheckBuilder $command): string
+    {
+        return CheckCompiler::compile($this, $blueprint, $command);
     }
 
     protected function typeNumeric(Fluent $column): string

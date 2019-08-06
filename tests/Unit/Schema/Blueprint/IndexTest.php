@@ -26,7 +26,7 @@ class IndexTest extends TestCase
      * @test
      * @dataProvider provideExcludeConstraints
      */
-    public function addExcludeConstraint(Closure $callback, string $expectedSQL): void
+    public function addConstraint(Closure $callback, string $expectedSQL): void
     {
         $callback($this->blueprint);
         $this->assertSameSql($expectedSQL);
@@ -102,6 +102,18 @@ class IndexTest extends TestCase
                 'ALTER TABLE test_table ADD CONSTRAINT test_table_period_start_period_end_excl',
                 'EXCLUDE (period_type_id WITH =, daterange(period_start, period_end) WITH &&)',
                 "WITH (some_arg = 1, any_arg = 'some_value')",
+            ]),
+        ];
+        yield [
+            static function (Blueprint $table) {
+                $table
+                    ->check(['period_start', 'period_end'])
+                    ->whereColumn('period_end', '>', 'period_start')
+                    ->whereRaw('period_start NOT NULL or period_end NOT NULL');
+            },
+            implode(' ', [
+                'ALTER TABLE test_table ADD CONSTRAINT test_table_period_start_period_end_chk',
+                'CHECK (("period_end" > "period_start") and (period_start NOT NULL or period_end NOT NULL))',
             ]),
         ];
     }

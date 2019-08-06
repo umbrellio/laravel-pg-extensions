@@ -88,13 +88,6 @@ Schema::create('table', function (Blueprint $table) {
 define a partial (ie conditional) UNIQUE constraint. If you try to delete such a Partial Unique
 Index you will get an error.
 
-But in this case, the clear preferred method is a unique constraint, with which you still 
-get an automatic unique index. If you are creating a table from scratch, this is absolutely
-the way to go. If you are adding a uniqueness constraint to an existing table, you may still
-find yourself erring on the side of a unique index, if only because an index can be created
-concurrently while a constraint cannot. Should you choose a concurrent index in this case,
-you can add a unique constraint that depends on that index, effectively doing manually what
-PostgreSQL would have done automatically on a new table:
 ```SQL
 CREATE UNIQUE INDEX CONCURRENTLY examples_new_col_idx ON examples (new_col);
 ALTER TABLE examples

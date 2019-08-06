@@ -77,7 +77,7 @@ Schema::create('table', function (Blueprint $table) {
 });
 ```
 
-If you are want delete partial unique index, use this method:
+If you want to delete partial unique index, use this method:
 ```php
 Schema::create('table', function (Blueprint $table) {
     $table->dropUniquePartial(['code']);

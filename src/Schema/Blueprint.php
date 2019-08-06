@@ -8,8 +8,10 @@ use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
 use Illuminate\Database\Schema\ColumnDefinition;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Fluent;
-use Umbrellio\Postgres\Schema\Builders\UniquePartialBuilder;
+use Umbrellio\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
+use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
 use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
+use Umbrellio\Postgres\Schema\Definitions\ExcludeDefinition;
 use Umbrellio\Postgres\Schema\Definitions\LikeDefinition;
 use Umbrellio\Postgres\Schema\Definitions\UniqueDefinition;
 use Umbrellio\Postgres\Schema\Definitions\ViewDefinition;
@@ -53,10 +55,28 @@ class Blueprint extends BaseBlueprint
         $index = $index ?: $this->createIndexName('unique', $columns);
 
         return $this->addExtendedCommand(
-            UniquePartialBuilder::class,
+            UniqueBuilder::class,
             'uniquePartial',
             compact('columns', 'index', 'algorithm')
         );
+    }
+
+    /**
+     * @param array|string $columns
+     * @return ExcludeDefinition|ExcludeBuilder
+     */
+    public function exclude($columns, ?string $index = null)
+    {
+        $columns = (array) $columns;
+
+        $index = $index ?: $this->createIndexName('excl', $columns);
+
+        return $this->addExtendedCommand(ExcludeBuilder::class, 'exclude', compact('columns', 'index'));
+    }
+
+    public function dropExclude($index): Fluent
+    {
+        return $this->dropIndexCommand('dropUnique', 'excl', $index);
     }
 
     public function hasIndex($index, bool $unique = false): bool

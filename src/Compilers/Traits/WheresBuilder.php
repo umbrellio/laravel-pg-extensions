@@ -2,39 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Compilers;
+namespace Umbrellio\Postgres\Compilers\Traits;
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\Grammar;
-use Umbrellio\Postgres\Schema\Builders\UniquePartialBuilder;
-use Umbrellio\Postgres\Schema\Builders\UniqueWhereBuilder;
+use Illuminate\Support\Fluent;
+use Umbrellio\Postgres\Schema\Blueprint;
 
-class UniqueWhereCompiler
+trait WheresBuilder
 {
-    public static function compile(
-        Grammar $grammar,
-        Blueprint $blueprint,
-        UniquePartialBuilder $fluent,
-        UniqueWhereBuilder $command
-    ): string {
-        $wheres = collect($command->get('wheres'))
-            ->map(function ($where) use ($grammar, $blueprint) {
-                return implode(' ', [
-                    $where['boolean'],
-                    '(' . static::{"where{$where['type']}"}($grammar, $blueprint, $where) . ')',
-                ]);
-            })
-            ->all();
-
-        return sprintf(
-            'CREATE UNIQUE INDEX %s ON %s (%s) WHERE %s',
-            $fluent->get('index'),
-            $blueprint->getTable(),
-            implode(',', $fluent->get('columns')),
-            static::removeLeadingBoolean(implode(' ', $wheres))
-        );
-    }
-
     protected static function whereRaw(Grammar $grammar, Blueprint $blueprint, array $where = []): string
     {
         return call_user_func_array('sprintf', array_merge(
@@ -124,5 +99,17 @@ class UniqueWhereCompiler
     protected static function removeLeadingBoolean(string $value): string
     {
         return preg_replace('/and |or /i', '', $value, 1);
+    }
+
+    private static function build(Grammar $grammar, Blueprint $blueprint, Fluent $command): array
+    {
+        return collect($command->get('wheres'))
+            ->map(function ($where) use ($grammar, $blueprint) {
+                return implode(' ', [
+                    $where['boolean'],
+                    '(' . static::{"where{$where['type']}"}($grammar, $blueprint, $where) . ')',
+                ]);
+            })
+            ->all();
     }
 }

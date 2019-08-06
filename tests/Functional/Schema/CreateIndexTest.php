@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Tests\Functional\Schema;
 
 use Closure;
+use DB;
 use Generator;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
@@ -153,6 +154,36 @@ class CreateIndexTest extends FunctionalTestCase
                 $table->uniquePartial('name')->whereNotIn('phone', []);
             },
         ];
+    }
+
+    /** @test */
+    public function addExcludeConstraints(): void
+    {
+        DB::statement('CREATE EXTENSION IF NOT EXISTS btree_gist');
+
+        Schema::create('test_table', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('code')->unique();
+            $table->integer('period_type_id');
+            $table->date('period_start');
+            $table->date('period_end');
+            $table->softDeletes();
+
+            $table
+                ->exclude(['period_start', 'period_end'])
+                ->using('period_type_id', '=')
+                ->using('daterange(period_start, period_end)', '&&')
+                ->method('gist')
+                ->whereNull('deleted_at');
+        });
+
+        $this->seeConstraint('test_table', 'test_table_period_start_period_end_excl');
+
+        Schema::table('test_table', function (Blueprint $table) {
+            $table->dropExclude(['period_start', 'period_end']);
+        });
+
+        $this->dontSeeConstraint('test_table', 'test_table_period_start_period_end_excl');
     }
 
     protected function getDummyIndex(): string

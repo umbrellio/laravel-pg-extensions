@@ -42,6 +42,7 @@ trait IndexAssertions
     {
         $this->assertFalse($this->existConstraintOnTable($table, $index));
     }
+
     protected function seeConstraint(string $table, string $index): void
     {
         $this->assertTrue($this->existConstraintOnTable($table, $index));

@@ -7,15 +7,15 @@ namespace Umbrellio\Postgres\Schema\Definitions;
 use Illuminate\Support\Fluent;
 
 /**
- * @method UniqueDefinition where($column, $operator, $value, $boolean = 'and')
- * @method UniqueDefinition whereRaw($sql, $bindings = [], $boolean = 'and')
- * @method UniqueDefinition whereColumn($first, $operator, $second, $boolean = 'and')
- * @method UniqueDefinition whereIn($column, $values = [], $boolean = 'and', $not = false)
- * @method UniqueDefinition whereNotIn($column, $values = [], $boolean = 'and')
- * @method UniqueDefinition whereBetween($column, $values, $boolean = 'and', $not = false)
- * @method UniqueDefinition whereNotBetween($column, $values, $boolean = 'and')
- * @method UniqueDefinition whereNull($column, $boolean = 'and', $not = false)
- * @method UniqueDefinition whereNotNull($column, $boolean = 'and')
+ * @method self where($column, $operator, $value, $boolean = 'and')
+ * @method self whereRaw($sql, $bindings = [], $boolean = 'and')
+ * @method self whereColumn($first, $operator, $second, $boolean = 'and')
+ * @method self whereIn($column, $values = [], $boolean = 'and', $not = false)
+ * @method self whereNotIn($column, $values = [], $boolean = 'and')
+ * @method self whereBetween($column, $values, $boolean = 'and', $not = false)
+ * @method self whereNotBetween($column, $values, $boolean = 'and')
+ * @method self whereNull($column, $boolean = 'and', $not = false)
+ * @method self whereNotNull($column, $boolean = 'and')
  */
 class UniqueDefinition extends Fluent
 {

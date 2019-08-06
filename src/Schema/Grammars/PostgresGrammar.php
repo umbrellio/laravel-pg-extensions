@@ -8,10 +8,14 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\PostgresGrammar as BasePostgresGrammar;
 use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Compilers\AttachPartitionCompiler;
+use Umbrellio\Postgres\Compilers\CheckCompiler;
 use Umbrellio\Postgres\Compilers\CreateCompiler;
-use Umbrellio\Postgres\Compilers\UniqueWhereCompiler;
-use Umbrellio\Postgres\Schema\Builders\UniquePartialBuilder;
-use Umbrellio\Postgres\Schema\Builders\UniqueWhereBuilder;
+use Umbrellio\Postgres\Compilers\ExcludeCompiler;
+use Umbrellio\Postgres\Compilers\UniqueCompiler;
+use Umbrellio\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
+use Umbrellio\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
+use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
+use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniquePartialBuilder;
 
 class PostgresGrammar extends BasePostgresGrammar
 {
@@ -66,24 +70,39 @@ class PostgresGrammar extends BasePostgresGrammar
         return 'select view_definition from information_schema.views where table_schema = ? and table_name = ?';
     }
 
-    public function compileUniquePartial(Blueprint $blueprint, UniquePartialBuilder $command): string
+    public function compileUniquePartial(Blueprint $blueprint, UniqueBuilder $command): string
     {
         $constraints = $command->get('constraints');
-        if ($constraints instanceof UniqueWhereBuilder) {
-            return UniqueWhereCompiler::compile($this, $blueprint, $command, $constraints);
+        if ($constraints instanceof UniquePartialBuilder) {
+            return UniqueCompiler::compile($this, $blueprint, $command, $constraints);
         }
         return $this->compileUnique($blueprint, $command);
+    }
+
+    public function compileExclude(Blueprint $blueprint, ExcludeBuilder $command): string
+    {
+        return ExcludeCompiler::compile($this, $blueprint, $command);
+    }
+
+    public function compileCheck(Blueprint $blueprint, CheckBuilder $command): string
+    {
+        return CheckCompiler::compile($this, $blueprint, $command);
     }
 
     protected function typeNumeric(Fluent $column): string
     {
         $type = 'numeric';
-        if ($column->precision && $column->scale) {
-            return "${type}({$column->precision}, {$column->scale})";
+        $precision = $column->get('precision');
+        $scale = $column->get('scale');
+
+        if ($precision && $scale) {
+            return "${type}({$precision}, {$scale})";
         }
-        if ($column->precision) {
-            return "${type}({$column->precision})";
+
+        if ($precision) {
+            return "${type}({$precision})";
         }
+
         return $type;
     }
 }

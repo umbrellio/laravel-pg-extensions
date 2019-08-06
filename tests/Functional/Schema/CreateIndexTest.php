@@ -6,7 +6,10 @@ namespace Umbrellio\Postgres\Tests\Functional\Schema;
 
 use Closure;
 use Generator;
+use Illuminate\Database\QueryException;
+use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\Functional\Helpers\IndexAssertions;
@@ -15,7 +18,7 @@ use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class CreateIndexTest extends FunctionalTestCase
 {
-    use DatabaseTransactions, IndexAssertions, TableAssertions;
+    use DatabaseTransactions, IndexAssertions, TableAssertions, InteractsWithDatabase;
 
     /** @test */
     public function createIndexIfNotExists(): void
@@ -166,8 +169,101 @@ class CreateIndexTest extends FunctionalTestCase
         ];
     }
 
+    /** @test */
+    public function addExcludeConstraints(): void
+    {
+        DB::statement('CREATE EXTENSION IF NOT EXISTS btree_gist');
+
+        Schema::create('test_table', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('code')->unique();
+            $table->integer('period_type_id');
+            $table->date('period_start');
+            $table->date('period_end');
+            $table->softDeletes();
+
+            $table
+                ->exclude(['period_start', 'period_end'])
+                ->using('period_type_id', '=')
+                ->using('daterange(period_start, period_end)', '&&')
+                ->method('gist')
+                ->whereNull('deleted_at');
+        });
+
+        $this->seeConstraint('test_table', 'test_table_period_start_period_end_excl');
+
+        Schema::table('test_table', function (Blueprint $table) {
+            $table->dropExclude(['period_start', 'period_end']);
+        });
+
+        $this->dontSeeConstraint('test_table', 'test_table_period_start_period_end_excl');
+    }
+
+    /** @test */
+    public function addCheckConstraints(): void
+    {
+        Schema::create('test_table', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('period_type_id');
+            $table->date('period_start');
+            $table->date('period_end');
+            $table->softDeletes();
+
+            $table
+                ->check(['period_start', 'period_end'])
+                ->whereColumn('period_end', '>', 'period_start')
+                ->whereIn('period_type_id', [1, 2, 3]);
+        });
+
+        foreach ($this->provideSuccessData() as [$period_type_id, $period_start, $period_end]) {
+            $data = compact('period_type_id', 'period_start', 'period_end');
+            DB::table('test_table')->insert($data);
+            $this->assertDatabaseHas('test_table', $data);
+        }
+
+        foreach ($this->provideWrongData() as [$period_type_id, $period_start, $period_end]) {
+            $data = compact('period_type_id', 'period_start', 'period_end');
+            $this->expectException(QueryException::class);
+            DB::table('test_table')->insert($data);
+        }
+    }
+
+    /** @test */
+    public function dropCheckConstraints(): void
+    {
+        Schema::create('test_table', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('period_type_id');
+            $table
+                ->check(['period_type_id'])
+                ->whereNotNull('period_type_id');
+        });
+
+        $this->seeConstraint('test_table', 'test_table_period_type_id_chk');
+
+        Schema::table('test_table', function (Blueprint $table) {
+            $table->dropCheck(['period_type_id']);
+        });
+
+        $this->dontSeeConstraint('test_table', 'test_table_period_type_id_chk');
+    }
+
     protected function getDummyIndex(): string
     {
         return 'CREATE UNIQUE INDEX test_table_name_unique ON (public.)?test_table USING btree \(name\)';
+    }
+
+    private function provideSuccessData(): Generator
+    {
+        yield [1, '2019-01-01', '2019-01-31'];
+        yield [2, '2019-02-15', '2019-04-20'];
+        yield [3, '2019-03-07', '2019-06-24'];
+    }
+
+    private function provideWrongData(): Generator
+    {
+        yield [4, '2019-01-01', '2019-01-31'];
+        yield [1, '2019-07-15', '2019-04-20'];
+        yield [2, '2019-12-07', '2019-06-24'];
     }
 }

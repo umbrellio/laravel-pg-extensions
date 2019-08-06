@@ -6,7 +6,10 @@ namespace Umbrellio\Postgres\Schema\Builders;
 
 use Illuminate\Support\Fluent;
 
-class UniqueWhereBuilder extends Fluent
+/**
+ * @mixin Fluent
+ */
+trait WhereBuilderTrait
 {
     public function whereRaw(string $sql, array $bindings = [], string $boolean = 'and'): self
     {

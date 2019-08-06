@@ -7,10 +7,10 @@ namespace Umbrellio\Postgres\Tests\Functional\Schema;
 use Closure;
 use Generator;
 use Illuminate\Database\QueryException;
+use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Laravel\BrowserKitTesting\Concerns\InteractsWithDatabase;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\Functional\Helpers\IndexAssertions;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
@@ -207,14 +207,13 @@ class CreateIndexTest extends FunctionalTestCase
         foreach ($this->provideSuccessData() as [$period_type_id, $period_start, $period_end]) {
             $data = compact('period_type_id', 'period_start', 'period_end');
             DB::table('test_table')->insert($data);
-            $this->seeInDatabase('test_table', $data);
+            $this->assertDatabaseHas('test_table', $data);
         }
 
         foreach ($this->provideWrongData() as [$period_type_id, $period_start, $period_end]) {
             $data = compact('period_type_id', 'period_start', 'period_end');
             $this->expectException(QueryException::class);
             DB::table('test_table')->insert($data);
-            $this->dontSeeInDatabase('test_table', $data);
         }
     }
 

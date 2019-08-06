@@ -62,7 +62,7 @@ class CreateIndexTest extends FunctionalTestCase
         $this->assertRegExpIndex('test_table_name_unique', '/' . $this->getDummyIndex() . $expected . '/');
 
         Schema::table('test_table', function (Blueprint $table) {
-            if (!$this->seeConstraintOnTable($table->getTable(), 'UNIQUE', 'test_table_name_unique')) {
+            if (!$this->existConstraintOnTable($table->getTable(), 'test_table_name_unique')) {
                 $table->dropUniquePartial(['name']);
             } else {
                 $table->dropUnique(['name']);

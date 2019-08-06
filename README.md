@@ -47,7 +47,7 @@ Schema::create('table', function (Blueprint $table) {
 Schema::table('table', function (Blueprint $table) {
     $table
         ->string('number')
-        ->using("('[' || number || ']')::character varyiing")
+        ->using("('[' || number || ']')::character varying")
         ->change();
 });
 ```
@@ -63,7 +63,7 @@ Schema::dropView('active_users')
 // Schema methods:
 Schema::create('users', function (Blueprint $table) {
     $table
-        ->createView('active_users', , "SELECT * FROM users WHERE active = 1")
+        ->createView('active_users', "SELECT * FROM users WHERE active = 1")
         ->materialize();
 });
 ```
@@ -78,6 +78,27 @@ Schema::create('table', function (Blueprint $table) {
     $table->uniquePartial('code')->whereNull('deleted_at');
 });
 ```
+
+If you want to delete partial unique index, use this method:
+```php
+Schema::create('table', function (Blueprint $table) {
+    $table->dropUniquePartial(['code']);
+});
+```
+
+`$table->dropUnique()` doesn't work for Partial Unique Indexes, because PostgreSQL doesn't
+define a partial (ie conditional) UNIQUE constraint. If you try to delete such a Partial Unique
+Index you will get an error.
+
+```SQL
+CREATE UNIQUE INDEX CONCURRENTLY examples_new_col_idx ON examples (new_col);
+ALTER TABLE examples
+    ADD CONSTRAINT examples_unique_constraint USING INDEX examples_new_col_idx;
+```
+
+When you create a unique index without conditions, PostgresSQL will create Unique Constraint
+automatically for you, and when you try to delete such an index, Constraint will be deleted 
+first, then Unique Index. 
 
 ### Exclude constraints creation
 

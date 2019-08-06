@@ -17,6 +17,11 @@ trait IndexAssertions
         $this->assertNotNull($this->getIndexListing($index));
     }
 
+    protected function notSeeIndex(string $index): void
+    {
+        $this->assertNull($this->getIndexListing($index));
+    }
+
     protected function assertSameIndex(string $index, string $expectedDef): void
     {
         $definition = $this->getIndexListing($index);
@@ -45,7 +50,7 @@ trait IndexAssertions
 
     private function getIndexListing($index): ?string
     {
-        $definition = DB::selectOne('SELECT indexdef FROM pg_indexes WHERE indexname = ?', [$index]);
+        $definition = DB::selectOne('SELECT * FROM pg_indexes WHERE indexname = ?', [$index]);
 
         return $definition ? $definition->indexdef : null;
     }
@@ -61,7 +66,6 @@ trait IndexAssertions
         ',
             [$table, $index]
         );
-
         return $definition ? true : false;
     }
 }

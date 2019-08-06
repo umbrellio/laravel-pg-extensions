@@ -63,6 +63,11 @@ class Blueprint extends BaseBlueprint
         );
     }
 
+    public function dropUniquePartial($index): Fluent
+    {
+        return $this->dropIndexCommand('dropIndex', 'unique', $index);
+    }
+
     /**
      * @param array|string $columns
      * @return ExcludeDefinition

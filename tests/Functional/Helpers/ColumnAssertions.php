@@ -39,6 +39,7 @@ trait ColumnAssertions
     {
         $this->assertSame($expected, Schema::getColumnType($table, $column));
     }
+
     private function getCommentListing(string $table, string $column)
     {
         $definition = DB::selectOne(

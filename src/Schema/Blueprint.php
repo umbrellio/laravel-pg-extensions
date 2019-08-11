@@ -11,10 +11,14 @@ use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
 use Umbrellio\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
 use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
+use Umbrellio\Postgres\Schema\Builders\Routines\FunctionBuilder;
+use Umbrellio\Postgres\Schema\Builders\Routines\TriggerBuilder;
 use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
 use Umbrellio\Postgres\Schema\Definitions\CheckDefinition;
 use Umbrellio\Postgres\Schema\Definitions\ExcludeDefinition;
+use Umbrellio\Postgres\Schema\Definitions\FunctionDefinition;
 use Umbrellio\Postgres\Schema\Definitions\LikeDefinition;
+use Umbrellio\Postgres\Schema\Definitions\TriggerDefinition;
 use Umbrellio\Postgres\Schema\Definitions\UniqueDefinition;
 use Umbrellio\Postgres\Schema\Definitions\ViewDefinition;
 
@@ -119,6 +123,22 @@ class Blueprint extends BaseBlueprint
     public function createView(string $view, string $select, bool $materialize = false): Fluent
     {
         return $this->addCommand('createView', compact('view', 'select', 'materialize'));
+    }
+
+    /**
+     * @return TriggerDefinition
+     */
+    public function createTrigger(string $name): Fluent
+    {
+        return $this->addExtendedCommand(TriggerBuilder::class, 'createTrigger', compact('name'));
+    }
+
+    /**
+     * @return FunctionDefinition
+     */
+    public function createFunction(string $name): Fluent
+    {
+        return $this->addExtendedCommand(FunctionBuilder::class, 'createFunction', compact('name'));
     }
 
     public function dropView(string $view): Fluent

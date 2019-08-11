@@ -55,6 +55,16 @@ class PostgresGrammar extends BasePostgresGrammar
         ]));
     }
 
+    public function compileCreateTrigger(Blueprint $blueprint, Fluent $command): void
+    {
+        dd($blueprint, $command);
+    }
+
+    public function compileCreateFunction(Blueprint $blueprint, Fluent $command): void
+    {
+        dd($blueprint, $command);
+    }
+
     public function compileDropView(Blueprint $blueprint, Fluent $command): string
     {
         return 'drop view ' . $this->wrapTable($command->get('view'));

@@ -6,7 +6,9 @@ namespace Illuminate\Database\Schema {
     use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
     use Umbrellio\Postgres\Schema\Definitions\CheckDefinition;
     use Umbrellio\Postgres\Schema\Definitions\ExcludeDefinition;
+    use Umbrellio\Postgres\Schema\Definitions\FunctionDefinition;
     use Umbrellio\Postgres\Schema\Definitions\LikeDefinition;
+    use Umbrellio\Postgres\Schema\Definitions\TriggerDefinition;
     use Umbrellio\Postgres\Schema\Definitions\ViewDefinition;
     use Umbrellio\Postgres\Schema\Definitions\UniqueDefinition;
 
@@ -21,6 +23,8 @@ namespace Illuminate\Database\Schema {
      * @method ColumnDefinition numeric(string $column, ?int $precision = null, ?int $scale = null)
      * @method ExcludeDefinition exclude($columns, ?string $index = null)
      * @method CheckDefinition check($columns, ?string $index = null)
+     * @method FunctionDefinition createFunction(string $name)
+     * @method TriggerDefinition createTrigger(string $name)
      */
     class Blueprint
     {

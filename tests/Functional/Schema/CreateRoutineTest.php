@@ -18,13 +18,17 @@ class CreateRoutineTest extends FunctionalTestCase
     public function createFunction(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
-            $table->createFunction('test_function')
-                ->security()->definer()
-                ->stability()->leakProof(true)
-                ->with('test')
-                ->window();
+            $table->createFunction('test_function');
+            $table->createProcedure('test_function');
+            $table->createTrigger('test_function');
         });
 
         $this->assertTrue(true);
+
+        Schema::table('test_table', function (Blueprint $table) {
+            $table->dropFunction('test_function');
+            $table->dropProcedure('test_function');
+            $table->dropTrigger('test_function');
+        });
     }
 }

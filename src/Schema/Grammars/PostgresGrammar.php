@@ -10,12 +10,24 @@ use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Compilers\AttachPartitionCompiler;
 use Umbrellio\Postgres\Compilers\CheckCompiler;
 use Umbrellio\Postgres\Compilers\CreateCompiler;
+use Umbrellio\Postgres\Compilers\CreateFunctionCompiler;
+use Umbrellio\Postgres\Compilers\CreateProcedureCompiler;
+use Umbrellio\Postgres\Compilers\CreateTriggerCompiler;
+use Umbrellio\Postgres\Compilers\DropFunctionCompiler;
+use Umbrellio\Postgres\Compilers\DropProcedureCompiler;
+use Umbrellio\Postgres\Compilers\DropTriggerCompiler;
 use Umbrellio\Postgres\Compilers\ExcludeCompiler;
 use Umbrellio\Postgres\Compilers\UniqueCompiler;
 use Umbrellio\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
 use Umbrellio\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
 use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
 use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniquePartialBuilder;
+use Umbrellio\Postgres\Schema\Builders\Routines\CreateFunctionBuilder;
+use Umbrellio\Postgres\Schema\Builders\Routines\CreateProcedureBuilder;
+use Umbrellio\Postgres\Schema\Builders\Routines\CreateTriggerBuilder;
+use Umbrellio\Postgres\Schema\Builders\Routines\DropFunctionBuilder;
+use Umbrellio\Postgres\Schema\Builders\Routines\DropProcedureBuilder;
+use Umbrellio\Postgres\Schema\Builders\Routines\DropTriggerBuilder;
 
 class PostgresGrammar extends BasePostgresGrammar
 {
@@ -55,14 +67,34 @@ class PostgresGrammar extends BasePostgresGrammar
         ]));
     }
 
-    public function compileCreateTrigger(Blueprint $blueprint, Fluent $command): void
+    public function compileCreateTrigger(Blueprint $blueprint, CreateTriggerBuilder $command): array
     {
-        dd($blueprint, $command);
+        return CreateTriggerCompiler::compile($this, $blueprint, $command);
     }
 
-    public function compileCreateFunction(Blueprint $blueprint, Fluent $command): void
+    public function compileCreateFunction(Blueprint $blueprint, CreateFunctionBuilder $command): array
     {
-        dd($blueprint, $command);
+        return CreateFunctionCompiler::compile($this, $blueprint, $command);
+    }
+
+    public function compileCreateProcedure(Blueprint $blueprint, CreateProcedureBuilder $command): array
+    {
+        return CreateProcedureCompiler::compile($this, $blueprint, $command);
+    }
+
+    public function compileDropTrigger(Blueprint $blueprint, DropTriggerBuilder $command): array
+    {
+        return DropTriggerCompiler::compile($this, $blueprint, $command);
+    }
+
+    public function compileDropFunction(Blueprint $blueprint, DropFunctionBuilder $command): string
+    {
+        return DropFunctionCompiler::compile($this, $blueprint, $command);
+    }
+
+    public function compileDropProcedure(Blueprint $blueprint, DropProcedureBuilder $command): string
+    {
+        return DropProcedureCompiler::compile($this, $blueprint, $command);
     }
 
     public function compileDropView(Blueprint $blueprint, Fluent $command): string

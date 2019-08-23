@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests\Functional\Helpers;
+namespace Umbrellio\Postgres\Helpers;
 
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\TestCase;

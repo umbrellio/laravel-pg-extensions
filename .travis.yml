@@ -28,14 +28,14 @@ script:
     fi
   - |
     if [ "x$COVERAGE" == "xyes" ]; then
-      if [[ -z "${EXCLUDE_GROUP}" ]]; then
+      if [ "x$EXCLUDE_GROUP" != "x" ]; then
         ./vendor/bin/phpunit --configuration phpunit.travis.xml --exclude-group $EXCLUDE_GROUP --coverage-clover build/logs/clover.xml
       else
         ./vendor/bin/phpunit --configuration phpunit.travis.xml --coverage-clover build/logs/clover.xml
       fi
     else
-      if [[ -z "${EXCLUDE_GROUP}" ]]; then
-       ./vendor/bin/phpunit --configuration phpunit.travis.xml --group $EXCLUDEGROUP
+      if [ "x$EXCLUDE_GROUP" != "x" ]; then
+       ./vendor/bin/phpunit --configuration phpunit.travis.xml --exclude-group $EXCLUDE_GROUP
       else
        ./vendor/bin/phpunit --configuration phpunit.travis.xml
       fi

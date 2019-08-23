@@ -11,9 +11,9 @@ use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Umbrellio\Postgres\Helpers\IndexAssertions;
+use Umbrellio\Postgres\Helpers\TableAssertions;
 use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Tests\Functional\Helpers\IndexAssertions;
-use Umbrellio\Postgres\Tests\Functional\Helpers\TableAssertions;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class CreateIndexTest extends FunctionalTestCase

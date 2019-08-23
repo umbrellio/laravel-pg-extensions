@@ -6,8 +6,8 @@ namespace Umbrellio\Postgres\Tests\Functional\Schema;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
+use Umbrellio\Postgres\Helpers\TableAssertions;
 use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Tests\Functional\Helpers\TableAssertions;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class CreateTableTest extends FunctionalTestCase

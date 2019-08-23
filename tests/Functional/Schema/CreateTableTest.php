@@ -40,8 +40,9 @@ class CreateTableTest extends FunctionalTestCase
 
         $this->assertSameTable(['id', 'name', 'field_comment', 'field_default'], 'test_table');
 
-        $this->assertTypeColumn('test_table', 'id', 'integer');
-        $this->assertTypeColumn('test_table', 'name', 'string');
+        $this->assertPostgresTypeColumn('test_table', 'id', 'integer');
+        $this->assertLaravelTypeColumn('test_table', 'name', 'string');
+        $this->assertPostgresTypeColumn('test_table', 'name', 'character varying');
 
         $this->assertDefaultOnColumn('test_table', 'field_default', '123');
         $this->assertCommentOnColumn('test_table', 'field_comment', 'test');

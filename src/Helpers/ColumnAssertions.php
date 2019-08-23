@@ -35,9 +35,14 @@ trait ColumnAssertions
         $this->assertSame($expected, $defaultValue);
     }
 
-    protected function assertTypeColumn(string $table, string $column, string $expected): void
+    protected function assertLaravelTypeColumn(string $table, string $column, string $expected): void
     {
         $this->assertSame($expected, Schema::getColumnType($table, $column));
+    }
+
+    protected function assertPostgresTypeColumn(string $table, string $column, string $expected): void
+    {
+        $this->assertSame($expected, $this->getTypeListing($table, $column));
     }
 
     private function getCommentListing(string $table, string $column)
@@ -55,6 +60,20 @@ trait ColumnAssertions
         );
 
         return $definition ? $definition->description : null;
+    }
+
+    private function getTypeListing(string $table, string $column): ?string
+    {
+        $definition = DB::selectOne(
+            '
+                SELECT data_type
+                FROM information_schema.columns
+                WHERE table_name = ? AND column_name = ?
+            ',
+            [$table, $column]
+        );
+
+        return $definition ? $definition->data_type : null;
     }
 
     private function getDefaultListing(string $table, string $column)

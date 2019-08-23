@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Helpers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,7 +35,12 @@ trait ColumnAssertions
         $this->assertSame($expected, $defaultValue);
     }
 
-    protected function assertTypeColumn(string $table, string $column, string $expected): void
+    protected function assertLaravelTypeColumn(string $table, string $column, string $expected): void
+    {
+        $this->assertSame($expected, Schema::getColumnType($table, $column));
+    }
+
+    protected function assertPostgresTypeColumn(string $table, string $column, string $expected): void
     {
         $this->assertSame($expected, $this->getTypeListing($table, $column));
     }

@@ -41,6 +41,11 @@ class CreateIndexTest extends FunctionalTestCase
         });
 
         $this->seeIndex('test_table_name_unique');
+
+        $this->assertSameIndex(
+            'test_table_name_unique',
+            'CREATE UNIQUE INDEX test_table_name_unique ON public.test_table USING btree (name)'
+        );
     }
 
     /**

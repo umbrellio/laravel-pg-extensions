@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @mixin TestCase
+ * @codeCoverageIgnore
  */
 trait ColumnAssertions
 {

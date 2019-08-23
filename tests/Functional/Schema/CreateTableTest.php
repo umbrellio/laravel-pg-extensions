@@ -34,6 +34,9 @@ class CreateTableTest extends FunctionalTestCase
 
         $this->assertDefaultOnColumn('test_table', 'field_default', '123');
         $this->assertCommentOnColumn('test_table', 'field_comment', 'test');
+
+        $this->assertDefaultOnColumn('test_table', 'id');
+        $this->assertCommentOnColumn('test_table', 'name');
     }
 
     /** @test */

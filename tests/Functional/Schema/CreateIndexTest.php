@@ -45,31 +45,27 @@ class CreateIndexTest extends FunctionalTestCase
 
     /**
      * @test
-     * @group php73-pg10
+     * @group WithSchema
      */
-    public function createIndexDefinition(): void
+    public function createIndexWithSchema(): void
     {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-
-            if (!$table->hasIndex(['name'], true)) {
-                $table->unique(['name']);
-            }
-        });
-
-        $this->seeTable('test_table');
-
-        Schema::table('test_table', function (Blueprint $table) {
-            if (!$table->hasIndex(['name'], true)) {
-                $table->unique(['name']);
-            }
-        });
-
-        $this->seeIndex('test_table_name_unique');
+        $this->createIndexDefinition();
         $this->assertSameIndex(
             'test_table_name_unique',
             'CREATE UNIQUE INDEX test_table_name_unique ON public.test_table USING btree (name)'
+        );
+    }
+
+    /**
+     * @test
+     * @group WithoutSchema
+     */
+    public function createIndexWithoutSchema(): void
+    {
+        $this->createIndexDefinition();
+        $this->assertSameIndex(
+            'test_table_name_unique',
+            'CREATE UNIQUE INDEX test_table_name_unique ON test_table USING btree (name)'
         );
     }
 
@@ -281,6 +277,28 @@ class CreateIndexTest extends FunctionalTestCase
     protected function getDummyIndex(): string
     {
         return 'CREATE UNIQUE INDEX test_table_name_unique ON (public.)?test_table USING btree \(name\)';
+    }
+
+    private function createIndexDefinition(): void
+    {
+        Schema::create('test_table', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+
+            if (!$table->hasIndex(['name'], true)) {
+                $table->unique(['name']);
+            }
+        });
+
+        $this->seeTable('test_table');
+
+        Schema::table('test_table', function (Blueprint $table) {
+            if (!$table->hasIndex(['name'], true)) {
+                $table->unique(['name']);
+            }
+        });
+
+        $this->seeIndex('test_table_name_unique');
     }
 
     private function provideSuccessData(): Generator

@@ -26,6 +26,17 @@ class CreateTableTest extends FunctionalTestCase
         });
 
         $this->seeTable('test_table');
+    }
+
+    /** @test */
+    public function columnAssertions(): void
+    {
+        Schema::create('test_table', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('field_comment')->comment('test');
+            $table->integer('field_default')->default(123);
+        });
 
         $this->assertSameTable(['id', 'name', 'field_comment', 'field_default'], 'test_table');
 

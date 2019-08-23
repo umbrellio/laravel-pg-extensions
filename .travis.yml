@@ -95,7 +95,7 @@ matrix:
         postgresql: "9.6"
     - stage: Test
       php: "7.3"
-      env: DB=pgsql POSTGRESQL_VERSION=10.0 COVERAGE=yes EXCLUDE_GROUP=php73-pg10
+      env: DB=pgsql POSTGRESQL_VERSION=10.0 COVERAGE=yes
       sudo: required
       services:
         - postgresql

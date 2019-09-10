@@ -24,7 +24,7 @@ abstract class AbstractExtension extends AbstractComponent
 
     final public static function register(): void
     {
-        collect(static::getMixins())->each(static function ($mixin, $extension) {
+        collect(static::getMixins())->each(static function ($extension, $mixin) {
             if (!is_subclass_of($mixin, AbstractComponent::class)) {
                 throw new MixinInvalidException(sprintf(
                     'Mixed class %s is not descendant of %s.',

@@ -18,20 +18,7 @@ class AbstractExtensionTest extends TestCase
     /** @test */
     public function registerInvalidExtension(): void
     {
-        $abstractExtension = new class() extends AbstractExtension {
-            public static function getName(): string
-            {
-                return 'extension';
-            }
-
-            public static function getMixins(): array
-            {
-                return [
-                    Blueprint::class => new class() extends Model {
-                    },
-                ];
-            }
-        };
+        $abstractExtension = new ExtensionStub();
 
         $this->expectException(MixinInvalidException::class);
 
@@ -42,24 +29,49 @@ class AbstractExtensionTest extends TestCase
     /** @test */
     public function registerWithInvalidMixin(): void
     {
-        $abstractExtension = new class() extends AbstractExtension {
-            public static function getName(): string
-            {
-                return 'extension';
-            }
-
-            public static function getMixins(): array
-            {
-                return [
-                    ServiceProvider::class => new class() extends AbstractComponent {
-                    },
-                ];
-            }
-        };
+        $abstractExtension = new InvalidExtensionStub();
 
         $this->expectException(MacroableMissedException::class);
 
         /** @var AbstractExtension $abstractExtension */
         $abstractExtension::register();
     }
+}
+
+class InvalidExtensionStub extends AbstractExtension
+{
+    public static function getName(): string
+    {
+        return 'extension';
+    }
+
+    public static function getMixins(): array
+    {
+        return [
+            ComponentStub::class => ServiceProvider::class,
+        ];
+    }
+}
+
+class ComponentStub extends AbstractComponent
+{
+}
+
+class ExtensionStub extends AbstractExtension
+{
+    public static function getName(): string
+    {
+        return 'extension';
+    }
+
+    public static function getMixins(): array
+    {
+        return [
+            InvalidComponentStub::class => Blueprint::class,
+        ];
+    }
+}
+
+class InvalidComponentStub extends Model
+{
 }

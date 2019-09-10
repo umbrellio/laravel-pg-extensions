@@ -223,9 +223,9 @@ class SomeExtension extends AbstractExtension
     public static function getMixins(): array
     {
         return [
-            Blueprint::class => SomeBlueprint::class,
-            PostgresConnection::class => SomeConnection::class,
-            PostgresGrammar::class => SomeSchemaGrammar::class,
+            SomeBlueprint::class => Blueprint::class,
+            SomeConnection::class => PostgresConnection::class,
+            SomeSchemaGrammar::class => PostgresGrammar::class,
             ...
         ];
     }

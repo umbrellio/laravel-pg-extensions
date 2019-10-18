@@ -8,6 +8,7 @@ cache:
     - $HOME/.composer/cache
 
 before_install:
+  - wget -q -O - https://www.mongodb.org/static/pgp/server-3.2.pub | sudo apt-key add -
   - phpenv config-rm xdebug.ini || true
   - |
     if [ "x$COVERAGE" == "xyes" ]; then

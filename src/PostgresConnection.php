@@ -60,35 +60,6 @@ class PostgresConnection extends BasePostgresConnection
         return $doctrineConnection;
     }
 
-    protected function getDefaultSchemaGrammar()
-    {
-        return $this->withTablePrefix(new PostgresGrammar());
-    }
-
-    /**
-     * @codeCoverageIgnore
-     */
-    private function registerExtensions(): void
-    {
-        collect(self::$extensions)->each(function ($extension) {
-            /** @var AbstractExtension $extension */
-            $extension::register();
-            foreach ($extension::getTypes() as $type => $typeClass) {
-                $this->getSchemaBuilder()->registerCustomDoctrineType($typeClass, $type, $type);
-            }
-        });
-    }
-
-    private function overrideDoctrineBehavior(Connection $connection): Connection
-    {
-        $eventManager = $connection->getEventManager();
-        if (!$eventManager->hasListeners(Events::onSchemaAlterTableChangeColumn)) {
-            $eventManager->addEventSubscriber(new SchemaAlterTableChangeColumnSubscriber());
-        }
-        $connection->getDatabasePlatform()->setEventManager($eventManager);
-        return $connection;
-    }
-
     public function bindValues($statement, $bindings)
     {
         if ($this->pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES)) {
@@ -130,5 +101,34 @@ class PostgresConnection extends BasePostgresConnection
         }
 
         return parent::prepareBindings($bindings);
+    }
+
+    protected function getDefaultSchemaGrammar()
+    {
+        return $this->withTablePrefix(new PostgresGrammar());
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    private function registerExtensions(): void
+    {
+        collect(self::$extensions)->each(function ($extension) {
+            /** @var AbstractExtension $extension */
+            $extension::register();
+            foreach ($extension::getTypes() as $type => $typeClass) {
+                $this->getSchemaBuilder()->registerCustomDoctrineType($typeClass, $type, $type);
+            }
+        });
+    }
+
+    private function overrideDoctrineBehavior(Connection $connection): Connection
+    {
+        $eventManager = $connection->getEventManager();
+        if (!$eventManager->hasListeners(Events::onSchemaAlterTableChangeColumn)) {
+            $eventManager->addEventSubscriber(new SchemaAlterTableChangeColumnSubscriber());
+        }
+        $connection->getDatabasePlatform()->setEventManager($eventManager);
+        return $connection;
     }
 }

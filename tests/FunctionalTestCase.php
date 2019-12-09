@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Tests;
 
 use Illuminate\Support\Facades\Facade;
+use PDO;
 
 abstract class FunctionalTestCase extends TestCase
 {
+    protected $emulatePrepares = false;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -33,6 +36,12 @@ abstract class FunctionalTestCase extends TestCase
             'prefix' => '',
             'schema' => 'public',
         ]);
+
+        if ($this->emulatePrepares) {
+            $app['config']->set('database.connections.main.options', [
+                PDO::ATTR_EMULATE_PREPARES => true,
+            ]);
+        }
     }
 
     private function getConnectionParams(): array

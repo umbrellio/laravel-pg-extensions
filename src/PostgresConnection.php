@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres;
 
+use DateTimeInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Events;
 use Illuminate\Database\PostgresConnection as BasePostgresConnection;
 use Illuminate\Support\Traits\Macroable;
+use PDO;
 use Umbrellio\Postgres\Extensions\AbstractExtension;
 use Umbrellio\Postgres\Extensions\Exceptions\ExtensionInvalidException;
 use Umbrellio\Postgres\Schema\Builder;
@@ -56,6 +58,49 @@ class PostgresConnection extends BasePostgresConnection
         $doctrineConnection = parent::getDoctrineConnection();
         $this->overrideDoctrineBehavior($doctrineConnection);
         return $doctrineConnection;
+    }
+
+    public function bindValues($statement, $bindings)
+    {
+        if ($this->pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES)) {
+            foreach ($bindings as $key => $value) {
+                $parameter = is_string($key) ? $key : $key + 1;
+
+                switch (true) {
+                    case is_bool($value):
+                        $dataType = PDO::PARAM_BOOL;
+                        break;
+
+                    case $value === null:
+                        $dataType = PDO::PARAM_NULL;
+                        break;
+
+                    default:
+                        $dataType = PDO::PARAM_STR;
+                }
+
+                $statement->bindValue($parameter, $value, $dataType);
+            }
+        } else {
+            parent::bindValues($statement, $bindings);
+        }
+    }
+
+    public function prepareBindings(array $bindings)
+    {
+        if ($this->pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES)) {
+            $grammar = $this->getQueryGrammar();
+
+            foreach ($bindings as $key => $value) {
+                if ($value instanceof DateTimeInterface) {
+                    $bindings[$key] = $value->format($grammar->getDateFormat());
+                }
+            }
+
+            return $bindings;
+        }
+
+        return parent::prepareBindings($bindings);
     }
 
     protected function getDefaultSchemaGrammar()

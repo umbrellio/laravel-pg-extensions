@@ -80,7 +80,7 @@ class ConnectionTest extends FunctionalTestCase
             $table->string('field')->nullable();
         });
         DB::table($table)->insert($data);
-        $result = DB::table($table)->select($data);
+        $result = DB::table($table)->whereNull('field')->get();
         $this->assertSame(1, $result->count());
     }
 

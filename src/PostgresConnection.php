@@ -62,7 +62,7 @@ class PostgresConnection extends BasePostgresConnection
 
     public function bindValues($statement, $bindings)
     {
-        if ($this->pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES)) {
+        if ($this->getPdo()->getAttribute(PDO::ATTR_EMULATE_PREPARES)) {
             foreach ($bindings as $key => $value) {
                 $parameter = is_string($key) ? $key : $key + 1;
 
@@ -88,7 +88,7 @@ class PostgresConnection extends BasePostgresConnection
 
     public function prepareBindings(array $bindings)
     {
-        if ($this->pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES)) {
+        if ($this->getPdo()->getAttribute(PDO::ATTR_EMULATE_PREPARES)) {
             $grammar = $this->getQueryGrammar();
 
             foreach ($bindings as $key => $value) {

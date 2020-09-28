@@ -15,7 +15,9 @@ use Umbrellio\Postgres\Tests\TestCase;
 
 class AbstractExtensionTest extends TestCase
 {
-    /** @test */
+    /**
+     * @test
+     */
     public function registerInvalidExtension(): void
     {
         $abstractExtension = new ExtensionStub();
@@ -26,7 +28,9 @@ class AbstractExtensionTest extends TestCase
         $abstractExtension::register();
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function registerWithInvalidMixin(): void
     {
         $abstractExtension = new InvalidExtensionStub();

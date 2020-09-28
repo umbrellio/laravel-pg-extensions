@@ -15,7 +15,9 @@ class CreateTableTest extends FunctionalTestCase
 {
     use DatabaseTransactions, TableAssertions, ColumnAssertions;
 
-    /** @test */
+    /**
+     * @test
+     */
     public function createSimple(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -28,7 +30,9 @@ class CreateTableTest extends FunctionalTestCase
         $this->seeTable('test_table');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function columnAssertions(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -51,7 +55,9 @@ class CreateTableTest extends FunctionalTestCase
         $this->assertCommentOnColumn('test_table', 'name');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function createViaLike(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -68,7 +74,9 @@ class CreateTableTest extends FunctionalTestCase
         $this->assertCompareTables('test_table', 'test_table2');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function createViaLikeIncludingAll(): void
     {
         Schema::create('test_table', function (Blueprint $table) {

@@ -21,14 +21,18 @@ class PartitionTest extends TestCase
         $this->initializeMock(static::TABLE);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function detachPartition(): void
     {
         $this->blueprint->detachPartition('some_partition');
         $this->assertSameSql('alter table "test_table" detach partition some_partition');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function attachPartitionRangeInt(): void
     {
         $this->blueprint->attachPartition('some_partition')->range([
@@ -38,7 +42,9 @@ class PartitionTest extends TestCase
         $this->assertSameSql('alter table "test_table" attach partition some_partition for values from (10) to (100)');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function attachPartitionFailedWithoutForValuesPart(): void
     {
         $this->blueprint->attachPartition('some_partition');
@@ -46,7 +52,9 @@ class PartitionTest extends TestCase
         $this->runToSql();
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function attachPartitionRangeDates(): void
     {
         $today = Carbon::today();
@@ -63,21 +71,27 @@ class PartitionTest extends TestCase
         ));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function addingNumericColumnWithVariablePrecicion()
     {
         $this->blueprint->numeric('foo');
         $this->assertSameSql('alter table "test_table" add column "foo" numeric not null');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function addingNumericColumnWithDefinedPrecicion()
     {
         $this->blueprint->numeric('foo', 8);
         $this->assertSameSql('alter table "test_table" add column "foo" numeric(8) not null');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function addingNumericColumnWithDefinedPrecicionAndScope()
     {
         $this->blueprint->numeric('foo', 8, 2);

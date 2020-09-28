@@ -29,7 +29,9 @@ class CreateViewTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function createFacadeView(): void
     {
         Schema::createView('test_view', 'select * from test_table where name is not null');
@@ -44,7 +46,9 @@ class CreateViewTest extends FunctionalTestCase
         $this->notSeeView('test_view');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function createBlueprintView(): void
     {
         Schema::table('test_table', function (Blueprint $table) {

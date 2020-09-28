@@ -20,7 +20,9 @@ class CreateIndexTest extends FunctionalTestCase
 {
     use DatabaseTransactions, IndexAssertions, TableAssertions, InteractsWithDatabase;
 
-    /** @test */
+    /**
+     * @test
+     */
     public function createIndexIfNotExists(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -101,7 +103,9 @@ class CreateIndexTest extends FunctionalTestCase
         $this->notSeeIndex('test_table_name_unique');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function createSpecifyIndex(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -195,7 +199,9 @@ class CreateIndexTest extends FunctionalTestCase
         ];
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function addExcludeConstraints(): void
     {
         DB::statement('CREATE EXTENSION IF NOT EXISTS btree_gist');
@@ -225,7 +231,9 @@ class CreateIndexTest extends FunctionalTestCase
         $this->dontSeeConstraint('test_table', 'test_table_period_start_period_end_excl');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function addCheckConstraints(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -254,7 +262,9 @@ class CreateIndexTest extends FunctionalTestCase
         }
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function dropCheckConstraints(): void
     {
         Schema::create('test_table', function (Blueprint $table) {

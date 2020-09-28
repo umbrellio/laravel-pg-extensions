@@ -60,7 +60,9 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         $this->platform = new PostgreSqlPlatform();
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function getSubscriberEvents(): void
     {
         $this->assertSame([Events::onSchemaAlterTableChangeColumn], $this->subscriber->getSubscribedEvents());

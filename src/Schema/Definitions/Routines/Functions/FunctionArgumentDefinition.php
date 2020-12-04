@@ -11,10 +11,10 @@ use Illuminate\Support\Fluent;
  * @method self out()
  * @method self inout()
  * @method self variadic()
- * @method self default()
+ * @method self default(mixed $value)
  * @method self equal()
- * @method self expression()
- * @method CreateFunctionDefinition type(string $type)
+ * @method self defaultExpression(mixed $expression)
+ * @method self type(string $type)
  */
 class FunctionArgumentDefinition extends Fluent
 {

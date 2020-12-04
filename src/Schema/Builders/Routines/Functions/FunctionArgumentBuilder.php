@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Umbrellio\Postgres\Schema\Builders\Routines\Functions;
 
 use Illuminate\Support\Fluent;
@@ -18,7 +20,7 @@ class FunctionArgumentBuilder extends Fluent
 
     public function __call($method, $parameters)
     {
-        if (in_array($method, ["in", "out", "inout", "variadic"], true)) {
+        if (in_array($method, ['in', 'out', 'inout', 'variadic'], true)) {
             $this->attributes['mode'] = $method;
         } else {
             parent::__call($method, $parameters);

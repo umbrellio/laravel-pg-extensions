@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Schema\Builders\Routines;
 
 use Illuminate\Support\Fluent;
-use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniquePartialBuilder;
 use Umbrellio\Postgres\Schema\Builders\Routines\Functions\ExecutionBuilder;
 use Umbrellio\Postgres\Schema\Builders\Routines\Functions\FunctionArgumentBuilder;
 use Umbrellio\Postgres\Schema\Builders\Routines\Functions\FunctionSecurityBuilder;

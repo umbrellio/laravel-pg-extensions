@@ -45,7 +45,6 @@ class Builder extends BasePostgresBuilder
 
     /**
      * @param string $table
-     * @param Closure|null $callback
      * @return Blueprint|\Illuminate\Database\Schema\Blueprint
      */
     protected function createBlueprint($table, Closure $callback = null)

@@ -11,16 +11,18 @@ use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Umbrellio\Postgres\Helpers\IndexAssertions;
+use Umbrellio\Postgres\Helpers\TableAssertions;
 use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Tests\Functional\Helpers\IndexAssertions;
-use Umbrellio\Postgres\Tests\Functional\Helpers\TableAssertions;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class CreateIndexTest extends FunctionalTestCase
 {
     use DatabaseTransactions, IndexAssertions, TableAssertions, InteractsWithDatabase;
 
-    /** @test */
+    /**
+     * @test
+     */
     public function createIndexIfNotExists(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -41,6 +43,32 @@ class CreateIndexTest extends FunctionalTestCase
         });
 
         $this->seeIndex('test_table_name_unique');
+    }
+
+    /**
+     * @test
+     * @group WithSchema
+     */
+    public function createIndexWithSchema(): void
+    {
+        $this->createIndexDefinition();
+        $this->assertSameIndex(
+            'test_table_name_unique',
+            'CREATE UNIQUE INDEX test_table_name_unique ON public.test_table USING btree (name)'
+        );
+    }
+
+    /**
+     * @test
+     * @group WithoutSchema
+     */
+    public function createIndexWithoutSchema(): void
+    {
+        $this->createIndexDefinition();
+        $this->assertSameIndex(
+            'test_table_name_unique',
+            'CREATE UNIQUE INDEX test_table_name_unique ON test_table USING btree (name)'
+        );
     }
 
     /**
@@ -75,7 +103,9 @@ class CreateIndexTest extends FunctionalTestCase
         $this->notSeeIndex('test_table_name_unique');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function createSpecifyIndex(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -169,7 +199,9 @@ class CreateIndexTest extends FunctionalTestCase
         ];
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function addExcludeConstraints(): void
     {
         DB::statement('CREATE EXTENSION IF NOT EXISTS btree_gist');
@@ -199,7 +231,9 @@ class CreateIndexTest extends FunctionalTestCase
         $this->dontSeeConstraint('test_table', 'test_table_period_start_period_end_excl');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function addCheckConstraints(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -228,7 +262,9 @@ class CreateIndexTest extends FunctionalTestCase
         }
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function dropCheckConstraints(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -251,6 +287,28 @@ class CreateIndexTest extends FunctionalTestCase
     protected function getDummyIndex(): string
     {
         return 'CREATE UNIQUE INDEX test_table_name_unique ON (public.)?test_table USING btree \(name\)';
+    }
+
+    private function createIndexDefinition(): void
+    {
+        Schema::create('test_table', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+
+            if (!$table->hasIndex(['name'], true)) {
+                $table->unique(['name']);
+            }
+        });
+
+        $this->seeTable('test_table');
+
+        Schema::table('test_table', function (Blueprint $table) {
+            if (!$table->hasIndex(['name'], true)) {
+                $table->unique(['name']);
+            }
+        });
+
+        $this->seeIndex('test_table_name_unique');
     }
 
     private function provideSuccessData(): Generator

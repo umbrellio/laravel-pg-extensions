@@ -14,7 +14,9 @@ class CreateRoutineTest extends FunctionalTestCase
 {
     use DatabaseTransactions, RoutineAssertions;
 
-    /** @test */
+    /**
+     * @test
+     */
     public function createFunction(): void
     {
         Schema::create('test_table', function (Blueprint $table) {

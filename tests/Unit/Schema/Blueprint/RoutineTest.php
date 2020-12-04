@@ -19,42 +19,54 @@ class RoutineTest extends TestCase
         $this->initializeMock(static::TABLE);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function createFunction(): void
     {
         $this->blueprint->createFunction('test_function');
         $this->assertTrue(true);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function createProcedure(): void
     {
         $this->blueprint->createProcedure('test_procedure');
         $this->assertTrue(true);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function createTrigger(): void
     {
         $this->blueprint->createTrigger('test_trigger');
         $this->assertTrue(true);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function dropFunction(): void
     {
         $this->blueprint->dropFunction('test_function');
         $this->assertTrue(true);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function dropProcedure(): void
     {
         $this->blueprint->dropProcedure('test_procedure');
         $this->assertTrue(true);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function dropTrigger(): void
     {
         $this->blueprint->dropTrigger('test_trigger');

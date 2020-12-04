@@ -8,6 +8,7 @@ cache:
     - $HOME/.composer/cache
 
 before_install:
+  - wget -q -O - https://www.mongodb.org/static/pgp/server-3.2.pub | sudo apt-key add -
   - phpenv config-rm xdebug.ini || true
   - |
     if [ "x$COVERAGE" == "xyes" ]; then
@@ -28,9 +29,9 @@ script:
     fi
   - |
     if [ "x$COVERAGE" == "xyes" ]; then
-       ./vendor/bin/phpunit --configuration phpunit.travis.xml --coverage-clover build/logs/clover.xml
+        ./vendor/bin/phpunit --configuration phpunit.travis.xml --exclude-group $EXCLUDE_GROUP --coverage-clover build/logs/clover.xml
     else
-       ./vendor/bin/phpunit --configuration phpunit.travis.xml
+       ./vendor/bin/phpunit --configuration phpunit.travis.xml --exclude-group $EXCLUDE_GROUP
     fi
 
 after_success:
@@ -46,48 +47,48 @@ matrix:
   include:
     - stage: Test
       php: "7.2"
-      env: DB=pgsql POSTGRESQL_VERSION=11.0
+      env: DB=pgsql POSTGRESQL_VERSION=11.0 EXCLUDE_GROUP=WithSchema
       sudo: required
       services:
         - docker
     - stage: Test
       php: "7.3"
-      env: DB=pgsql POSTGRESQL_VERSION=9.2 COVERAGE=yes
+      env: DB=pgsql POSTGRESQL_VERSION=9.2 COVERAGE=yes EXCLUDE_GROUP=WithSchema
       services:
         - postgresql
       addons:
         postgresql: "9.2"
     - stage: Test
       php: "7.3"
-      env: DB=pgsql POSTGRESQL_VERSION=9.3 COVERAGE=yes
+      env: DB=pgsql POSTGRESQL_VERSION=9.3 COVERAGE=yes EXCLUDE_GROUP=WithSchema
       services:
         - postgresql
       addons:
         postgresql: "9.3"
     - stage: Test
       php: "7.3"
-      env: DB=pgsql POSTGRESQL_VERSION=9.4 COVERAGE=yes
+      env: DB=pgsql POSTGRESQL_VERSION=9.4 COVERAGE=yes EXCLUDE_GROUP=WithSchema
       services:
         - postgresql
       addons:
         postgresql: "9.4"
     - stage: Test
       php: "7.3"
-      env: DB=pgsql POSTGRESQL_VERSION=9.5 COVERAGE=yes
+      env: DB=pgsql POSTGRESQL_VERSION=9.5 COVERAGE=yes EXCLUDE_GROUP=WithSchema
       services:
         - postgresql
       addons:
         postgresql: "9.5"
     - stage: Test
       php: "7.3"
-      env: DB=pgsql POSTGRESQL_VERSION=9.6 COVERAGE=yes
+      env: DB=pgsql POSTGRESQL_VERSION=9.6 COVERAGE=yes EXCLUDE_GROUP=WithSchema
       services:
         - postgresql
       addons:
         postgresql: "9.6"
     - stage: Test
       php: "7.3"
-      env: DB=pgsql POSTGRESQL_VERSION=10.0 COVERAGE=yes
+      env: DB=pgsql POSTGRESQL_VERSION=10.0 COVERAGE=yes EXCLUDE_GROUP=WithoutSchema
       sudo: required
       services:
         - postgresql
@@ -97,7 +98,7 @@ matrix:
         - bash ./tests/travis/install-postgres-10.sh
     - stage: Test
       php: "7.3"
-      env: DB=pgsql DOCKER_POSTGRES=yes POSTGRESQL_VERSION=11.0 COVERAGE=yes
+      env: DB=pgsql DOCKER_POSTGRES=yes POSTGRESQL_VERSION=11.0 COVERAGE=yes EXCLUDE_GROUP=WithoutSchema
       sudo: required
       services:
         - docker
@@ -108,7 +109,7 @@ matrix:
         - bash ./tests/travis/install-postgres-11.sh
     - stage: Test
       php: "7.4"
-      env: DB=pgsql DOCKER_POSTGRES=yes POSTGRESQL_VERSION=11.0
+      env: DB=pgsql DOCKER_POSTGRES=yes POSTGRESQL_VERSION=11.0 EXCLUDE_GROUP=WithoutSchema
       sudo: required
       services:
         - docker

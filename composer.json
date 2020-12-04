@@ -1,7 +1,7 @@
 {
   "name": "umbrellio/laravel-pg-extensions",
   "type": "library",
-  "description": "This is package for new features for Postgres in Laravel Migrations",
+  "description": "Extensions for Postgres Laravel",
   "minimum-stability": "stable",
   "authors": [
     {
@@ -12,7 +12,7 @@
   "require": {
     "php": "7.*",
     "doctrine/dbal": "^2.9",
-    "laravel/framework": "^5.8"
+    "laravel/framework": "^5.8|^6.0|^7.0|^8.0"
   },
   "require-dev": {
     "umbrellio/code-style-php": "^1.0",

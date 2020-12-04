@@ -3,6 +3,7 @@
 set -ex
 
 echo "Installing Postgres 10"
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6B05F25D762E3157
 sudo service postgresql stop
 sudo apt-get remove -q 'postgresql-*'
 sudo apt-get update -q

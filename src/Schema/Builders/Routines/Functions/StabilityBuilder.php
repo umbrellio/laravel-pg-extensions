@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Umbrellio\Postgres\Schema\Builders\Routines\Functions;
 
 use Illuminate\Support\Fluent;

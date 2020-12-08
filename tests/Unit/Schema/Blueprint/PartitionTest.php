@@ -74,6 +74,15 @@ class PartitionTest extends TestCase
     /**
      * @test
      */
+    public function addingTsrangeColumn()
+    {
+        $this->blueprint->tsrange('foo');
+        $this->assertSameSql('alter table "test_table" add column "foo" tsrange not null');
+    }
+
+    /**
+     * @test
+     */
     public function addingNumericColumnWithVariablePrecicion()
     {
         $this->blueprint->numeric('foo');

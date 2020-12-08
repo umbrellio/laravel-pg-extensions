@@ -134,6 +134,11 @@ class Blueprint extends BaseBlueprint
         return $this->addColumn('numeric', $column, compact('precision', 'scale'));
     }
 
+    public function tsrange(string $column): ColumnDefinition
+    {
+        return $this->addColumn('tsrange', $column);
+    }
+
     protected function getSchemaManager()
     {
         return Schema::getConnection()->getDoctrineSchemaManager();

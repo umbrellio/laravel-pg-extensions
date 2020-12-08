@@ -43,7 +43,7 @@ after_success:
 matrix:
   fast_finish: true
   allow_failures:
-    - php: "7.4snapshot"
+    - php: "7.4"
   include:
     - stage: Test
       php: "7.2"
@@ -108,7 +108,7 @@ matrix:
       before_script:
         - bash ./tests/travis/install-postgres-11.sh
     - stage: Test
-      php: "7.4snapshot"
+      php: "7.4"
       env: DB=pgsql DOCKER_POSTGRES=yes POSTGRESQL_VERSION=11.0 EXCLUDE_GROUP=WithoutSchema
       sudo: required
       services:

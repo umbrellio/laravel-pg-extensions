@@ -7,16 +7,19 @@
     {
       "name": "Vitaliy Lazeev",
       "email": "vetal@umbrellio.biz"
+    },
+    {
+      "name": "Korben Dallas",
+      "email": "pvsaintpe@umbrellio.biz"
     }
   ],
   "require": {
-    "php": "7.*",
+    "php": "^7.2|^7.3|^7.4",
     "doctrine/dbal": "^2.9",
     "laravel/framework": "^5.8|^6.0|^7.0|^8.0"
   },
   "require-dev": {
     "umbrellio/code-style-php": "^1.0",
-    "codeception/codeception": "^3.0",
     "orchestra/testbench": "^3.5",
     "php-coveralls/php-coveralls": "^2.1"
   },

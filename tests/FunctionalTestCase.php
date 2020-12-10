@@ -37,6 +37,13 @@ abstract class FunctionalTestCase extends TestCase
             'schema' => 'public',
         ]);
 
+        $app['config']->set('database.connections.sqlite', [
+            'driver' => 'sqlite',
+            'host' => '127.0.0.1',
+            'port' => '3306',
+            'database' => __DIR__ . '/_data/database.sqlite',
+        ]);
+
         if ($this->emulatePrepares) {
             $app['config']->set('database.connections.main.options', [
                 PDO::ATTR_EMULATE_PREPARES => true,

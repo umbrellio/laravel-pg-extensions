@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Tests\Functional\Connection;
 
+use Illuminate\Database\Connection;
+use Illuminate\Database\SQLiteConnection;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Umbrellio\Postgres\Connectors\ConnectionFactory;
 use Umbrellio\Postgres\Schema\Blueprint;
+use Umbrellio\Postgres\Tests\_data\CustomSQLiteConnection;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class ConnectionTest extends FunctionalTestCase
@@ -17,6 +21,33 @@ class ConnectionTest extends FunctionalTestCase
     use DatabaseTransactions, InteractsWithDatabase;
 
     protected $emulatePrepares = true;
+
+    /**
+     * @test
+     */
+    public function connectionFactory(): void
+    {
+        $factory = new ConnectionFactory(app());
+
+        $this->assertInstanceOf(SQLiteConnection::class, $factory->make(config('database.connections.sqlite')));
+    }
+
+    /**
+     * @test
+     */
+    public function resolverFor(): void
+    {
+        Connection::resolverFor('sqlite', function ($connection, $database, $prefix, $config) {
+            return new CustomSQLiteConnection($connection, $database, $prefix, $config);
+        });
+
+        $factory = new ConnectionFactory(app());
+
+        $this->assertInstanceOf(
+            CustomSQLiteConnection::class,
+            $factory->make(config('database.connections.sqlite'))
+        );
+    }
 
     /**
      * @test

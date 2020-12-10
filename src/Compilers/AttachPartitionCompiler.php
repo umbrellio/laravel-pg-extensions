@@ -38,6 +38,6 @@ class AttachPartitionCompiler
             return "'{$date->toDateTimeString()}'";
         }
 
-        return $date;
+        return "'${date}'";
     }
 }

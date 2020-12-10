@@ -74,6 +74,25 @@ class PartitionTest extends TestCase
     /**
      * @test
      */
+    public function attachPartitionStringDates(): void
+    {
+        $today = '2010-01-01';
+        $tomorrow = '2010-12-31';
+        $this->blueprint->attachPartition('some_partition')->range([
+            'from' => $today,
+            'to' => $tomorrow,
+        ]);
+
+        $this->assertSameSql(sprintf(
+            'alter table "test_table" attach partition some_partition for values from (\'%s\') to (\'%s\')',
+            $today,
+            $tomorrow
+        ));
+    }
+
+    /**
+     * @test
+     */
     public function addingTsrangeColumn()
     {
         $this->blueprint->tsrange('foo');

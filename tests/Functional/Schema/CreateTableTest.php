@@ -23,8 +23,10 @@ class CreateTableTest extends FunctionalTestCase
         Schema::create('test_table', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('field_comment')->comment('test');
-            $table->integer('field_default')->default(123);
+            $table->string('field_comment')
+                ->comment('test');
+            $table->integer('field_default')
+                ->default(123);
         });
 
         $this->seeTable('test_table');
@@ -38,8 +40,10 @@ class CreateTableTest extends FunctionalTestCase
         Schema::create('test_table', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('field_comment')->comment('test');
-            $table->integer('field_default')->default(123);
+            $table->string('field_comment')
+                ->comment('test');
+            $table->integer('field_default')
+                ->default(123);
         });
 
         $this->assertSameTable(['id', 'name', 'field_comment', 'field_default'], 'test_table');
@@ -81,11 +85,13 @@ class CreateTableTest extends FunctionalTestCase
     {
         Schema::create('test_table', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->unique();
+            $table->string('name')
+                ->unique();
         });
 
         Schema::create('test_table2', function (Blueprint $table) {
-            $table->like('test_table')->includingAll();
+            $table->like('test_table')
+                ->includingAll();
             $table->ifNotExists();
         });
 

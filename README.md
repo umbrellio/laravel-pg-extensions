@@ -1,7 +1,9 @@
 # Laravel PG extensions
 
-[![Build Status](https://travis-ci.org/umbrellio/laravel-pg-extensions.svg?branch=master)](https://travis-ci.org/umbrellio/laravel-pg-extensions)
+[![Github Status](https://github.com/umbrellio/laravel-pg-extensions/workflows/CI/badge.svg)](https://github.com/umbrellio/laravel-pg-extensions/actions)
 [![Coverage Status](https://coveralls.io/repos/github/umbrellio/laravel-pg-extensions/badge.svg?branch=master)](https://coveralls.io/github/umbrellio/laravel-pg-extensions?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/umbrellio/laravel-pg-extensions/v/stable.png)](https://packagist.org/packages/umbrellio/laravel-pg-extensions)
+[![Total Downloads](https://poser.pugx.org/umbrellio/laravel-pg-extensions/downloads.png)](https://packagist.org/packages/umbrellio/laravel-pg-extensions)
 
 This project extends Laravel`s database layer to allow use specific Postgres features without raw queries. 
 
@@ -275,7 +277,7 @@ Released under MIT License.
 
 ## Authors
 
-Created by Vitaliy Lazeev.
+Created by Vitaliy Lazeev & Korben Dallas.
 
 ## Contributing
 

@@ -18,6 +18,7 @@ class PartitionTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->initializeMock(static::TABLE);
     }
 
@@ -35,10 +36,11 @@ class PartitionTest extends TestCase
      */
     public function attachPartitionRangeInt(): void
     {
-        $this->blueprint->attachPartition('some_partition')->range([
-            'from' => 10,
-            'to' => 100,
-        ]);
+        $this->blueprint->attachPartition('some_partition')
+            ->range([
+                'from' => 10,
+                'to' => 100,
+            ]);
         $this->assertSameSql('alter table "test_table" attach partition some_partition for values from (10) to (100)');
     }
 
@@ -59,10 +61,11 @@ class PartitionTest extends TestCase
     {
         $today = Carbon::today();
         $tomorrow = Carbon::tomorrow();
-        $this->blueprint->attachPartition('some_partition')->range([
-            'from' => $today,
-            'to' => $tomorrow,
-        ]);
+        $this->blueprint->attachPartition('some_partition')
+            ->range([
+                'from' => $today,
+                'to' => $tomorrow,
+            ]);
 
         $this->assertSameSql(sprintf(
             'alter table "test_table" attach partition some_partition for values from (\'%s\') to (\'%s\')',
@@ -78,10 +81,11 @@ class PartitionTest extends TestCase
     {
         $today = '2010-01-01';
         $tomorrow = '2010-12-31';
-        $this->blueprint->attachPartition('some_partition')->range([
-            'from' => $today,
-            'to' => $tomorrow,
-        ]);
+        $this->blueprint->attachPartition('some_partition')
+            ->range([
+                'from' => $today,
+                'to' => $tomorrow,
+            ]);
 
         $this->assertSameSql(sprintf(
             'alter table "test_table" attach partition some_partition for values from (\'%s\') to (\'%s\')',

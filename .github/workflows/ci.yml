@@ -65,6 +65,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        exclude_group: WithSchema
+        experimental: [false]
         operating_system:
           - ubuntu-latest
         postgres:
@@ -75,6 +77,30 @@ jobs:
           - '7.3'
           - '7.4'
           - '8.0'
+        exclude:
+          - operating_system: 'ubuntu-latest'
+            php_versions: '7.3'
+            postgres: '10'
+          - operating_system: 'ubuntu-latest'
+            php_versions: '7.3'
+            postgres: '11'
+          - operating_system: 'ubuntu-latest'
+            php_versions: '7.4'
+            postgres: '10'
+          - operating_system: 'ubuntu-latest'
+            php_versions: '7.4'
+            postgres: '11'
+        include:
+          - operating_system: 'ubuntu-latest'
+            php_versions: '8.0'
+            postgres: '13'
+            experimental: true
+            exclude_group: WithoutSchema
+          - operating_system: 'ubuntu-latest'
+            php_versions: '8.0'
+            postgres: '11'
+            exclude_group: WithoutSchema
+            experimental: true
     runs-on: '${{ matrix.operating_system }}'
     services:
       postgres:
@@ -88,7 +114,7 @@ jobs:
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     name: 'Test / PHP ${{ matrix.php_versions }} with Postgres ${{ matrix.postgres }}'
-    continue-on-error: ${{ matrix.php_versions == '8.0' }}
+    continue-on-error: ${{ matrix.experimental }}
     needs:
       - lint
     steps:
@@ -135,7 +161,7 @@ jobs:
           POSTGRES_DB: ${{ env.DB_NAME }}
           POSTGRES_HOST: 127.0.0.1
           POSTGRES_PORT: 5432
-        run: './vendor/bin/phpunit --verbose --stderr --configuration phpunit.github.xml --coverage-clover build/logs/clover.xml --coverage-text'
+        run: './vendor/bin/phpunit --verbose --stderr --configuration phpunit.github.xml --exclude-group ${{ matrix.exclude_group }} --coverage-clover build/logs/clover.xml --coverage-text'
         working-directory: './'
       - name: Upload coverage results to Coveralls
         env:

@@ -17,6 +17,7 @@ class CreateViewTest extends FunctionalTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         Schema::create('test_table', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
@@ -26,6 +27,7 @@ class CreateViewTest extends FunctionalTestCase
     protected function tearDown(): void
     {
         Schema::dropIfExists('test_table');
+
         parent::tearDown();
     }
 

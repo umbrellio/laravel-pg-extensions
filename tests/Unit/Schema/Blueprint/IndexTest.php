@@ -19,6 +19,7 @@ class IndexTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->initializeMock(static::TABLE);
     }
 

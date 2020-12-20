@@ -35,7 +35,7 @@ trait IndexAssertions
         $definition = $this->getIndexListing($index);
 
         $this->seeIndex($index);
-        $this->assertRegExp($expectedDef, $definition);
+        $this->assertMatchesRegularExpression($expectedDef, $definition);
     }
 
     protected function dontSeeConstraint(string $table, string $index): void

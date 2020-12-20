@@ -147,4 +147,9 @@ class PostgresGrammar extends BasePostgresGrammar
 
         return $type;
     }
+
+    protected function typeTsrange(Fluent $column): string
+    {
+        return 'tsrange';
+    }
 }

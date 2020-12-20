@@ -50,6 +50,7 @@ class PostgresConnection extends BasePostgresConnection
     public function useDefaultPostProcessor(): void
     {
         parent::useDefaultPostProcessor();
+
         $this->registerExtensions();
     }
 
@@ -117,7 +118,8 @@ class PostgresConnection extends BasePostgresConnection
             /** @var AbstractExtension $extension */
             $extension::register();
             foreach ($extension::getTypes() as $type => $typeClass) {
-                $this->getSchemaBuilder()->registerCustomDoctrineType($typeClass, $type, $type);
+                $this->getSchemaBuilder()
+                    ->registerCustomDoctrineType($typeClass, $type, $type);
             }
         });
     }
@@ -128,7 +130,8 @@ class PostgresConnection extends BasePostgresConnection
         if (!$eventManager->hasListeners(Events::onSchemaAlterTableChangeColumn)) {
             $eventManager->addEventSubscriber(new SchemaAlterTableChangeColumnSubscriber());
         }
-        $connection->getDatabasePlatform()->setEventManager($eventManager);
+        $connection->getDatabasePlatform()
+            ->setEventManager($eventManager);
         return $connection;
     }
 }

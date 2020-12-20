@@ -8,7 +8,7 @@ use Closure;
 use Codeception\Util\ReflectionHelper;
 use Doctrine\DBAL\Event\SchemaAlterTableChangeColumnEventArgs;
 use Doctrine\DBAL\Events;
-use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
+use Doctrine\DBAL\Platforms\PostgreSQL94Platform as PostgreSQLPlatform;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\ColumnDiff;
 use Doctrine\DBAL\Schema\Comparator;
@@ -105,7 +105,9 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
             $this->columns[] = ReflectionHelper::invokePrivateMethod(
                 $schemaManager,
                 '_getPortableTableColumnDefinition',
-                ['tableName' => $listColumn]
+                [
+                    'tableName' => $listColumn,
+                ]
             );
         }
 
@@ -133,7 +135,9 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         return [
             'some_comment',
             function (Blueprint $table, string $column) {
-                $table->string($column)->nullable(false)->change();
+                $table->string($column)
+                    ->nullable(false)
+                    ->change();
             },
             ['ALTER TABLE some_table ALTER some_comment SET NOT NULL'],
         ];
@@ -157,7 +161,9 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         return [
             'some_integer_default',
             function (Blueprint $table, string $column) {
-                $table->integer($column)->nullable()->change();
+                $table->integer($column)
+                    ->nullable()
+                    ->change();
             },
             ['ALTER TABLE some_table ALTER some_integer_default DROP NOT NULL'],
         ];
@@ -168,7 +174,8 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         return [
             'some_integer_default',
             function (Blueprint $table, string $column) {
-                $table->increments($column)->change();
+                $table->increments($column)
+                    ->change();
             },
             [
                 'CREATE SEQUENCE some_table_some_integer_default_seq',
@@ -183,7 +190,8 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         return [
             'some_key',
             function (Blueprint $table, string $column) {
-                $table->integer($column)->change();
+                $table->integer($column)
+                    ->change();
             },
             [
                 'ALTER TABLE some_table ALTER some_key DROP DEFAULT',
@@ -197,7 +205,9 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         return [
             'some_comment',
             function (Blueprint $table, string $column) {
-                $table->string($column)->default('some_default')->change();
+                $table->string($column)
+                    ->default('some_default')
+                    ->change();
             },
             ["ALTER TABLE some_table ALTER some_comment SET DEFAULT 'some_default'"],
         ];
@@ -208,9 +218,9 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         return [
             'some_comment',
             function (Blueprint $table, string $column) {
-                $table->string($column)->default(
-                    new Expression("('some_string:' || some_comment)::character varying")
-                )->change();
+                $table->string($column)
+                    ->default(new Expression("('some_string:' || some_comment)::character varying"))
+                    ->change();
             },
             [
                 "ALTER TABLE some_table ALTER some_comment SET DEFAULT ('some_string:' || some_comment)::character varying",
@@ -241,7 +251,8 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         return [
             'some_comment',
             function (Blueprint $table, string $column) {
-                $table->string($column, 75)->change();
+                $table->string($column, 75)
+                    ->change();
             },
             ['ALTER TABLE some_table ALTER some_comment TYPE VARCHAR(75)'],
         ];

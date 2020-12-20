@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Tests\Functional\Connection;
 
+use Illuminate\Database\Connection;
+use Illuminate\Database\SQLiteConnection;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Umbrellio\Postgres\Connectors\ConnectionFactory;
 use Umbrellio\Postgres\Schema\Blueprint;
+use Umbrellio\Postgres\Tests\_data\CustomSQLiteConnection;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class ConnectionTest extends FunctionalTestCase
@@ -20,12 +24,41 @@ class ConnectionTest extends FunctionalTestCase
 
     /**
      * @test
+     */
+    public function connectionFactory(): void
+    {
+        $factory = new ConnectionFactory(app());
+
+        $this->assertInstanceOf(SQLiteConnection::class, $factory->make(config('database.connections.sqlite')));
+    }
+
+    /**
+     * @test
+     */
+    public function resolverFor(): void
+    {
+        Connection::resolverFor('sqlite', function ($connection, $database, $prefix, $config) {
+            return new CustomSQLiteConnection($connection, $database, $prefix, $config);
+        });
+
+        $factory = new ConnectionFactory(app());
+
+        $this->assertInstanceOf(
+            CustomSQLiteConnection::class,
+            $factory->make(config('database.connections.sqlite'))
+        );
+    }
+
+    /**
+     * @test
      * @dataProvider boolDataProvider
      */
     public function boolTrueBindingsWorks($value)
     {
         $table = 'test_table';
-        $data = ['field' => $value];
+        $data = [
+            'field' => $value,
+        ];
         Schema::create($table, function (Blueprint $table) {
             $table->increments('id');
             $table->boolean('field');
@@ -42,7 +75,9 @@ class ConnectionTest extends FunctionalTestCase
     public function intBindingsWorks($value)
     {
         $table = 'test_table';
-        $data = ['field' => $value];
+        $data = [
+            'field' => $value,
+        ];
         Schema::create($table, function (Blueprint $table) {
             $table->increments('id');
             $table->integer('field');
@@ -58,7 +93,9 @@ class ConnectionTest extends FunctionalTestCase
     public function stringBindingsWorks()
     {
         $table = 'test_table';
-        $data = ['field' => 'string'];
+        $data = [
+            'field' => 'string',
+        ];
         Schema::create($table, function (Blueprint $table) {
             $table->increments('id');
             $table->string('field');
@@ -74,10 +111,13 @@ class ConnectionTest extends FunctionalTestCase
     public function nullBindingsWorks()
     {
         $table = 'test_table';
-        $data = ['field' => null];
+        $data = [
+            'field' => null,
+        ];
         Schema::create($table, function (Blueprint $table) {
             $table->increments('id');
-            $table->string('field')->nullable();
+            $table->string('field')
+                ->nullable();
         });
         DB::table($table)->insert($data);
         $result = DB::table($table)->whereNull('field')->get();
@@ -91,7 +131,9 @@ class ConnectionTest extends FunctionalTestCase
     public function dateTimeBindingsWorks($value)
     {
         $table = 'test_table';
-        $data = ['field' => $value];
+        $data = [
+            'field' => $value,
+        ];
         Schema::create($table, function (Blueprint $table) {
             $table->increments('id');
             $table->dateTime('field');

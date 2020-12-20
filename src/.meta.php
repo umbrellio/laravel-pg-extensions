@@ -22,6 +22,7 @@ namespace Illuminate\Database\Schema {
      * @method ViewDefinition createView(string $view, string $select, bool $materialize = false)
      * @method Fluent dropView(string $view)
      * @method ColumnDefinition numeric(string $column, ?int $precision = null, ?int $scale = null)
+     * @method ColumnDefinition tsrange(string $column)
      * @method ExcludeDefinition exclude($columns, ?string $index = null)
      * @method CheckDefinition check($columns, ?string $index = null)
      * @method CreateFunctionDefinition createFunction(string $name)

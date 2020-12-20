@@ -5,6 +5,8 @@ services:
   PhpCsFixer\Fixer\PhpUnit\PhpUnitTestAnnotationFixer:
     style: annotation
   PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer: ~
+  PhpCsFixer\Fixer\Operator\BinaryOperatorSpacesFixer:
+    default: single_space
 
 parameters:
   cache_directory: .ecs_cache

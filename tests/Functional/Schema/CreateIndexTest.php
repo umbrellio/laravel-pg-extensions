@@ -109,7 +109,8 @@ class CreateIndexTest extends FunctionalTestCase
     public function createSpecifyIndex(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
-            $table->string('name')->index('specify_index_name');
+            $table->string('name')
+                ->index('specify_index_name');
         });
 
         $this->seeTable('test_table');
@@ -128,73 +129,85 @@ class CreateIndexTest extends FunctionalTestCase
         yield [
             ' WHERE \(deleted_at IS NULL\)',
             function (Blueprint $table) {
-                $table->uniquePartial('name')->whereNull('deleted_at');
+                $table->uniquePartial('name')
+                    ->whereNull('deleted_at');
             },
         ];
         yield [
             ' WHERE \(deleted_at IS NOT NULL\)',
             function (Blueprint $table) {
-                $table->uniquePartial('name')->whereNotNull('deleted_at');
+                $table->uniquePartial('name')
+                    ->whereNotNull('deleted_at');
             },
         ];
         yield [
             ' WHERE \(phone = 1234\)',
             function (Blueprint $table) {
-                $table->uniquePartial('name')->where('phone', '=', 1234);
+                $table->uniquePartial('name')
+                    ->where('phone', '=', 1234);
             },
         ];
         yield [
             " WHERE \(\(code\)::text = 'test'::text\)",
             function (Blueprint $table) {
-                $table->uniquePartial('name')->where('code', '=', 'test');
+                $table->uniquePartial('name')
+                    ->where('code', '=', 'test');
             },
         ];
         yield [
             ' WHERE \(\(phone >= 1\) AND \(phone <= 2\)\)',
             function (Blueprint $table) {
-                $table->uniquePartial('name')->whereBetween('phone', [1, 2]);
+                $table->uniquePartial('name')
+                    ->whereBetween('phone', [1, 2]);
             },
         ];
         yield [
             ' WHERE \(\(phone < 1\) OR \(phone > 2\)\)',
             function (Blueprint $table) {
-                $table->uniquePartial('name')->whereNotBetween('phone', [1, 2]);
+                $table->uniquePartial('name')
+                    ->whereNotBetween('phone', [1, 2]);
             },
         ];
         yield [
             ' WHERE \(phone <> icq\)',
             function (Blueprint $table) {
-                $table->uniquePartial('name')->whereColumn('phone', '<>', 'icq');
+                $table->uniquePartial('name')
+                    ->whereColumn('phone', '<>', 'icq');
             },
         ];
         yield [
             ' WHERE \(\(phone = 1\) AND \(icq < 2\)\)',
             function (Blueprint $table) {
-                $table->uniquePartial('name')->whereRaw('phone = ? and icq < ?', [1, 2]);
+                $table->uniquePartial('name')
+                    ->whereRaw('phone = ? and icq < ?', [1, 2]);
             },
         ];
         yield [
             ' WHERE \(phone = ANY \(ARRAY\[1, 2, 4\]\)\)',
             function (Blueprint $table) {
-                $table->uniquePartial('name')->whereIn('phone', [1, 2, 4]);
+                $table->uniquePartial('name')
+                    ->whereIn('phone', [1, 2, 4]);
             },
         ];
         yield [
             ' WHERE \(0 = 1\)',
             function (Blueprint $table) {
-                $table->uniquePartial('name')->whereIn('phone', []);
+                $table->uniquePartial('name')
+                    ->whereIn('phone', []);
             },
         ];
         yield [
             ' WHERE \(phone <> ALL \(ARRAY\[1, 2, 4\]\)\)',
             function (Blueprint $table) {
-                $table->uniquePartial('name')->whereNotIn('phone', [1, 2, 4]);
+                $table->uniquePartial('name')
+                    ->whereNotIn('phone', [1, 2, 4]);
             },
         ];
         yield [
             ' WHERE \(1 = 1\)',
             function (Blueprint $table) {
-                $table->uniquePartial('name')->whereNotIn('phone', []);
+                $table->uniquePartial('name')
+                    ->whereNotIn('phone', []);
             },
         ];
     }
@@ -208,7 +221,8 @@ class CreateIndexTest extends FunctionalTestCase
 
         Schema::create('test_table', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code')->unique();
+            $table->string('code')
+                ->unique();
             $table->integer('period_type_id');
             $table->date('period_start');
             $table->date('period_end');

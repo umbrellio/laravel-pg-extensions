@@ -40,7 +40,7 @@ trait BlueprintAssertions
     protected function assertRegExpSql(string $regexpExpected): void
     {
         foreach ($this->runToSql() as $sql) {
-            $this->assertRegExp($regexpExpected, $sql);
+            $this->assertMatchesRegularExpression($regexpExpected, $sql);
         }
     }
 

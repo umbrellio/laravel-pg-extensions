@@ -32,12 +32,16 @@ class AttachPartitionCompiler
         throw new InvalidArgumentException('Not set "for values" for attachPartition');
     }
 
-    private static function formatValue($date)
+    private static function formatValue($value)
     {
-        if ($date instanceof Carbon) {
-            return "'{$date->toDateTimeString()}'";
+        if ($value instanceof Carbon) {
+            return "'{$value->toDateTimeString()}'";
         }
 
-        return $date;
+        if (is_string($value)) {
+            return "'{$value}'";
+        }
+
+        return $value;
     }
 }

@@ -46,7 +46,8 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
 
         $quoteName = $this->quoteName($platform, $diff);
 
-        $oldColumnName = $columnDiff->getOldColumnName()->getQuotedName($platform);
+        $oldColumnName = $columnDiff->getOldColumnName()
+            ->getQuotedName($platform);
         $column = $columnDiff->column;
 
         $this->compileAlterColumnType($platform, $columnDiff, $column, $quoteName, $oldColumnName, $sql);
@@ -67,7 +68,8 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
             'ALTER TABLE %s ALTER %s TYPE %s',
             $quoteName,
             $oldColumnName,
-            $column->getType()->getSQLDeclaration($column->toArray(), $platform)
+            $column->getType()
+                ->getSQLDeclaration($column->toArray(), $platform)
         ));
 
         return $sql;
@@ -218,7 +220,8 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
 
     public function quoteName(AbstractPlatform $platform, TableDiff $diff): string
     {
-        return $diff->getName($platform)->getQuotedName($platform);
+        return $diff->getName($platform)
+            ->getQuotedName($platform);
     }
 
     public function getOldColumnComment(ColumnDiff $columnDiff): ?string

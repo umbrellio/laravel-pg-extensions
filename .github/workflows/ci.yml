@@ -79,43 +79,42 @@ jobs:
           - '7.3'
           - '7.4'
           - '8.0'
-#        exclude:
-#          - operating_system: 'ubuntu-latest'
-#            php_versions: '7.3'
-#            postgres: '10'
-#            exclude_group: WithoutSchema
-#            experimental: false
-#          - operating_system: 'ubuntu-latest'
-#            php_versions: '7.3'
-#            postgres: '11'
-#            exclude_group: WithoutSchema
-#            experimental: false
-#          - operating_system: 'ubuntu-latest'
-#            php_versions: '7.4'
-#            postgres: '10'
-#            exclude_group: WithoutSchema
-#            experimental: false
-#          - operating_system: 'ubuntu-latest'
-#            php_versions: '7.4'
-#            postgres: '11'
-#            exclude_group: WithoutSchema
-#            experimental: false
         include:
           - operating_system: 'ubuntu-latest'
             php_versions: '7.3'
-            postgres: '9'
+            postgres: '9.6'
             experimental: false
+            exclude_group: WithoutSchema
+          - operating_system: 'ubuntu-latest'
+            php_versions: '7.3'
+            postgres: '13'
+            experimental: true
+            exclude_group: WithoutSchema
+          - operating_system: 'ubuntu-latest'
+            php_versions: '7.4'
+            postgres: '13'
+            experimental: true
+            exclude_group: WithoutSchema
+          - operating_system: 'ubuntu-latest'
+            php_versions: '8.0'
+            postgres: '10'
+            experimental: true
+            exclude_group: WithSchema
+          - operating_system: 'ubuntu-latest'
+            php_versions: '8.0'
+            postgres: '11'
+            experimental: true
+            exclude_group: WithSchema
+          - operating_system: 'ubuntu-latest'
+            php_versions: '8.0'
+            postgres: '12'
+            experimental: true
             exclude_group: WithSchema
           - operating_system: 'ubuntu-latest'
             php_versions: '8.0'
             postgres: '13'
             experimental: true
             exclude_group: WithSchema
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.0'
-            postgres: '11'
-            exclude_group: WithSchema
-            experimental: true
     runs-on: '${{ matrix.operating_system }}'
     services:
       postgres:
@@ -129,7 +128,6 @@ jobs:
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     name: 'Test / PHP ${{ matrix.php_versions }} with Postgres ${{ matrix.postgres }}'
-    continue-on-error: ${{ matrix.experimental }}
     needs:
       - lint
     steps:
@@ -168,6 +166,7 @@ jobs:
           composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
         working-directory: './'
       - name: 'Run Unit Tests with PHPUnit'
+        continue-on-error: ${{ matrix.experimental }}
         env:
           # use localhost for the host here because we are running the job on the VM.
           # If we were running the job on in a container this would be postgres
@@ -179,6 +178,7 @@ jobs:
         run: './vendor/bin/phpunit --verbose --stderr --configuration phpunit.github.xml --exclude-group ${{ matrix.exclude_group }} --coverage-clover build/logs/clover.xml --coverage-text'
         working-directory: './'
       - name: Upload coverage results to Coveralls
+        continue-on-error: ${{ matrix.experimental }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_PARALLEL: true

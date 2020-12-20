@@ -65,7 +65,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        exclude_group: WithSchema
+        exclude_group: [WithSchema]
         experimental: [false]
         operating_system:
           - ubuntu-latest

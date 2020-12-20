@@ -55,11 +55,11 @@ abstract class FunctionalTestCase extends TestCase
     {
         return [
             'driver' => $GLOBALS['db_type'] ?? 'pdo_pgsql',
-            'user' => $GLOBALS['db_username'],
-            'password' => $GLOBALS['db_password'],
-            'host' => $GLOBALS['db_host'],
-            'database' => $GLOBALS['db_database'],
-            'port' => $GLOBALS['db_port'],
+            'user' => env('POSTGRES_USER', $GLOBALS['db_username']),
+            'password' => env('POSTGRES_PASSWORD', $GLOBALS['db_password']),
+            'host' => env('POSTGRES_HOST', $GLOBALS['db_host']),
+            'database' => env('POSTGRES_DB', $GLOBALS['db_database']),
+            'port' => env('POSTGRES_PORT', $GLOBALS['db_port']),
         ];
     }
 }

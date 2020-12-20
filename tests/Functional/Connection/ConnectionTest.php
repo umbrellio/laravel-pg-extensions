@@ -56,7 +56,9 @@ class ConnectionTest extends FunctionalTestCase
     public function boolTrueBindingsWorks($value)
     {
         $table = 'test_table';
-        $data = ['field' => $value];
+        $data = [
+            'field' => $value,
+        ];
         Schema::create($table, function (Blueprint $table) {
             $table->increments('id');
             $table->boolean('field');
@@ -73,7 +75,9 @@ class ConnectionTest extends FunctionalTestCase
     public function intBindingsWorks($value)
     {
         $table = 'test_table';
-        $data = ['field' => $value];
+        $data = [
+            'field' => $value,
+        ];
         Schema::create($table, function (Blueprint $table) {
             $table->increments('id');
             $table->integer('field');
@@ -89,7 +93,9 @@ class ConnectionTest extends FunctionalTestCase
     public function stringBindingsWorks()
     {
         $table = 'test_table';
-        $data = ['field' => 'string'];
+        $data = [
+            'field' => 'string',
+        ];
         Schema::create($table, function (Blueprint $table) {
             $table->increments('id');
             $table->string('field');
@@ -105,10 +111,13 @@ class ConnectionTest extends FunctionalTestCase
     public function nullBindingsWorks()
     {
         $table = 'test_table';
-        $data = ['field' => null];
+        $data = [
+            'field' => null,
+        ];
         Schema::create($table, function (Blueprint $table) {
             $table->increments('id');
-            $table->string('field')->nullable();
+            $table->string('field')
+                ->nullable();
         });
         DB::table($table)->insert($data);
         $result = DB::table($table)->whereNull('field')->get();
@@ -122,7 +131,9 @@ class ConnectionTest extends FunctionalTestCase
     public function dateTimeBindingsWorks($value)
     {
         $table = 'test_table';
-        $data = ['field' => $value];
+        $data = [
+            'field' => $value,
+        ];
         Schema::create($table, function (Blueprint $table) {
             $table->increments('id');
             $table->dateTime('field');

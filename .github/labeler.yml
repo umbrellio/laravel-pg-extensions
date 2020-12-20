@@ -21,7 +21,7 @@ type:indexes:
   - "src/Schema/Definitions/CheckDefinition.php"
   - "src/Schema/Definitions/ExcludeDefinition.php"
   - "src/Schema/Definitions/UniqueDefinition.php"
-  -
+
 type:routines:
   - "src/Compilers/Routines/**/*"
   - "src/Schema/Builders/Routines/**/*"

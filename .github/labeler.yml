@@ -1,0 +1,44 @@
+type:build:
+  - ".github/**"
+  - ".travis.yml"
+  - ".coveralls.yml"
+  - "phpunit.github.xml"
+  - "phpunit.travis.xml"
+  - ".gitignore"
+  - "ecs.yml"
+  - "tests/travis/*"
+  - "composer.json"
+  - "composer.lock"
+
+type:helper:
+  - "src/Helpers/*"
+  - "src/Traits/*"
+
+type:providers:
+  - "src/Providers/*"
+  - "src/Schema/*"
+  - "src/Types/*"
+  - "src/LTreeExtension.php"
+
+type:resources:
+  - "src/Resources/*"
+
+type:relations:
+  - "src/Relations/*"
+
+type:services:
+  - "src/Services/*"
+  - "src/Exceptions/*"
+
+type:interfaces:
+  - "src/Interfaces/*"
+
+type:tests:
+  - any: ['tests/**/*', 'phpunit.xml.dist', 'tests.sh', '!tests/travis/*']
+
+theme:documentation:
+  - "README.md"
+  - "LICENSE"
+  - "CONTRIBUTING.md"
+  - "CODE_OF_CONDUCT.md"
+  - "src/.meta.php"

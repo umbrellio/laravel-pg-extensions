@@ -65,8 +65,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        exclude_group: [WithSchema]
-        experimental: [false]
+        exclude_group:
+          - WithoutSchema
+        experimental:
+          - false
         operating_system:
           - ubuntu-latest
         postgres:
@@ -77,29 +79,42 @@ jobs:
           - '7.3'
           - '7.4'
           - '8.0'
-        exclude:
-          - operating_system: 'ubuntu-latest'
-            php_versions: '7.3'
-            postgres: '10'
-          - operating_system: 'ubuntu-latest'
-            php_versions: '7.3'
-            postgres: '11'
-          - operating_system: 'ubuntu-latest'
-            php_versions: '7.4'
-            postgres: '10'
-          - operating_system: 'ubuntu-latest'
-            php_versions: '7.4'
-            postgres: '11'
+#        exclude:
+#          - operating_system: 'ubuntu-latest'
+#            php_versions: '7.3'
+#            postgres: '10'
+#            exclude_group: WithoutSchema
+#            experimental: false
+#          - operating_system: 'ubuntu-latest'
+#            php_versions: '7.3'
+#            postgres: '11'
+#            exclude_group: WithoutSchema
+#            experimental: false
+#          - operating_system: 'ubuntu-latest'
+#            php_versions: '7.4'
+#            postgres: '10'
+#            exclude_group: WithoutSchema
+#            experimental: false
+#          - operating_system: 'ubuntu-latest'
+#            php_versions: '7.4'
+#            postgres: '11'
+#            exclude_group: WithoutSchema
+#            experimental: false
         include:
+          - operating_system: 'ubuntu-latest'
+            php_versions: '7.3'
+            postgres: '9'
+            experimental: false
+            exclude_group: WithSchema
           - operating_system: 'ubuntu-latest'
             php_versions: '8.0'
             postgres: '13'
             experimental: true
-            exclude_group: WithoutSchema
+            exclude_group: WithSchema
           - operating_system: 'ubuntu-latest'
             php_versions: '8.0'
             postgres: '11'
-            exclude_group: WithoutSchema
+            exclude_group: WithSchema
             experimental: true
     runs-on: '${{ matrix.operating_system }}'
     services:

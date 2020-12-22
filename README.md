@@ -6,7 +6,6 @@
 [![Total Downloads](https://poser.pugx.org/umbrellio/laravel-pg-extensions/downloads.png)](https://packagist.org/packages/umbrellio/laravel-pg-extensions)
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 [![Build Status](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/badges/build.png?b=master)](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/build-status/master)
-[![Code Coverage](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/?branch=master)
 
 This project extends Laravel`s database layer to allow use specific Postgres features without raw queries. 

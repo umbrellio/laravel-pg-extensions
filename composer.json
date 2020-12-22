@@ -3,6 +3,17 @@
   "type": "library",
   "description": "Extensions for Postgres Laravel",
   "minimum-stability": "stable",
+  "license": "MIT",
+  "keywords": [
+    "laravel",
+    "php",
+    "postgres",
+    "postgresql",
+    "extension",
+    "migrations",
+    "schema",
+    "builder"
+  ],
   "authors": [
     {
       "name": "Vitaliy Lazeev",
@@ -13,9 +24,17 @@
       "email": "pvsaintpe@umbrellio.biz"
     }
   ],
+  "conflict": {
+    "php": "^8.0",
+    "doctrine/dbal": "^3.0"
+  },
+  "suggest": {
+    "umbrellio/laravel-ltree": "Package for working with Postgres LTree extension",
+    "umbrellio/laravel-common-objects": "Package with helpers for common Laravel components"
+  },
   "require": {
     "php": "^7.2|^7.3|^7.4|^8.0",
-    "doctrine/dbal": "^2.9",
+    "doctrine/dbal": "2.9.*",
     "laravel/framework": "^5.8|^6.0|^7.0|^8.0"
   },
   "require-dev": {

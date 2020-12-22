@@ -87,12 +87,12 @@ jobs:
           - operating_system: 'ubuntu-latest'
             php_versions: '7.3'
             postgres: '13'
-            experimental: true
+            experimental: false
             exclude_group: WithoutSchema
           - operating_system: 'ubuntu-latest'
             php_versions: '7.4'
             postgres: '13'
-            experimental: true
+            experimental: false
             exclude_group: WithoutSchema
           - operating_system: 'ubuntu-latest'
             php_versions: '8.0'
@@ -126,7 +126,7 @@ jobs:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-    name: 'Test / PHP ${{ matrix.php_versions }} with Postgres ${{ matrix.postgres }}'
+    name: 'Test / PHP ${{ matrix.php_versions }} / Postgres ${{ matrix.postgres }}'
     needs:
       - lint
     steps:
@@ -160,6 +160,7 @@ jobs:
           coverage: pcov
           tools: 'phpunit'
       - name: 'Install PHP dependencies with Composer'
+        continue-on-error: ${{ matrix.experimental }}
         run: |
           rm composer.lock
           composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader

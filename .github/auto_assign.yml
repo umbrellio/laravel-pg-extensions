@@ -1,16 +1,19 @@
-# Set to true to add assignees to pull requests
+addReviewers: true
+
+numberOfReviewers: 1
+
+reviewers:
+ - pvsaitpe
+ - zlob
+
 addAssignees: true
 
-# A list of assignees, overrides reviewers if set
 assignees:
  - pvsaintpe
+ - zlob
 
-# A number of assignees to add to the pull request
-# Set to 0 to add all of the assignees.
-# Uses numberOfReviewers if unset.
 numberOfAssignees: 1
 
-# A list of keywords to be skipped the process that add reviewers if pull requests include it
 skipKeywords:
   - wip
   - draft

@@ -24,10 +24,6 @@
       "email": "pvsaintpe@umbrellio.biz"
     }
   ],
-  "conflict": {
-    "php": "^8.0",
-    "doctrine/dbal": "^3.0"
-  },
   "suggest": {
     "umbrellio/laravel-ltree": "Package for working with Postgres LTree extension",
     "umbrellio/laravel-common-objects": "Package with helpers for common Laravel components"

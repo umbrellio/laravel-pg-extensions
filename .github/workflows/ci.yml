@@ -160,6 +160,7 @@ jobs:
           coverage: pcov
           tools: 'phpunit'
       - name: 'Install PHP dependencies with Composer'
+        continue-on-error: ${{ matrix.experimental }}
         run: |
           rm composer.lock
           composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader

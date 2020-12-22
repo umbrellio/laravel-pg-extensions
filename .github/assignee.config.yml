@@ -1,0 +1,18 @@
+addReviewers: true
+
+numberOfReviewers: 1
+
+reviewers:
+ - pvsaitpe
+ - zlob
+
+addAssignees: true
+
+assignees:
+ - pvsaintpe
+
+numberOfAssignees: 1
+
+skipKeywords:
+  - wip
+  - draft

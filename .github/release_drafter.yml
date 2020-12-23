@@ -1,0 +1,46 @@
+name-template: '$RESOLVED_VERSION'
+tag-template: '$RESOLVED_VERSION'
+categories:
+  - title: 'Features'
+    labels:
+      - 'feature'
+      - 'type:compilers'
+      - 'type:helpers'
+      - 'type:routines'
+      - 'type:indexes'
+      - 'type:schema'
+  - title: 'Bug Fixes'
+    labels:
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+      - 'hotfix'
+      - 'duplicate'
+  - title: 'Maintenance'
+    label:
+      - 'type:build'
+      - 'refactoring'
+      - 'theme:docs'
+      - 'type:tests'
+      - 'analysis'
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-title-escapes: '\<*_&'
+version-resolver:
+  major:
+    labels:
+      - 'major'
+  minor:
+    labels:
+      - 'minor'
+  patch:
+    labels:
+      - 'patch'
+  default: patch
+template: |
+  $TITLE
+  $BODY
+  $URL
+
+  ## Changes
+
+  $CHANGES

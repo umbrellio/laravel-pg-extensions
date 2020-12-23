@@ -70,12 +70,27 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
 
     /**
      * @test
+     * @group forPHP7
      * @dataProvider provideSchemas
      */
-    public function changeSchema(string $column, Closure $callback, array $expectedSQL): void
+    public function changeSchema7(string $column, Closure $callback, array $expectedSQL): void
     {
         $callback($this->blueprint, $column);
         $eventArgs = $this->getEventArgsForColumn($column);
+        $this->subscriber->onSchemaAlterTableChangeColumn($eventArgs);
+
+        $this->assertSame($expectedSQL, $eventArgs->getSql());
+    }
+
+    /**
+     * @test
+     * @group forPHP8
+     * @dataProvider provideSchemas
+     */
+    public function changeSchema8(string $column, Closure $callback, array $expectedSQL): void
+    {
+        $callback($this->blueprint, $column);
+        $eventArgs = $this->getEventArgsForColumn($column, 'tableColumn');
         $this->subscriber->onSchemaAlterTableChangeColumn($eventArgs);
 
         $this->assertSame($expectedSQL, $eventArgs->getSql());
@@ -94,8 +109,10 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         yield $this->changeLengthCase();
     }
 
-    private function getEventArgsForColumn(string $columnName): SchemaAlterTableChangeColumnEventArgs
-    {
+    private function getEventArgsForColumn(
+        string $columnName,
+        string $argumentName = 'tableName'
+    ): SchemaAlterTableChangeColumnEventArgs {
         /** @var PostgresConnection $connection */
         $connection = DB::connection();
         $schemaManager = $connection->getDoctrineSchemaManager();
@@ -106,7 +123,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
                 $schemaManager,
                 '_getPortableTableColumnDefinition',
                 [
-                    'tableName' => $listColumn,
+                    $argumentName => $listColumn,
                 ]
             );
         }

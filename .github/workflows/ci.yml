@@ -66,7 +66,7 @@ jobs:
       fail-fast: false
       matrix:
         exclude_group:
-          - WithoutSchema
+          - WithoutSchema,forPHP8
         experimental:
           - false
         operating_system:
@@ -83,37 +83,37 @@ jobs:
             php_versions: '7.3'
             postgres: '9.6'
             experimental: false
-            exclude_group: WithoutSchema
+            exclude_group: WithoutSchema,forPHP8
           - operating_system: 'ubuntu-latest'
             php_versions: '7.3'
             postgres: '13'
             experimental: false
-            exclude_group: WithoutSchema
+            exclude_group: WithoutSchema,forPHP8
           - operating_system: 'ubuntu-latest'
             php_versions: '7.4'
             postgres: '13'
             experimental: false
-            exclude_group: WithoutSchema
+            exclude_group: WithoutSchema,forPHP8
           - operating_system: 'ubuntu-latest'
             php_versions: '8.0'
             postgres: '10'
-            experimental: true
-            exclude_group: WithSchema
+            experimental: false
+            exclude_group: WithSchema,forPHP7
           - operating_system: 'ubuntu-latest'
             php_versions: '8.0'
             postgres: '11'
-            experimental: true
-            exclude_group: WithSchema
+            experimental: false
+            exclude_group: WithSchema,forPHP7
           - operating_system: 'ubuntu-latest'
             php_versions: '8.0'
             postgres: '12'
-            experimental: true
-            exclude_group: WithSchema
+            experimental: false
+            exclude_group: WithSchema,forPHP7
           - operating_system: 'ubuntu-latest'
             php_versions: '8.0'
             postgres: '13'
-            experimental: true
-            exclude_group: WithSchema
+            experimental: false
+            exclude_group: WithSchema,forPHP7
     runs-on: '${{ matrix.operating_system }}'
     services:
       postgres:

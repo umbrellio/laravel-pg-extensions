@@ -1,5 +1,16 @@
+template: |
+  ## Changes
+  $CHANGES
+
+change-template: |
+  - **$TITLE** (#$NUMBER)
+    $BODY
+    @$AUTHOR
+
+version-template: "$MAJOR.$MINOR.$PATCH"
 name-template: '$RESOLVED_VERSION'
 tag-template: '$RESOLVED_VERSION'
+
 categories:
   - title: 'Features'
     labels:
@@ -17,29 +28,23 @@ categories:
       - 'hotfix'
       - 'duplicate'
   - title: 'Maintenance'
-    label:
+    labels:
       - 'type:build'
       - 'refactoring'
       - 'theme:docs'
       - 'type:tests'
       - 'analysis'
-change-template: |
-  - **$TITLE** (#$NUMBER)
-    $BODY
-    @$AUTHOR
+
 change-title-escapes: '\<*_&'
+
 version-resolver:
   major:
     labels:
-      - 'major'
+      - major
   minor:
     labels:
-      - 'minor'
+      - minor
   patch:
     labels:
-      - 'patch'
+      - patch
   default: patch
-template: |
-  ## Changes
-
-  $CHANGES

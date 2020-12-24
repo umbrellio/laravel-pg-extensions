@@ -23,7 +23,10 @@ categories:
       - 'theme:docs'
       - 'type:tests'
       - 'analysis'
-change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-template: |
+  - **$TITLE** (#$NUMBER)
+    $BODY
+    @$AUTHOR
 change-title-escapes: '\<*_&'
 version-resolver:
   major:
@@ -37,10 +40,6 @@ version-resolver:
       - 'patch'
   default: patch
 template: |
-  $TITLE
-  $BODY
-  $URL
-
   ## Changes
 
   $CHANGES

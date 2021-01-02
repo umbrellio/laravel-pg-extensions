@@ -15,12 +15,19 @@ use Umbrellio\Postgres\Extensions\Exceptions\ExtensionInvalidException;
 use Umbrellio\Postgres\Schema\Builder;
 use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 use Umbrellio\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber;
+use Umbrellio\Postgres\Schema\Types\NumericType;
+use Umbrellio\Postgres\Schema\Types\TsRangeType;
 
 class PostgresConnection extends BasePostgresConnection
 {
     use Macroable;
 
     private static $extensions = [];
+
+    private $initialTypes = [
+        TsRangeType::TYPE_NAME => TsRangeType::class,
+        NumericType::TYPE_NAME => NumericType::class,
+    ];
 
     /**
      * @param AbstractExtension|string $extension
@@ -52,6 +59,7 @@ class PostgresConnection extends BasePostgresConnection
         parent::useDefaultPostProcessor();
 
         $this->registerExtensions();
+        $this->registerInitialTypes();
     }
 
     public function getDoctrineConnection(): Connection
@@ -107,6 +115,15 @@ class PostgresConnection extends BasePostgresConnection
     protected function getDefaultSchemaGrammar()
     {
         return $this->withTablePrefix(new PostgresGrammar());
+    }
+
+    private function registerInitialTypes(): void
+    {
+        foreach ($this->initialTypes as $type => $typeClass) {
+            $this
+                ->getSchemaBuilder()
+                ->registerCustomDoctrineType($typeClass, $type, $type);
+        }
     }
 
     /**

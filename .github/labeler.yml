@@ -1,11 +1,10 @@
 type:build:
   - ".github/**/*"
   - ".coveralls.yml"
-  - "phpunit.github.xml"
   - ".gitignore"
   - "ecs.yml"
   - "composer.json"
-  - "composer.lock"
+  - "phpcs.xml"
 
 type:helpers:
   - "src/Helpers/**/*"

@@ -10,6 +10,13 @@ on:
       - reopened
       - edited
       - synchronize
+      - labeled
+      - assigned
+      - unlabeled
+      - unlocked
+      - review_requested
+      - review_request_removed
+      - unassigned
 
 env:
   COVERAGE: '1'

@@ -9,13 +9,13 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/?branch=master)
 
-This project extends Laravel`s database layer to allow use specific Postgres features without raw queries. 
+This project extends Laravel's database layer to allow use specific Postgres features without raw queries. 
 
 ## Installation
 
 Run this command to install:
 ```bash
-php composer.phar require umbrellio/laravel-pg-extensions
+composer require umbrellio/laravel-pg-extensions
 ```
 
 ## Features

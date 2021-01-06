@@ -3,8 +3,10 @@ type:build:
   - ".coveralls.yml"
   - ".gitignore"
   - "ecs.yml"
-  - "composer.json"
   - "phpcs.xml"
+
+dependencies:
+  - "composer.json"
 
 type:helpers:
   - "src/Helpers/**/*"
@@ -43,4 +45,3 @@ theme:docs:
   - "CONTRIBUTING.md"
   - "CODE_OF_CONDUCT.md"
   - "src/.meta.php"
-  - "*.md"

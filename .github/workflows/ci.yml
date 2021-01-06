@@ -1,8 +1,15 @@
 name: CI
 
-on:	
+on:
   push:
+    branches:
+      - master
   pull_request:
+    types:
+      - opened
+      - reopened
+      - edited
+      - synchronize
 
 env:
   COVERAGE: '1'
@@ -11,6 +18,7 @@ env:
   DB_USER: 'postgres'
   DB_NAME: 'testing'
   DB_PASSWORD: 'postgres'
+  DB_HOST: '127.0.0.1'
 
 jobs:	
   lint:
@@ -55,9 +63,7 @@ jobs:
       - name: 'Setup problem matchers for PHPUnit'
         run: 'echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"'
       - name: 'Install PHP dependencies with Composer'
-        run: |
-          rm composer.lock
-          composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
+        run: composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
         working-directory: './'
       - name: 'Linting PHP source files'
         run: 'vendor/bin/ecs check --config=ecs.yml .'
@@ -161,21 +167,22 @@ jobs:
           tools: 'phpunit'
       - name: 'Install PHP dependencies with Composer'
         continue-on-error: ${{ matrix.experimental }}
-        run: |
-          rm composer.lock
-          composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
+        run: composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
         working-directory: './'
       - name: 'Run Unit Tests with PHPUnit'
         continue-on-error: ${{ matrix.experimental }}
-        env:
-          # use localhost for the host here because we are running the job on the VM.
-          # If we were running the job on in a container this would be postgres
-          POSTGRES_USER: ${{ env.DB_USER }}
-          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
-          POSTGRES_DB: ${{ env.DB_NAME }}
-          POSTGRES_HOST: 127.0.0.1
-          POSTGRES_PORT: 5432
-        run: './vendor/bin/phpunit --verbose --stderr --configuration phpunit.github.xml --exclude-group ${{ matrix.exclude_group }} --coverage-clover build/logs/clover.xml --coverage-text'
+        run: |
+          sed -e "s/\${USERNAME}/${{ env.DB_USER }}/" \
+              -e "s/\${PASSWORD}/${{ env.DB_PASSWORD }}/" \
+              -e "s/\${DATABASE}/${{ env.DB_NAME }}/" \
+              -e "s/\${HOST}/${{ env.DB_HOST }}/" \
+              phpunit.xml.dist > phpunit.xml
+          ./vendor/bin/phpunit \
+              --verbose \
+              --stderr \
+              --exclude-group ${{ matrix.exclude_group }} \
+              --coverage-clover build/logs/clover.xml \
+              --coverage-text
         working-directory: './'
       - name: Upload coverage results to Coveralls
         if: ${{ !matrix.experimental }}

@@ -19,12 +19,14 @@
         <var name="db_database" value="${DATABASE}" />
         <var name="db_port" value="5432"/>
     </php>
-    <coverage processUncoveredFiles="true">
-        <directory suffix=".php">./src</directory>
-        <exclude>
-            <file>./src/.meta.php</file>
-        </exclude>
-    </coverage>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+            <exclude>
+                <file>./src/.meta.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
     <testsuites>
         <testsuite name="Test suite">
             <directory suffix="Test.php">./tests</directory>

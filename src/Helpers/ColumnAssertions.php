@@ -7,7 +7,6 @@ namespace Umbrellio\Postgres\Helpers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @static void assertNull($actual, string $message = '')

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Helpers;
 
 use Illuminate\Support\Facades\Schema;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @static void assertSame($expected, $actual, string $message = '')

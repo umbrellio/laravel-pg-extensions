@@ -6,16 +6,12 @@ namespace Umbrellio\Postgres\Helpers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use PHPUnit\Framework\Assert;
 
-/**
- * @static void assertNull($actual, string $message = '')
- * @static void assertSame($expected, $actual, string $message = '')
- *
- * @see Assert
- */
 trait ColumnAssertions
 {
+    abstract public static function assertNull($actual, string $message = ''): void;
+    abstract public static function assertSame($expected, $actual, string $message = ''): void;
+
     protected function assertCommentOnColumn(string $table, string $column, ?string $expected = null): void
     {
         $comment = $this->getCommentListing($table, $column);

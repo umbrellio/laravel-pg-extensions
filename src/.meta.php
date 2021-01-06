@@ -32,12 +32,26 @@ namespace Illuminate\Database\Schema {
      */
     class Blueprint
     {
+        protected function addCommand($name, array $parameters = []): Fluent
+        {
+            return new Fluent();
+        }
+
+        protected function createIndexName($type, array $columns): string
+        {
+            return '';
+        }
+
+        protected function dropIndexCommand($command, $type, $index): Fluent
+        {
+            return new Fluent();
+        }
     }
 
     /**
      * @method ColumnDefinition using($expression)
      */
-    class ColumnDefinition
+    class ColumnDefinition extends Fluent
     {
     }
 }

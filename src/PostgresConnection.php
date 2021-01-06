@@ -18,12 +18,11 @@ use Umbrellio\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber
 use Umbrellio\Postgres\Schema\Types\NumericType;
 use Umbrellio\Postgres\Schema\Types\TsRangeType;
 
-/**
- * @property $name
- */
 class PostgresConnection extends BasePostgresConnection
 {
     use Macroable;
+
+    public $name;
 
     private static $extensions = [];
 

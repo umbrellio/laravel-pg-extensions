@@ -6,15 +6,12 @@ namespace Umbrellio\Postgres\Helpers;
 
 use Illuminate\Support\Facades\Schema;
 
-/**
- * @static void assertSame($expected, $actual, string $message = '')
- * @static void assertTrue($condition, string $message = '')
- * @static void assertFalse($condition, string $message = '')
- *
- * @see Assert
- */
 trait ViewAssertions
 {
+    abstract public static function assertSame($expected, $actual, string $message = ''): void;
+    abstract public static function assertTrue($condition, string $message = ''): void;
+    abstract public static function assertFalse($condition, string $message = ''): void;
+
     protected function assertSameView(string $expectedDef, string $view): void
     {
         $definition = $this->getViewDefinition($view);

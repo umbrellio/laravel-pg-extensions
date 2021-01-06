@@ -25,7 +25,7 @@ class Blueprint extends BaseBlueprint
     /**
      * @return AttachPartitionDefinition|Fluent
      */
-    public function attachPartition(string $partition)
+    public function attachPartition(string $partition): Fluent
     {
         return $this->addCommand('attachPartition', compact('partition'));
     }
@@ -38,7 +38,7 @@ class Blueprint extends BaseBlueprint
     /**
      * @return LikeDefinition|Fluent
      */
-    public function like(string $table)
+    public function like(string $table): Fluent
     {
         return $this->addCommand('like', compact('table'));
     }
@@ -52,7 +52,7 @@ class Blueprint extends BaseBlueprint
      * @param array|string $columns
      * @return UniqueDefinition|UniqueBuilder
      */
-    public function uniquePartial($columns, ?string $index = null, ?string $algorithm = null)
+    public function uniquePartial($columns, ?string $index = null, ?string $algorithm = null): Fluent
     {
         $columns = (array) $columns;
 
@@ -74,7 +74,7 @@ class Blueprint extends BaseBlueprint
      * @param array|string $columns
      * @return ExcludeDefinition|ExcludeBuilder
      */
-    public function exclude($columns, ?string $index = null)
+    public function exclude($columns, ?string $index = null): Fluent
     {
         $columns = (array) $columns;
 
@@ -87,7 +87,7 @@ class Blueprint extends BaseBlueprint
      * @param array|string $columns
      * @return CheckDefinition|CheckBuilder
      */
-    public function check($columns, ?string $index = null)
+    public function check($columns, ?string $index = null): Fluent
     {
         $columns = (array) $columns;
 
@@ -130,13 +130,17 @@ class Blueprint extends BaseBlueprint
 
     /**
      * Almost like 'decimal' type, but can be with variable precision (by default)
+     * @return Fluent|ColumnDefinition
      */
-    public function numeric(string $column, ?int $precision = null, ?int $scale = null): ColumnDefinition
+    public function numeric(string $column, ?int $precision = null, ?int $scale = null): Fluent
     {
         return $this->addColumn('numeric', $column, compact('precision', 'scale'));
     }
 
-    public function tsrange(string $column): ColumnDefinition
+    /**
+     * @return Fluent|ColumnDefinition
+     */
+    public function tsrange(string $column): Fluent
     {
         return $this->addColumn('tsrange', $column);
     }
@@ -146,7 +150,7 @@ class Blueprint extends BaseBlueprint
         return Schema::getConnection()->getDoctrineSchemaManager();
     }
 
-    private function addExtendedCommand(string $fluent, string $name, array $parameters = [])
+    private function addExtendedCommand(string $fluent, string $name, array $parameters = []): Fluent
     {
         $command = new $fluent(array_merge(compact('name'), $parameters));
         $this->commands[] = $command;

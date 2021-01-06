@@ -6,18 +6,19 @@ namespace Umbrellio\Postgres\Helpers;
 
 use Illuminate\Support\Facades\DB;
 
-/**
- * @static void assertNotNull($actual, string $message = '')
- * @static void assertSame($expected, $actual, string $message = '')
- * @static void assertNull($actual, string $message = '')
- * @static void assertMatchesRegularExpression(string $pattern, string $string, string $message = '')
- * @static void assertTrue($condition, string $message = '')
- * @static void assertFalse($condition, string $message = '')
- *
- * @see Assert
- */
 trait IndexAssertions
 {
+    abstract public static function assertNotNull($actual, string $message = ''): void;
+    abstract public static function assertSame($expected, $actual, string $message = ''): void;
+    abstract public static function assertNull($actual, string $message = ''): void;
+    abstract public static function assertMatchesRegularExpression(
+        string $pattern,
+        string $string,
+        string $message = ''
+    ): void;
+    abstract public static function assertTrue($condition, string $message = ''): void;
+    abstract public static function assertFalse($condition, string $message = ''): void;
+
     protected function seeIndex(string $index): void
     {
         $this->assertNotNull($this->getIndexListing($index));

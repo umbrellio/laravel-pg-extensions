@@ -6,14 +6,11 @@ namespace Umbrellio\Postgres\Helpers;
 
 use Illuminate\Support\Facades\Schema;
 
-/**
- * @static void assertTrue($condition, string $message = '')
- * @static void assertSame($expected, $actual, string $message = '')
- *
- * @see Assert
- */
 trait TableAssertions
 {
+    abstract public static function assertSame($expected, $actual, string $message = ''): void;
+    abstract public static function assertTrue($condition, string $message = ''): void;
+
     protected function assertCompareTables(string $sourceTable, string $destinationTable): void
     {
         $this->assertSame($this->getTableDefinition($sourceTable), $this->getTableDefinition($destinationTable));

@@ -12,6 +12,8 @@ class Builder extends BasePostgresBuilder
 {
     use Macroable;
 
+    public $name;
+
     public function createView(string $view, string $select, $materialize = false): void
     {
         $blueprint = $this->createBlueprint($view);

@@ -13,7 +13,6 @@ use Doctrine\DBAL\Schema\ColumnDiff;
 use Doctrine\DBAL\Schema\TableDiff;
 use Doctrine\DBAL\Types\BigIntType;
 use Doctrine\DBAL\Types\IntegerType;
-use Doctrine\DBAL\Types\Type;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Collection;
 
@@ -46,7 +45,8 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
 
         $quoteName = $this->quoteName($platform, $diff);
 
-        $oldColumnName = $columnDiff->getOldColumnName()
+        $oldColumnName = $columnDiff
+            ->getOldColumnName()
             ->getQuotedName($platform);
         $column = $columnDiff->column;
 
@@ -68,7 +68,8 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
             'ALTER TABLE %s ALTER %s TYPE %s',
             $quoteName,
             $oldColumnName,
-            $column->getType()
+            $column
+                ->getType()
                 ->getSQLDeclaration($column->toArray(), $platform)
         ));
 
@@ -205,22 +206,25 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
 
     public function typeChangeBreaksDefaultValue(ColumnDiff $columnDiff): bool
     {
-        $oldTypeIsNumeric = $this->isNumericType($columnDiff->fromColumn->getType());
-        $newTypeIsNumeric = $this->isNumericType($columnDiff->column->getType());
+        $oldTypeIsNumeric = $this->isNumericType($columnDiff->fromColumn);
+        $newTypeIsNumeric = $this->isNumericType($columnDiff->column);
 
         $isNumeric = !($oldTypeIsNumeric && $newTypeIsNumeric && $columnDiff->column->getAutoincrement());
 
         return $columnDiff->hasChanged('type') && $isNumeric;
     }
 
-    public function isNumericType(Type $type): bool
+    public function isNumericType(?Column $column): bool
     {
+        $type = $column ? $column->getType() : null;
+
         return $type instanceof IntegerType || $type instanceof BigIntType;
     }
 
     public function quoteName(AbstractPlatform $platform, TableDiff $diff): string
     {
-        return $diff->getName($platform)
+        return $diff
+            ->getName($platform)
             ->getQuotedName($platform);
     }
 

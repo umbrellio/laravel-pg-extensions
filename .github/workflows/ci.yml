@@ -10,6 +10,13 @@ on:
       - reopened
       - edited
       - synchronize
+      - labeled
+      - assigned
+      - unlabeled
+      - unlocked
+      - review_requested
+      - review_request_removed
+      - unassigned
 
 env:
   COVERAGE: '1'
@@ -71,53 +78,53 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        exclude_group:
-          - WithoutSchema,forPHP8
-        experimental:
-          - false
-        operating_system:
-          - ubuntu-latest
-        postgres:
-          - '10'
-          - '11'
-          - '12'
-        php_versions:
-          - '7.3'
-          - '7.4'
+        coverage: [false]
+        exclude_group: ['WithoutSchema,forPHP8']
+        experimental: [false]
+        operating_system: [ubuntu-latest]
+        postgres: ['10', '11', '12']
+        php_versions: ['7.3', '7.4']
         include:
           - operating_system: 'ubuntu-latest'
             php_versions: '7.3'
             postgres: '9.6'
             experimental: false
+            coverage: true
             exclude_group: WithoutSchema,forPHP8
           - operating_system: 'ubuntu-latest'
             php_versions: '7.3'
             postgres: '13'
             experimental: false
+            coverage: false
             exclude_group: WithoutSchema,forPHP8
           - operating_system: 'ubuntu-latest'
             php_versions: '7.4'
             postgres: '13'
             experimental: false
+            coverage: false
             exclude_group: WithoutSchema,forPHP8
           - operating_system: 'ubuntu-latest'
             php_versions: '8.0'
             postgres: '10'
             experimental: false
+            coverage: false
             exclude_group: WithoutSchema,forPHP7
           - operating_system: 'ubuntu-latest'
             php_versions: '8.0'
             postgres: '11'
             experimental: false
+            coverage: false
             exclude_group: WithoutSchema,forPHP7
           - operating_system: 'ubuntu-latest'
             php_versions: '8.0'
             postgres: '12'
             experimental: false
+            coverage: true
             exclude_group: WithoutSchema,forPHP7
           - operating_system: 'ubuntu-latest'
             php_versions: '8.0'
             postgres: '13'
+            coverage: false
             experimental: false
             exclude_group: WithoutSchema,forPHP7
     runs-on: '${{ matrix.operating_system }}'
@@ -185,7 +192,7 @@ jobs:
               --coverage-text
         working-directory: './'
       - name: Upload coverage results to Coveralls
-        if: ${{ !matrix.experimental }}
+        if: ${{ !matrix.experimental && matrix.coverage }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_PARALLEL: true

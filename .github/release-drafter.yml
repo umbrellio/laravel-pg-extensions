@@ -39,24 +39,10 @@ version-resolver:
   major:
     labels:
       - major
-      - refactoring
   minor:
     labels:
-      - feature
       - minor
-      - type:helpers
-      - type:indexes
-      - type:routines
-      - type:schema
-      - type:compilers
   patch:
     labels:
       - patch
-      - type:build
-      - bug
-      - bugfix
-      - hotfix
-      - fix
-      - theme:docs
-      - analysis
   default: patch

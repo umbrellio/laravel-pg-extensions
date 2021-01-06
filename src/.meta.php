@@ -2,6 +2,7 @@
 
 namespace Illuminate\Database\Schema {
 
+    use Closure;
     use Illuminate\Support\Fluent;
     use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
     use Umbrellio\Postgres\Schema\Definitions\CheckDefinition;
@@ -11,6 +12,8 @@ namespace Illuminate\Database\Schema {
     use Umbrellio\Postgres\Schema\Definitions\UniqueDefinition;
 
     /**
+     * @method __construct($table, Closure $callback = null, $prefix = '')
+     *
      * @method AttachPartitionDefinition attachPartition(string $partition)
      * @method void detachPartition(string $partition)
      * @method LikeDefinition like(string $table)
@@ -22,15 +25,33 @@ namespace Illuminate\Database\Schema {
      * @method ColumnDefinition tsrange(string $column)
      * @method ExcludeDefinition exclude($columns, ?string $index = null)
      * @method CheckDefinition check($columns, ?string $index = null)
+     * @method string getTable()
+     * @method ColumnDefinition|Fluent addColumn($type, $name, array $parameters = [])
+     *
+     * @property bool $temporary
      */
     class Blueprint
     {
+        protected function addCommand($name, array $parameters = []): Fluent
+        {
+            return new Fluent();
+        }
+
+        protected function createIndexName($type, array $columns): string
+        {
+            return '';
+        }
+
+        protected function dropIndexCommand($command, $type, $index): Fluent
+        {
+            return new Fluent();
+        }
     }
 
     /**
      * @method ColumnDefinition using($expression)
      */
-    class ColumnDefinition
+    class ColumnDefinition extends Fluent
     {
     }
 }

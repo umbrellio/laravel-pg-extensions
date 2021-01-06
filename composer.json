@@ -28,6 +28,10 @@
     "umbrellio/laravel-ltree": "Package for working with Postgres LTree extension",
     "umbrellio/laravel-common-objects": "Package with helpers for common Laravel components"
   },
+  "support": {
+    "issues": "https://github.com/umbrellio/laravel-pg-extensions/issues",
+    "source": "https://github.com/umbrellio/laravel-pg-extensions"
+  },
   "require": {
     "php": "^7.2|^7.3|^7.4|^8.0",
     "doctrine/dbal": "2.9.*|^3.0",

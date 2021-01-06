@@ -11,9 +11,11 @@ composer lint
 if [ "x$EXCLUDE_GROUP" != "x" ]; then
     php -d pcov.directory='.' vendor/bin/phpunit \
       --exclude-group $EXCLUDE_GROUP \
-      --coverage-html build
+      --coverage-html build \
+      --coverage-text
 else
     php -d pcov.directory='.' vendor/bin/phpunit \
-      --exclude-group WithoutSchema,forPHP7,forPHP8 \
-      --coverage-html build
+      --exclude-group WithoutSchema,forPHP7 \
+      --coverage-html build \
+      --coverage-text
 fi

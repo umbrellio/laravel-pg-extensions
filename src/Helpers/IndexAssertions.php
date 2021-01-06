@@ -55,11 +55,11 @@ trait IndexAssertions
         $this->assertTrue($this->existConstraintOnTable($table, $index));
     }
 
-    private function getIndexListing($index): ?string
+    private function getIndexListing($index): string
     {
         $definition = DB::selectOne('SELECT * FROM pg_indexes WHERE indexname = ?', [$index]);
 
-        return $definition ? $definition->indexdef : null;
+        return $definition ? $definition->indexdef : '';
     }
 
     private function existConstraintOnTable(string $table, string $index): bool

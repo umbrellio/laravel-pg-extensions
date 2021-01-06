@@ -16,6 +16,8 @@ use Umbrellio\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
 use Umbrellio\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
 use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
 use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniquePartialBuilder;
+use Umbrellio\Postgres\Schema\Types\NumericType;
+use Umbrellio\Postgres\Schema\Types\TsRangeType;
 
 class PostgresGrammar extends BasePostgresGrammar
 {
@@ -45,17 +47,20 @@ class PostgresGrammar extends BasePostgresGrammar
         );
     }
 
-    public function compileCreateView(Blueprint $blueprint, Fluent $command): string
+    public function compileCreateView(/** @scrutinizer ignore-unused */ Blueprint $blueprint, Fluent $command): string
     {
         $materialize = $command->get('materialize') ? 'materialized' : '';
         return implode(' ', array_filter([
-            'create', $materialize, 'view',
+            'create',
+            $materialize,
+            'view',
             $this->wrapTable($command->get('view')),
-            'as', $command->get('select'),
+            'as',
+            $command->get('select'),
         ]));
     }
 
-    public function compileDropView(Blueprint $blueprint, Fluent $command): string
+    public function compileDropView(/** @scrutinizer ignore-unused */ Blueprint $blueprint, Fluent $command): string
     {
         return 'drop view ' . $this->wrapTable($command->get('view'));
     }
@@ -91,7 +96,7 @@ class PostgresGrammar extends BasePostgresGrammar
 
     protected function typeNumeric(Fluent $column): string
     {
-        $type = 'numeric';
+        $type = NumericType::TYPE_NAME;
         $precision = $column->get('precision');
         $scale = $column->get('scale');
 
@@ -106,8 +111,8 @@ class PostgresGrammar extends BasePostgresGrammar
         return $type;
     }
 
-    protected function typeTsrange(Fluent $column): string
+    protected function typeTsrange(/** @scrutinizer ignore-unused */ Fluent $column): string
     {
-        return 'tsrange';
+        return TsRangeType::TYPE_NAME;
     }
 }

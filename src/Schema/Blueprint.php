@@ -20,8 +20,10 @@ use Umbrellio\Postgres\Schema\Definitions\ViewDefinition;
 
 class Blueprint extends BaseBlueprint
 {
+    protected $commands = [];
+
     /**
-     * @return AttachPartitionDefinition
+     * @return AttachPartitionDefinition|Fluent
      */
     public function attachPartition(string $partition)
     {
@@ -34,7 +36,7 @@ class Blueprint extends BaseBlueprint
     }
 
     /**
-     * @return LikeDefinition
+     * @return LikeDefinition|Fluent
      */
     public function like(string $table)
     {
@@ -48,7 +50,7 @@ class Blueprint extends BaseBlueprint
 
     /**
      * @param array|string $columns
-     * @return UniqueDefinition
+     * @return UniqueDefinition|UniqueBuilder
      */
     public function uniquePartial($columns, ?string $index = null, ?string $algorithm = null)
     {
@@ -70,7 +72,7 @@ class Blueprint extends BaseBlueprint
 
     /**
      * @param array|string $columns
-     * @return ExcludeDefinition
+     * @return ExcludeDefinition|ExcludeBuilder
      */
     public function exclude($columns, ?string $index = null)
     {
@@ -83,7 +85,7 @@ class Blueprint extends BaseBlueprint
 
     /**
      * @param array|string $columns
-     * @return CheckDefinition
+     * @return CheckDefinition|CheckBuilder
      */
     public function check($columns, ?string $index = null)
     {

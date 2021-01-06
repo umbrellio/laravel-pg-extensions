@@ -7,10 +7,12 @@ namespace Umbrellio\Postgres\Schema\Builders;
 use Illuminate\Support\Fluent;
 
 /**
- * @mixin Fluent
+ * @see Fluent
  */
 trait WhereBuilderTrait
 {
+    protected $attributes = [];
+
     public function whereRaw(string $sql, array $bindings = [], string $boolean = 'and'): self
     {
         return $this->compileWhere('Raw', $boolean, compact('sql', 'bindings'));

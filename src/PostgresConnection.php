@@ -18,6 +18,9 @@ use Umbrellio\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber
 use Umbrellio\Postgres\Schema\Types\NumericType;
 use Umbrellio\Postgres\Schema\Types\TsRangeType;
 
+/**
+ * @property $name
+ */
 class PostgresConnection extends BasePostgresConnection
 {
     use Macroable;
@@ -135,7 +138,8 @@ class PostgresConnection extends BasePostgresConnection
             /** @var AbstractExtension $extension */
             $extension::register();
             foreach ($extension::getTypes() as $type => $typeClass) {
-                $this->getSchemaBuilder()
+                $this
+                    ->getSchemaBuilder()
                     ->registerCustomDoctrineType($typeClass, $type, $type);
             }
         });
@@ -147,7 +151,8 @@ class PostgresConnection extends BasePostgresConnection
         if (!$eventManager->hasListeners(Events::onSchemaAlterTableChangeColumn)) {
             $eventManager->addEventSubscriber(new SchemaAlterTableChangeColumnSubscriber());
         }
-        $connection->getDatabasePlatform()
+        $connection
+            ->getDatabasePlatform()
             ->setEventManager($eventManager);
         return $connection;
     }

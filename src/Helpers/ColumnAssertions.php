@@ -6,10 +6,14 @@ namespace Umbrellio\Postgres\Helpers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @mixin TestCase
+ * @static void assertNull($actual, string $message = '')
+ * @static void assertSame($expected, $actual, string $message = '')
+ *
+ * @see Assert
  */
 trait ColumnAssertions
 {

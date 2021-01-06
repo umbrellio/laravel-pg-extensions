@@ -8,7 +8,14 @@ use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @mixin TestCase
+ * @static void assertNotNull($actual, string $message = '')
+ * @static void assertSame($expected, $actual, string $message = '')
+ * @static void assertNull($actual, string $message = '')
+ * @static void assertMatchesRegularExpression(string $pattern, string $string, string $message = '')
+ * @static void assertTrue($condition, string $message = '')
+ * @static void assertFalse($condition, string $message = '')
+ *
+ * @see Assert
  */
 trait IndexAssertions
 {
@@ -57,15 +64,14 @@ trait IndexAssertions
 
     private function existConstraintOnTable(string $table, string $index): bool
     {
-        $definition = DB::selectOne('
+        $expression = '
             SELECT c.conname
             FROM pg_constraint c
             LEFT JOIN pg_class t ON c.conrelid  = t.oid
             LEFT JOIN pg_class t2 ON c.confrelid = t2.oid
             WHERE t.relname = ? AND c.conname = ?;
-        ',
-            [$table, $index]
-        );
+        ';
+        $definition = DB::selectOne($expression, [$table, $index]);
         return $definition ? true : false;
     }
 }

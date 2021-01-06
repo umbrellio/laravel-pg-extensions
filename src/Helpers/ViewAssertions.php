@@ -8,7 +8,11 @@ use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @mixin TestCase
+ * @static void assertSame($expected, $actual, string $message = '')
+ * @static void assertTrue($condition, string $message = '')
+ * @static void assertFalse($condition, string $message = '')
+ *
+ * @see Assert
  */
 trait ViewAssertions
 {

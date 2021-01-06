@@ -42,7 +42,7 @@ trait IndexAssertions
         $definition = $this->getIndexListing($index);
 
         $this->seeIndex($index);
-        $this->assertMatchesRegularExpression($expectedDef, $definition);
+        $this->assertMatchesRegularExpression($expectedDef, $definition ?: '');
     }
 
     protected function dontSeeConstraint(string $table, string $index): void
@@ -55,11 +55,11 @@ trait IndexAssertions
         $this->assertTrue($this->existConstraintOnTable($table, $index));
     }
 
-    private function getIndexListing($index): string
+    private function getIndexListing($index): ?string
     {
         $definition = DB::selectOne('SELECT * FROM pg_indexes WHERE indexname = ?', [$index]);
 
-        return $definition ? $definition->indexdef : '';
+        return $definition ? $definition->indexdef : null;
     }
 
     private function existConstraintOnTable(string $table, string $index): bool

@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         bootstrap="vendor/autoload.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
-         stopOnFailure="true">
+         stopOnFailure="false"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+>
     <php>
+        <env name="APP_ENV" value="testing"/>
+        <ini name="error_reporting" value="-1" />
         <var name="db_type" value="pdo_pgsql"/>
         <var name="db_host" value="${HOST}" />
         <var name="db_username" value="${USERNAME}" />
@@ -14,14 +19,12 @@
         <var name="db_database" value="${DATABASE}" />
         <var name="db_port" value="5432"/>
     </php>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-            <exclude>
-                <file>./src/.meta.php</file>
-            </exclude>
-        </whitelist>
-    </filter>
+    <coverage processUncoveredFiles="true">
+        <directory suffix=".php">./src</directory>
+        <exclude>
+            <file>./src/.meta.php</file>
+        </exclude>
+    </coverage>
     <testsuites>
         <testsuite name="Test suite">
             <directory suffix="Test.php">./tests</directory>

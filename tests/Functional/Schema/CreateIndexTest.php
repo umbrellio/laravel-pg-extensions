@@ -18,7 +18,10 @@ use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class CreateIndexTest extends FunctionalTestCase
 {
-    use DatabaseTransactions, IndexAssertions, TableAssertions, InteractsWithDatabase;
+    use DatabaseTransactions;
+    use IndexAssertions;
+    use TableAssertions;
+    use InteractsWithDatabase;
 
     /**
      * @test

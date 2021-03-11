@@ -130,6 +130,7 @@ class Blueprint extends BaseBlueprint
 
     /**
      * Almost like 'decimal' type, but can be with variable precision (by default)
+     *
      * @return Fluent|ColumnDefinition
      */
     public function numeric(string $column, ?int $precision = null, ?int $scale = null): Fluent

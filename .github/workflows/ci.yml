@@ -73,7 +73,7 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
         working-directory: './'
       - name: 'Linting PHP source files'
-        run: 'vendor/bin/ecs check --config=ecs.yml .'
+        run: 'vendor/bin/ecs check --config=ecs.php .'
   test:
     strategy:
       fail-fast: false

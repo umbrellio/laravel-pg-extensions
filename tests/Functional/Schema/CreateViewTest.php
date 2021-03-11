@@ -12,7 +12,8 @@ use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class CreateViewTest extends FunctionalTestCase
 {
-    use DatabaseTransactions, ViewAssertions;
+    use DatabaseTransactions;
+    use ViewAssertions;
 
     protected function setUp(): void
     {

@@ -45,7 +45,7 @@
   },
   "scripts": {
     "lint": [
-      "ecs check --config=ecs.yml . --fix"
+      "ecs check --config=ecs.php . --fix"
     ]
   },
   "autoload": {

@@ -1,5 +1,16 @@
 <?php
 
+namespace Illuminate\Support\Facades {
+    use Umbrellio\Postgres\Schema\Definitions\ForeignKeyDefinition;
+
+    /**
+     * @method ForeignKeyDefinition[] getForeignKeys(string $tableName)
+     */
+    class Schema {
+
+    }
+}
+
 namespace Illuminate\Database\Schema {
 
     use Closure;

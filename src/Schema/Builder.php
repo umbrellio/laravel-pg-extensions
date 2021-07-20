@@ -36,6 +36,13 @@ class Builder extends BasePostgresBuilder
         ])) > 0;
     }
 
+    public function getForeignKeys(string $tableName): array
+    {
+        return $this->connection->selectFromWriteConnection(
+            $this->grammar->compileForeignKeysListing($tableName)
+        );
+    }
+
     public function getViewDefinition($view): string
     {
         $results = $this->connection->selectFromWriteConnection($this->grammar->compileViewDefinition(), [

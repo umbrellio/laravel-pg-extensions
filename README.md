@@ -29,6 +29,7 @@ composer require umbrellio/laravel-pg-extensions
  - [Working with CHECK constraints](#check-constraints-creation)
  - [Working with partitions](#partitions)
  - [Check existing index before manipulation](#check-existing-index)
+ - [Getting foreign keys for table](#get-foreign-keys)
 
 ### Extended table creation
 
@@ -72,6 +73,21 @@ Schema::create('users', function (Blueprint $table) {
         ->createView('active_users', "SELECT * FROM users WHERE active = 1")
         ->materialize();
 });
+```
+
+### Get foreign keys
+
+Example:
+```php
+// Facade methods:
+/** @var ForeignKeyDefinition[] $fks */
+$fks = Schema::getForeignKeys('some_table');
+
+foreach ($fks as $fk) {
+    // $fk->source_column_name
+    // $fk->target_table_name
+    // $fk->target_column_name
+}
 ```
 
 ### Extended unique indexes creation

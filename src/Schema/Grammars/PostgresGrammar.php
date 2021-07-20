@@ -70,6 +70,25 @@ class PostgresGrammar extends BasePostgresGrammar
         return 'select * from information_schema.views where table_schema = ? and table_name = ?';
     }
 
+    public function compileForeignKeysListing(string $tableName): string
+    {
+        return sprintf("
+            SELECT
+                kcu.column_name as source_column_name,
+                ccu.table_name AS target_table_name,
+                ccu.column_name AS target_column_name
+            FROM
+                information_schema.table_constraints AS tc
+                    JOIN information_schema.key_column_usage AS kcu
+                         ON tc.constraint_name = kcu.constraint_name
+                             AND tc.table_schema = kcu.table_schema
+                    JOIN information_schema.constraint_column_usage AS ccu
+                         ON ccu.constraint_name = tc.constraint_name
+                             AND ccu.table_schema = tc.table_schema
+            WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_name='%s';
+        ", $tableName);
+    }
+
     public function compileViewDefinition(): string
     {
         return 'select view_definition from information_schema.views where table_schema = ? and table_name = ?';

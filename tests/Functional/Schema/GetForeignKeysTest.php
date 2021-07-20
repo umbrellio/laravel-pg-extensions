@@ -64,7 +64,7 @@ class GetForeignKeysTest extends FunctionalTestCase
         );
 
         $this->assertSame(
-            (array) $foreignKeys[0],
+            (array) $foreignKeys[1],
             [
                 'source_column_name' => 'test2_id',
                 'target_table_name' => 'test_foreign_table2',

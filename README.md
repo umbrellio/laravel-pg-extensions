@@ -161,7 +161,7 @@ Schema::create('table', function (Blueprint $table) {
     $table->date('date_end'); 
     $table
         ->check(['date_start', 'date_end'])
-        ->whereColumn('date_end', '>', 'date_end')
+        ->whereColumn('date_end', '>', 'date_start')
         ->whereIn('type_id', [1, 2, 3]);
 });
 ```

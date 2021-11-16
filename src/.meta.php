@@ -34,6 +34,7 @@ namespace Illuminate\Database\Schema {
      * @method Fluent dropView(string $view)
      * @method ColumnDefinition numeric(string $column, ?int $precision = null, ?int $scale = null)
      * @method ColumnDefinition tsrange(string $column)
+     * @method ColumnDefinition daterange(string $column)
      * @method ExcludeDefinition exclude($columns, ?string $index = null)
      * @method CheckDefinition check($columns, ?string $index = null)
      * @method string getTable()

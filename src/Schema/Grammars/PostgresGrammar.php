@@ -16,6 +16,7 @@ use Umbrellio\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
 use Umbrellio\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
 use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
 use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniquePartialBuilder;
+use Umbrellio\Postgres\Schema\Types\DateRangeType;
 use Umbrellio\Postgres\Schema\Types\NumericType;
 use Umbrellio\Postgres\Schema\Types\TsRangeType;
 
@@ -133,5 +134,10 @@ class PostgresGrammar extends BasePostgresGrammar
     protected function typeTsrange(/** @scrutinizer ignore-unused */ Fluent $column): string
     {
         return TsRangeType::TYPE_NAME;
+    }
+
+    protected function typeDaterange(/** @scrutinizer ignore-unused */ Fluent $column): string
+    {
+        return DateRangeType::TYPE_NAME;
     }
 }

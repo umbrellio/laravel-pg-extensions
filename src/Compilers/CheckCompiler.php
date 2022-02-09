@@ -19,7 +19,7 @@ class CheckCompiler
 
         return sprintf(
             'ALTER TABLE %s ADD CONSTRAINT %s CHECK (%s)',
-                $blueprint->getTable(),
+            $blueprint->getTable(),
             $command->get('index'),
             static::removeLeadingBoolean(implode(' ', $wheres))
         );

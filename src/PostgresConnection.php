@@ -33,7 +33,6 @@ class PostgresConnection extends BasePostgresConnection
 
     /**
      * @param AbstractExtension|string $extension
-     * @throws ExtensionInvalidException
      * @codeCoverageIgnore
      */
     final public static function registerExtension(string $extension): void

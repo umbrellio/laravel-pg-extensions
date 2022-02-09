@@ -6,7 +6,6 @@ namespace Umbrellio\Postgres\Tests\Functional;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
-use Umbrellio\Postgres\Helpers\ViewAssertions;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 

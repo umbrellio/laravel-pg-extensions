@@ -111,7 +111,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
 
     private function getEventArgsForColumn(
         string $columnName,
-        string $argumentName = 'tableName'
+        string $argumentName = 'tableColumn'
     ): SchemaAlterTableChangeColumnEventArgs {
         /** @var PostgresConnection $connection */
         $connection = DB::connection();

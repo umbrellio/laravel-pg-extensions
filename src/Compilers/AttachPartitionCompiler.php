@@ -14,7 +14,8 @@ class AttachPartitionCompiler
 {
     public static function compile(Grammar $grammar, Blueprint $blueprint, Fluent $command): string
     {
-        return sprintf('alter table %s attach partition %s %s',
+        return sprintf(
+            'alter table %s attach partition %s %s',
             $grammar->wrapTable($blueprint),
             $command->get('partition'),
             self::compileForValues($command)

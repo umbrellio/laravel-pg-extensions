@@ -38,9 +38,7 @@ class Builder extends BasePostgresBuilder
 
     public function getForeignKeys(string $tableName): array
     {
-        return $this->connection->selectFromWriteConnection(
-            $this->grammar->compileForeignKeysListing($tableName)
-        );
+        return $this->connection->selectFromWriteConnection($this->grammar->compileForeignKeysListing($tableName));
     }
 
     public function getViewDefinition($view): string

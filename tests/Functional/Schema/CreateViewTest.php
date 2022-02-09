@@ -60,8 +60,8 @@ class CreateViewTest extends FunctionalTestCase
 
         $this->seeView('test_view');
         $this->assertSameView(
-           'select test_table.id, test_table.name from test_table where (test_table.name is not null);',
-           'test_view'
+            'select test_table.id, test_table.name from test_table where (test_table.name is not null);',
+            'test_view'
         );
 
         Schema::table('users', function (Blueprint $table) {

@@ -19,7 +19,9 @@ use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 trait BlueprintAssertions
 {
     protected $blueprint;
+
     protected $postgresConnection;
+
     protected $postgresGrammar;
 
     public function initializeMock(string $table)

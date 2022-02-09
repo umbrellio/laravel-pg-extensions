@@ -19,6 +19,7 @@ use Umbrellio\Postgres\Tests\FunctionalTestCase;
 class ConnectionTest extends FunctionalTestCase
 {
     use DatabaseTransactions;
+
     use InteractsWithDatabase;
 
     protected $emulatePrepares = true;

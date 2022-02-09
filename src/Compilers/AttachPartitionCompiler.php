@@ -24,7 +24,8 @@ class AttachPartitionCompiler
 
     private static function compileForValues(Fluent $command): string
     {
-        if ($range = $command->get('range')) {
+        $range = $command->get('range');
+        if ($range) {
             $from = self::formatValue($range['from']);
             $to = self::formatValue($range['to']);
             return "for values from ({$from}) to ({$to})";

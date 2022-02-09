@@ -31,7 +31,6 @@ class DateRangeTypeTest extends TestCase
         $this->abstractPlatform = $this->getMockForAbstractClass(AbstractPlatform::class);
     }
 
-
     /**
      * @test
      */
@@ -39,7 +38,6 @@ class DateRangeTypeTest extends TestCase
     {
         $this->assertSame(DateRangeType::TYPE_NAME, $this->type->getSQLDeclaration([], $this->abstractPlatform));
     }
-
 
     /**
      * @test

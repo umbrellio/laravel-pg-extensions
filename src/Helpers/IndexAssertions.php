@@ -9,14 +9,19 @@ use Illuminate\Support\Facades\DB;
 trait IndexAssertions
 {
     abstract public static function assertNotNull($actual, string $message = ''): void;
+
     abstract public static function assertSame($expected, $actual, string $message = ''): void;
+
     abstract public static function assertNull($actual, string $message = ''): void;
+
     abstract public static function assertMatchesRegularExpression(
         string $pattern,
         string $string,
         string $message = ''
     ): void;
+
     abstract public static function assertTrue($condition, string $message = ''): void;
+
     abstract public static function assertFalse($condition, string $message = ''): void;
 
     protected function seeIndex(string $index): void

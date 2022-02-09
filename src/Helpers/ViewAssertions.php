@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Schema;
 trait ViewAssertions
 {
     abstract public static function assertSame($expected, $actual, string $message = ''): void;
+
     abstract public static function assertTrue($condition, string $message = ''): void;
+
     abstract public static function assertFalse($condition, string $message = ''): void;
 
     protected function assertSameView(string $expectedDef, string $view): void

@@ -12,7 +12,8 @@ class ConnectionFactory extends ConnectionFactoryBase
 {
     protected function createConnection($driver, $connection, $database, $prefix = '', array $config = [])
     {
-        if ($resolver = Connection::getResolver($driver)) {
+        $resolver = Connection::getResolver($driver);
+        if ($resolver) {
             return $resolver($connection, $database, $prefix, $config);
         }
 

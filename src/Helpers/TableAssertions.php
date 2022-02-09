@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Schema;
 trait TableAssertions
 {
     abstract public static function assertSame($expected, $actual, string $message = ''): void;
+
     abstract public static function assertTrue($condition, string $message = ''): void;
 
     protected function assertCompareTables(string $sourceTable, string $destinationTable): void

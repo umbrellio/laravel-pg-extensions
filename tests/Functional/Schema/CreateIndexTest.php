@@ -19,8 +19,11 @@ use Umbrellio\Postgres\Tests\FunctionalTestCase;
 class CreateIndexTest extends FunctionalTestCase
 {
     use DatabaseTransactions;
+
     use IndexAssertions;
+
     use TableAssertions;
+
     use InteractsWithDatabase;
 
     /**
@@ -32,7 +35,7 @@ class CreateIndexTest extends FunctionalTestCase
             $table->increments('id');
             $table->string('name');
 
-            if (!$table->hasIndex(['name'], true)) {
+            if (! $table->hasIndex(['name'], true)) {
                 $table->unique(['name']);
             }
         });
@@ -40,7 +43,7 @@ class CreateIndexTest extends FunctionalTestCase
         $this->seeTable('test_table');
 
         Schema::table('test_table', function (Blueprint $table) {
-            if (!$table->hasIndex(['name'], true)) {
+            if (! $table->hasIndex(['name'], true)) {
                 $table->unique(['name']);
             }
         });
@@ -96,7 +99,7 @@ class CreateIndexTest extends FunctionalTestCase
         $this->assertRegExpIndex('test_table_name_unique', '/' . $this->getDummyIndex() . $expected . '/');
 
         Schema::table('test_table', function (Blueprint $table) {
-            if (!$this->existConstraintOnTable($table->getTable(), 'test_table_name_unique')) {
+            if (! $this->existConstraintOnTable($table->getTable(), 'test_table_name_unique')) {
                 $table->dropUniquePartial(['name']);
             } else {
                 $table->dropUnique(['name']);
@@ -312,7 +315,7 @@ class CreateIndexTest extends FunctionalTestCase
             $table->increments('id');
             $table->string('name');
 
-            if (!$table->hasIndex(['name'], true)) {
+            if (! $table->hasIndex(['name'], true)) {
                 $table->unique(['name']);
             }
         });
@@ -320,7 +323,7 @@ class CreateIndexTest extends FunctionalTestCase
         $this->seeTable('test_table');
 
         Schema::table('test_table', function (Blueprint $table) {
-            if (!$table->hasIndex(['name'], true)) {
+            if (! $table->hasIndex(['name'], true)) {
                 $table->unique(['name']);
             }
         });

@@ -14,7 +14,9 @@ use Umbrellio\Postgres\Tests\FunctionalTestCase;
 class CreateTableTest extends FunctionalTestCase
 {
     use DatabaseTransactions;
+
     use TableAssertions;
+
     use ColumnAssertions;
 
     /**

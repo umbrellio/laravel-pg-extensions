@@ -13,6 +13,7 @@ use Umbrellio\Postgres\Tests\FunctionalTestCase;
 class CreateViewTest extends FunctionalTestCase
 {
     use DatabaseTransactions;
+
     use ViewAssertions;
 
     protected function setUp(): void
@@ -60,8 +61,8 @@ class CreateViewTest extends FunctionalTestCase
 
         $this->seeView('test_view');
         $this->assertSameView(
-           'select test_table.id, test_table.name from test_table where (test_table.name is not null);',
-           'test_view'
+            'select test_table.id, test_table.name from test_table where (test_table.name is not null);',
+            'test_view'
         );
 
         Schema::table('users', function (Blueprint $table) {

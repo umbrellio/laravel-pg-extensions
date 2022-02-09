@@ -31,7 +31,6 @@ class NumericTypeTest extends TestCase
         $this->abstractPlatform = $this->getMockForAbstractClass(AbstractPlatform::class);
     }
 
-
     /**
      * @test
      */
@@ -39,7 +38,6 @@ class NumericTypeTest extends TestCase
     {
         $this->assertSame(NumericType::TYPE_NAME, $this->type->getSQLDeclaration([], $this->abstractPlatform));
     }
-
 
     /**
      * @test

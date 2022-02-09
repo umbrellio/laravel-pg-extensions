@@ -25,14 +25,14 @@ abstract class AbstractExtension extends AbstractComponent
     final public static function register(): void
     {
         collect(static::getMixins())->each(static function ($extension, $mixin) {
-            if (!is_subclass_of($mixin, AbstractComponent::class)) {
+            if (! is_subclass_of($mixin, AbstractComponent::class)) {
                 throw new MixinInvalidException(sprintf(
                     'Mixed class %s is not descendant of %s.',
                     $mixin,
                     AbstractComponent::class
                 ));
             }
-            if (!method_exists($extension, 'mixin')) {
+            if (! method_exists($extension, 'mixin')) {
                 throw new MacroableMissedException(sprintf('Class %s doesn’t use Macroable Trait.', $extension));
             }
             /** @var Macroable $extension */

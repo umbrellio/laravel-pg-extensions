@@ -12,7 +12,8 @@ class CreateCompiler
 {
     public static function compile(Grammar $grammar, Blueprint $blueprint, array $columns, array $commands = []): string
     {
-        $compiledCommand = sprintf('%s table %s %s (%s)',
+        $compiledCommand = sprintf(
+            '%s table %s %s (%s)',
             $blueprint->temporary ? 'create temporary' : 'create',
             self::beforeTable($commands['ifNotExists']),
             $grammar->wrapTable($blueprint),

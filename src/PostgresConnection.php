@@ -33,12 +33,11 @@ class PostgresConnection extends BasePostgresConnection
 
     /**
      * @param AbstractExtension|string $extension
-     * @throws ExtensionInvalidException
      * @codeCoverageIgnore
      */
     final public static function registerExtension(string $extension): void
     {
-        if (!is_subclass_of($extension, AbstractExtension::class)) {
+        if (! is_subclass_of($extension, AbstractExtension::class)) {
             throw new ExtensionInvalidException(sprintf(
                 'Class %s must be implemented from %s',
                 $extension,
@@ -147,7 +146,7 @@ class PostgresConnection extends BasePostgresConnection
     private function overrideDoctrineBehavior(Connection $connection): Connection
     {
         $eventManager = $connection->getEventManager();
-        if (!$eventManager->hasListeners(Events::onSchemaAlterTableChangeColumn)) {
+        if (! $eventManager->hasListeners(Events::onSchemaAlterTableChangeColumn)) {
             $eventManager->addEventSubscriber(new SchemaAlterTableChangeColumnSubscriber());
         }
         $connection

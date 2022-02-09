@@ -42,7 +42,8 @@ class PostgresGrammar extends BasePostgresGrammar
 
     public function compileDetachPartition(Blueprint $blueprint, Fluent $command): string
     {
-        return sprintf('alter table %s detach partition %s',
+        return sprintf(
+            'alter table %s detach partition %s',
             $this->wrapTable($blueprint),
             $command->get('partition')
         );

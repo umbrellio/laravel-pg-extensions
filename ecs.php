@@ -27,6 +27,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set('cache_directory', '.ecs_cache');
+    $parameters->set('skip', [
+        'PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer' => null,
+    ]);
 
     $parameters->set('exclude_files', ['vendor/*', 'database/*']);
 };

@@ -41,13 +41,19 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
     private const TABLE = 'some_table';
 
     private $subscriber;
+
     private $platform;
+
     private $tableDiff;
+
     private $columnDiff;
+
     private $columns;
+
     private $table;
 
     private $blueprint;
+
     private $postgresGrammar;
 
     protected function setUp(): void
@@ -111,7 +117,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
 
     private function getEventArgsForColumn(
         string $columnName,
-        string $argumentName = 'tableName'
+        string $argumentName = 'tableColumn'
     ): SchemaAlterTableChangeColumnEventArgs {
         /** @var PostgresConnection $connection */
         $connection = DB::connection();

@@ -60,7 +60,7 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
 
         $this->compileAlterColumnComment($platform, $columnDiff, $column, $quoteName, $sql);
 
-        if (!$columnDiff->hasChanged('length')) {
+        if (! $columnDiff->hasChanged('length')) {
             return $sql;
         }
 
@@ -135,11 +135,11 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
         string $oldColumnName,
         Collection $sql
     ): void {
-        if (!$columnDiff->hasChanged('autoincrement')) {
+        if (! $columnDiff->hasChanged('autoincrement')) {
             return;
         }
 
-        if (!$column->getAutoincrement()) {
+        if (! $column->getAutoincrement()) {
             $sql->add(sprintf('ALTER TABLE %s ALTER %s DROP DEFAULT', $quoteName, $oldColumnName));
             return;
         }
@@ -159,10 +159,10 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
         string $oldColumnName,
         Collection $sql
     ): void {
-        if (!$columnDiff->hasChanged('type')
-            && !$columnDiff->hasChanged('precision')
-            && !$columnDiff->hasChanged('scale')
-            && !$columnDiff->hasChanged('fixed')
+        if (! $columnDiff->hasChanged('type')
+            && ! $columnDiff->hasChanged('precision')
+            && ! $columnDiff->hasChanged('scale')
+            && ! $columnDiff->hasChanged('fixed')
         ) {
             return;
         }
@@ -209,7 +209,7 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
         $oldTypeIsNumeric = $this->isNumericType($columnDiff->fromColumn);
         $newTypeIsNumeric = $this->isNumericType($columnDiff->column);
 
-        $isNumeric = !($oldTypeIsNumeric && $newTypeIsNumeric && $columnDiff->column->getAutoincrement());
+        $isNumeric = ! ($oldTypeIsNumeric && $newTypeIsNumeric && $columnDiff->column->getAutoincrement());
 
         return $columnDiff->hasChanged('type') && $isNumeric;
     }

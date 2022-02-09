@@ -72,7 +72,7 @@ class ExcludeCompiler
     {
         $wheres = static::build($grammar, $blueprint, $command);
 
-        if (!empty($wheres)) {
+        if (! empty($wheres)) {
             return sprintf('WHERE %s', static::removeLeadingBoolean(implode(' ', $wheres)));
         }
 

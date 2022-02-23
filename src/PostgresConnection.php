@@ -8,6 +8,7 @@ use DateTimeInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Events;
 use Illuminate\Database\PostgresConnection as BasePostgresConnection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Traits\Macroable;
 use PDO;
 use Umbrellio\Postgres\Extensions\AbstractExtension;
@@ -121,9 +122,7 @@ class PostgresConnection extends BasePostgresConnection
     private function registerInitialTypes(): void
     {
         foreach ($this->initialTypes as $type => $typeClass) {
-            $this
-                ->getSchemaBuilder()
-                ->registerCustomDoctrineType($typeClass, $type, $type);
+            DB::registerDoctrineType($typeClass, $type, $type);
         }
     }
 
@@ -136,9 +135,7 @@ class PostgresConnection extends BasePostgresConnection
             /** @var AbstractExtension $extension */
             $extension::register();
             foreach ($extension::getTypes() as $type => $typeClass) {
-                $this
-                    ->getSchemaBuilder()
-                    ->registerCustomDoctrineType($typeClass, $type, $type);
+                DB::registerDoctrineType($typeClass, $type, $type);
             }
         });
     }

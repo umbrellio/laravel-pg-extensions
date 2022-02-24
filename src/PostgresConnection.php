@@ -122,7 +122,13 @@ class PostgresConnection extends BasePostgresConnection
     private function registerInitialTypes(): void
     {
         foreach ($this->initialTypes as $type => $typeClass) {
-            DB::registerDoctrineType($typeClass, $type, $type);
+            if (method_exists(DB::getFacadeRoot(), 'registerDoctrineType')) {
+                DB::registerDoctrineType($typeClass, $type, $type);
+            } else {
+                $this
+                    ->getSchemaBuilder()
+                    ->registerCustomDoctrineType($typeClass, $type, $type);
+            }
         }
     }
 
@@ -135,7 +141,13 @@ class PostgresConnection extends BasePostgresConnection
             /** @var AbstractExtension $extension */
             $extension::register();
             foreach ($extension::getTypes() as $type => $typeClass) {
-                DB::registerDoctrineType($typeClass, $type, $type);
+                if (method_exists(DB::getFacadeRoot(), 'registerDoctrineType')) {
+                    DB::registerDoctrineType($typeClass, $type, $type);
+                } else {
+                    $this
+                        ->getSchemaBuilder()
+                        ->registerCustomDoctrineType($typeClass, $type, $type);
+                }
             }
         });
     }

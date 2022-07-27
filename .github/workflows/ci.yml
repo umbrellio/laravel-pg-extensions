@@ -27,21 +27,21 @@ env:
   DB_PASSWORD: 'postgres'
   DB_HOST: '127.0.0.1'
 
-jobs:	
+jobs:
   lint:
     runs-on: '${{ matrix.operating_system }}'
-    timeout-minutes: 20	
-    strategy:	
+    timeout-minutes: 20
+    strategy:
       matrix:
         operating_system:
           - ubuntu-latest
         php_versions:
-          - '7.4'
+          - '8.0'
       fail-fast: false
-    env:	
+    env:
       PHP_CS_FIXER_FUTURE_MODE: '0'
     name: 'Lint PHP'
-    steps:	
+    steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
       - name: 'Setup cache environment'
@@ -58,11 +58,11 @@ jobs:
           key: '${{ steps.cache-env.outputs.key }}'
           restore-keys: '${{ steps.cache-env.outputs.key }}'
       - name: 'Setup PHP'
-        uses: shivammathur/setup-php@v2	
-        with:	
+        uses: shivammathur/setup-php@v2
+        with:
           php-version: ${{ matrix.php_versions }}
           extensions: '${{ env.php_extensions }}'
-          ini-values: memory_limit=-1	
+          ini-values: memory_limit=-1
           tools: pecl, composer
           coverage: none
       - name: 'Setup problem matchers for PHP (aka PHP error logs)'
@@ -82,27 +82,9 @@ jobs:
         exclude_group: ['WithoutSchema,forPHP8']
         experimental: [false]
         operating_system: [ubuntu-latest]
-        postgres: ['10', '11', '12']
-        php_versions: ['7.3', '7.4']
+        postgres: ['10', '11', '12', '13']
+        php_versions: ['8.0']
         include:
-          - operating_system: 'ubuntu-latest'
-            php_versions: '7.3'
-            postgres: '9.6'
-            experimental: false
-            coverage: true
-            exclude_group: WithoutSchema,forPHP8
-          - operating_system: 'ubuntu-latest'
-            php_versions: '7.3'
-            postgres: '13'
-            experimental: false
-            coverage: false
-            exclude_group: WithoutSchema,forPHP8
-          - operating_system: 'ubuntu-latest'
-            php_versions: '7.4'
-            postgres: '13'
-            experimental: false
-            coverage: false
-            exclude_group: WithoutSchema,forPHP8
           - operating_system: 'ubuntu-latest'
             php_versions: '8.0'
             postgres: '10'

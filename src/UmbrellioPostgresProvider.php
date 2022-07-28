@@ -33,7 +33,7 @@ class UmbrellioPostgresProvider extends DatabaseServiceProvider
         });
 
         $this->app->singleton('db.transactions', function ($app) {
-            return new DatabaseTransactionsManager;
+            return new DatabaseTransactionsManager();
         });
     }
 }

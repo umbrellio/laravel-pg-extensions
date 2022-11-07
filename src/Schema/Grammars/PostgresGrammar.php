@@ -19,6 +19,7 @@ use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniquePartialBuilder;
 use Umbrellio\Postgres\Schema\Types\DateRangeType;
 use Umbrellio\Postgres\Schema\Types\NumericType;
 use Umbrellio\Postgres\Schema\Types\TsRangeType;
+use Umbrellio\Postgres\Schema\Types\TsTzRangeType;
 
 class PostgresGrammar extends BasePostgresGrammar
 {
@@ -139,7 +140,7 @@ class PostgresGrammar extends BasePostgresGrammar
 
     protected function typeTstzrange(/** @scrutinizer ignore-unused */ Fluent $column): string
     {
-        return TsTxRangeType::TYPE_NAME;
+        return TsTzRangeType::TYPE_NAME;
     }
 
     protected function typeDaterange(/** @scrutinizer ignore-unused */ Fluent $column): string

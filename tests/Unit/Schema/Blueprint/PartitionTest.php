@@ -106,6 +106,15 @@ class PartitionTest extends TestCase
     /**
      * @test
      */
+    public function addingTstzrangeColumn()
+    {
+        $this->blueprint->tstzrange('foo');
+        $this->assertSameSql('alter table "test_table" add column "foo" tstzrange not null');
+    }
+
+    /**
+     * @test
+     */
     public function addingDaterangeColumn()
     {
         $this->blueprint->daterange('foo');

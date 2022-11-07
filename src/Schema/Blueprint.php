@@ -19,6 +19,7 @@ use Umbrellio\Postgres\Schema\Definitions\UniqueDefinition;
 use Umbrellio\Postgres\Schema\Definitions\ViewDefinition;
 use Umbrellio\Postgres\Schema\Types\DateRangeType;
 use Umbrellio\Postgres\Schema\Types\TsRangeType;
+use Umbrellio\Postgres\Schema\Types\TsTzRangeType;
 
 class Blueprint extends BaseBlueprint
 {
@@ -146,6 +147,14 @@ class Blueprint extends BaseBlueprint
     public function tsrange(string $column): Fluent
     {
         return $this->addColumn(TsRangeType::TYPE_NAME, $column);
+    }
+
+    /**
+     * @return Fluent|ColumnDefinition
+     */
+    public function tstzrange(string $column): Fluent
+    {
+        return $this->addColumn(TsTzRangeType::TYPE_NAME, $column);
     }
 
     /**

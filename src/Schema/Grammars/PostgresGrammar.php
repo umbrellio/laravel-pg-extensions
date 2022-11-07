@@ -137,6 +137,11 @@ class PostgresGrammar extends BasePostgresGrammar
         return TsRangeType::TYPE_NAME;
     }
 
+    protected function typeTstzrange(/** @scrutinizer ignore-unused */ Fluent $column): string
+    {
+        return TsTxRangeType::TYPE_NAME;
+    }
+
     protected function typeDaterange(/** @scrutinizer ignore-unused */ Fluent $column): string
     {
         return DateRangeType::TYPE_NAME;

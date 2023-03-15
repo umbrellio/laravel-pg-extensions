@@ -127,6 +127,30 @@ jobs:
             coverage: false
             experimental: false
             exclude_group: WithoutSchema,forPHP7
+          - operating_system: 'ubuntu-latest'
+            php_versions: '8.1'
+            postgres: '10'
+            experimental: false
+            coverage: false
+            exclude_group: WithoutSchema,forPHP7
+          - operating_system: 'ubuntu-latest'
+            php_versions: '8.1'
+            postgres: '11'
+            experimental: false
+            coverage: false
+            exclude_group: WithoutSchema,forPHP7
+          - operating_system: 'ubuntu-latest'
+            php_versions: '8.1'
+            postgres: '12'
+            experimental: false
+            coverage: true
+            exclude_group: WithoutSchema,forPHP7
+          - operating_system: 'ubuntu-latest'
+            php_versions: '8.1'
+            postgres: '13'
+            coverage: false
+            experimental: false
+            exclude_group: WithoutSchema,forPHP7
     runs-on: '${{ matrix.operating_system }}'
     services:
       postgres:

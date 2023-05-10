@@ -123,11 +123,11 @@ class PostgresGrammar extends BasePostgresGrammar
         $scale = $column->get('scale');
 
         if ($precision && $scale) {
-            return "${type}({$precision}, {$scale})";
+            return "{$type}({$precision}, {$scale})";
         }
 
         if ($precision) {
-            return "${type}({$precision})";
+            return "{$type}({$precision})";
         }
 
         return $type;

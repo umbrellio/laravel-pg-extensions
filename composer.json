@@ -43,7 +43,7 @@
     "orchestra/testbench": "^3.5|^6.0|^4.0|^7.0|^8.0",
     "php-coveralls/php-coveralls": "^2.1",
     "codeception/codeception": "^3.0|^4.0|^5.0",
-    "phpunit/phpunit": "^9.6"
+    "phpunit/phpunit": "^9.6 || ^10.0"
   },
   "scripts": {
     "lint": [

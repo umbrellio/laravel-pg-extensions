@@ -203,7 +203,6 @@ jobs:
               -e "s/\${HOST}/${{ env.DB_HOST }}/" \
               phpunit.xml.dist > phpunit.xml
           ./vendor/bin/phpunit \
-              --verbose \
               --stderr \
               --exclude-group ${{ matrix.exclude_group }} \
               --coverage-clover build/logs/clover.xml \

@@ -15,6 +15,7 @@ use Doctrine\DBAL\Types\BigIntType;
 use Doctrine\DBAL\Types\IntegerType;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Collection;
+use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 
 final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
 {
@@ -197,8 +198,9 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
 
     public function getDefaultValueDeclarationSQL(AbstractPlatform $platform, Column $column): string
     {
-        if ($column->getDefault() instanceof Expression) {
-            return ' DEFAULT ' . $column->getDefault();
+        $defaultValue = $column->getDefault();
+        if ($defaultValue instanceof Expression) {
+            return ' DEFAULT ' . $defaultValue->getValue(new PostgresGrammar());
         }
 
         return $platform->getDefaultValueDeclarationSQL($column->toArray());

@@ -19,6 +19,7 @@ use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniquePartialBuilder;
 use Umbrellio\Postgres\Schema\Types\DateRangeType;
 use Umbrellio\Postgres\Schema\Types\NumericType;
 use Umbrellio\Postgres\Schema\Types\TsRangeType;
+use Umbrellio\Postgres\Schema\Types\TsTzRangeType;
 
 class PostgresGrammar extends BasePostgresGrammar
 {
@@ -122,11 +123,11 @@ class PostgresGrammar extends BasePostgresGrammar
         $scale = $column->get('scale');
 
         if ($precision && $scale) {
-            return "${type}({$precision}, {$scale})";
+            return "{$type}({$precision}, {$scale})";
         }
 
         if ($precision) {
-            return "${type}({$precision})";
+            return "{$type}({$precision})";
         }
 
         return $type;
@@ -135,6 +136,11 @@ class PostgresGrammar extends BasePostgresGrammar
     protected function typeTsrange(/** @scrutinizer ignore-unused */ Fluent $column): string
     {
         return TsRangeType::TYPE_NAME;
+    }
+
+    protected function typeTstzrange(/** @scrutinizer ignore-unused */ Fluent $column): string
+    {
+        return TsTzRangeType::TYPE_NAME;
     }
 
     protected function typeDaterange(/** @scrutinizer ignore-unused */ Fluent $column): string

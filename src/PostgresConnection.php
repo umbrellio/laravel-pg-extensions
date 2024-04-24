@@ -18,6 +18,7 @@ use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 use Umbrellio\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber;
 use Umbrellio\Postgres\Schema\Types\NumericType;
 use Umbrellio\Postgres\Schema\Types\TsRangeType;
+use Umbrellio\Postgres\Schema\Types\TsTzRangeType;
 
 class PostgresConnection extends BasePostgresConnection
 {
@@ -29,6 +30,7 @@ class PostgresConnection extends BasePostgresConnection
 
     private $initialTypes = [
         TsRangeType::TYPE_NAME => TsRangeType::class,
+        TsTzRangeType::TYPE_NAME => TsTzRangeType::class,
         NumericType::TYPE_NAME => NumericType::class,
     ];
 

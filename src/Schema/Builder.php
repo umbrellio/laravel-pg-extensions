@@ -28,7 +28,7 @@ class Builder extends BasePostgresBuilder
         $this->build($blueprint);
     }
 
-    public function hasView(string $view): bool
+    public function hasView($view): bool
     {
         return count($this->connection->selectFromWriteConnection($this->grammar->compileViewExists(), [
             $this->connection->getConfig()['schema'],
@@ -36,7 +36,7 @@ class Builder extends BasePostgresBuilder
         ])) > 0;
     }
 
-    public function getForeignKeys(string $tableName): array
+    public function getForeignKeys($tableName): array
     {
         return $this->connection->selectFromWriteConnection($this->grammar->compileForeignKeysListing($tableName));
     }

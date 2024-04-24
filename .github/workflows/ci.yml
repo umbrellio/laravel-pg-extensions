@@ -144,7 +144,7 @@ jobs:
             postgres: '16'
             coverage: false
             experimental: false
-            exclude_group: WithoutSchema,forPHP7
+            exclude_group: forPHP7
     runs-on: '${{ matrix.operating_system }}'
     services:
       postgres:

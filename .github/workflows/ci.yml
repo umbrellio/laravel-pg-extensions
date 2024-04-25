@@ -82,7 +82,7 @@ jobs:
       fail-fast: false
       matrix:
         coverage: [true]
-        exclude_group: ['WithoutSchema']
+        exclude_group: ['WithSchema']
         experimental: [false]
         operating_system: [ubuntu-latest]
         postgres: ['10', '11', '12', '13']
@@ -167,9 +167,9 @@ jobs:
           ./vendor/bin/phpunit ${{ matrix.phpunit_command }}
           ./vendor/bin/phpunit \
               --stderr \
-              --configuration phpunit.xml
               --exclude-group ${{ matrix.exclude_group }} \
               --coverage-text
+              --configuration phpunit.xml
         working-directory: './'
       - name: Upload coverage results to Coveralls
         if: ${{ !matrix.experimental && matrix.coverage }}

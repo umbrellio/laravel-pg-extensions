@@ -87,26 +87,26 @@ jobs:
         operating_system: [ubuntu-latest]
         postgres: ['10', '11', '12', '13']
         php_versions: ['8.0']
-        phpunit_command: '--help'
+        phpunit_command: --help
         include:
           - operating_system: 'ubuntu-latest'
             php_versions: '8.1'
             postgres: '14'
             coverage: false
             experimental: false
-            phpunit_command: '-c phpunit.xml --migrate-configuration'
+            phpunit_command: -c phpunit.xml --migrate-configuration
           - operating_system: 'ubuntu-latest'
             php_versions: '8.2'
             postgres: '15'
             coverage: false
             experimental: false
-            phpunit_command: '-c phpunit.xml --migrate-configuration'
+            phpunit_command: -c phpunit.xml --migrate-configuration
           - operating_system: 'ubuntu-latest'
             php_versions: '8.2'
             postgres: '16'
             coverage: false
             experimental: false
-            phpunit_command: '-c phpunit.xml --migrate-configuration'
+            phpunit_command: -c phpunit.xml --migrate-configuration
     runs-on: '${{ matrix.operating_system }}'
     services:
       postgres:

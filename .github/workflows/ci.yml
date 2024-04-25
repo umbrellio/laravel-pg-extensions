@@ -167,6 +167,7 @@ jobs:
           ./vendor/bin/phpunit ${{ matrix.phpunit_command }}
           ./vendor/bin/phpunit \
               --stderr \
+              --configuration phpunit.xml
               --exclude-group ${{ matrix.exclude_group }} \
               --coverage-text
         working-directory: './'

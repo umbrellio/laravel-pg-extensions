@@ -170,6 +170,7 @@ jobs:
               --exclude-group ${{ matrix.exclude_group }} \
               --coverage-text
               --configuration phpunit.xml
+          cat build/logs/clover.xml
         working-directory: './'
       - name: Upload coverage results to Coveralls
         if: ${{ !matrix.experimental && matrix.coverage }}

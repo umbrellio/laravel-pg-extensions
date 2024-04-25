@@ -102,17 +102,17 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         $this->assertSame($expectedSQL, $eventArgs->getSql());
     }
 
-    public function provideSchemas(): Generator
+    public static function provideSchemas(): Generator
     {
-        yield $this->dropCommentCase();
-        yield $this->changeCommentCase();
-        yield $this->dropNotNullCase();
-        yield $this->createSequenceCase();
-        yield $this->dropDefaultCase();
-        yield $this->setSimpleDefaultCase();
-        yield $this->setExpressionDefaultCase();
-        yield $this->changeTypeWithUsingCase();
-        yield $this->changeLengthCase();
+        yield 'drop_comment' => static::dropCommentCase();
+        yield 'change_comment' => static::changeCommentCase();
+        yield 'drop_not_null' => static::dropNotNullCase();
+        yield 'create_sequence' => static::createSequenceCase();
+        yield 'drop_default' => static::dropDefaultCase();
+        yield 'set_simple_default' => static::setSimpleDefaultCase();
+        yield 'set_expression_default' => static::setExpressionDefaultCase();
+        yield 'change_type_with_using' => static::changeTypeWithUsingCase();
+        yield 'change_length' => static::changeLengthCase();
     }
 
     private function getEventArgsForColumn(
@@ -153,7 +153,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         return new SchemaAlterTableChangeColumnEventArgs($this->columnDiff, $this->tableDiff, $this->platform);
     }
 
-    private function dropCommentCase(): array
+    private static function dropCommentCase(): array
     {
         return [
             'some_comment',
@@ -166,7 +166,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         ];
     }
 
-    private function changeCommentCase(): array
+    private static function changeCommentCase(): array
     {
         return [
             'some_comment',
@@ -179,7 +179,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         ];
     }
 
-    private function dropNotNullCase(): array
+    private static function dropNotNullCase(): array
     {
         return [
             'some_integer_default',
@@ -192,7 +192,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         ];
     }
 
-    private function createSequenceCase(): array
+    private static function createSequenceCase(): array
     {
         return [
             'some_integer_default',
@@ -208,7 +208,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         ];
     }
 
-    private function dropDefaultCase(): array
+    private static function dropDefaultCase(): array
     {
         return [
             'some_key',
@@ -223,7 +223,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         ];
     }
 
-    private function setSimpleDefaultCase(): array
+    private static function setSimpleDefaultCase(): array
     {
         return [
             'some_comment',
@@ -236,7 +236,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         ];
     }
 
-    private function setExpressionDefaultCase(): array
+    private static function setExpressionDefaultCase(): array
     {
         return [
             'some_comment',
@@ -251,7 +251,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         ];
     }
 
-    private function changeTypeWithUsingCase(): array
+    private static function changeTypeWithUsingCase(): array
     {
         return [
             'some_integer_default',
@@ -269,7 +269,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         ];
     }
 
-    private function changeLengthCase(): array
+    private static function changeLengthCase(): array
     {
         return [
             'some_comment',

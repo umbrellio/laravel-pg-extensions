@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Tests\Functional\Connection;
 
+use Generator;
 use Illuminate\Database\Connection;
 use Illuminate\Database\SQLiteConnection;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
@@ -145,19 +146,19 @@ class ConnectionTest extends FunctionalTestCase
         $this->assertSame(1, $result->count());
     }
 
-    public function boolDataProvider()
+    public static function boolDataProvider(): Generator
     {
         yield 'true' => [true];
         yield 'false' => [false];
     }
 
-    public function intDataProvider()
+    public static function intDataProvider(): Generator
     {
         yield 'zero' => [0];
         yield 'non-zero' => [10];
     }
 
-    public function dateDataProvider()
+    public static function dateDataProvider(): Generator
     {
         yield 'as string' => ['2019-01-01 13:12:22'];
         yield 'as Carbon object' => [new Carbon('2019-01-01 13:12:22')];

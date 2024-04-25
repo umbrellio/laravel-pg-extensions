@@ -33,7 +33,7 @@ class IndexTest extends TestCase
         $this->assertSameSql($expectedSQL);
     }
 
-    public function provideExcludeConstraints(): Generator
+    public static function provideExcludeConstraints(): Generator
     {
         yield [
             static function (Blueprint $table) {

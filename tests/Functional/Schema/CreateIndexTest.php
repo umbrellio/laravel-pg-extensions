@@ -127,7 +127,7 @@ class CreateIndexTest extends FunctionalTestCase
         );
     }
 
-    public function provideIndexes(): Generator
+    public static function provideIndexes(): Generator
     {
         yield ['', function (Blueprint $table) {
             $table->uniquePartial('name');
@@ -331,14 +331,14 @@ class CreateIndexTest extends FunctionalTestCase
         $this->seeIndex('test_table_name_unique');
     }
 
-    private function provideSuccessData(): Generator
+    private static function provideSuccessData(): Generator
     {
         yield [1, '2019-01-01', '2019-01-31'];
         yield [2, '2019-02-15', '2019-04-20'];
         yield [3, '2019-03-07', '2019-06-24'];
     }
 
-    private function provideWrongData(): Generator
+    private static function provideWrongData(): Generator
     {
         yield [4, '2019-01-01', '2019-01-31'];
         yield [1, '2019-07-15', '2019-04-20'];

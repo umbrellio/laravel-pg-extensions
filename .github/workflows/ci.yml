@@ -168,7 +168,6 @@ jobs:
           ./vendor/bin/phpunit \
               --stderr \
               --exclude-group ${{ matrix.exclude_group }} \
-              --coverage-clover build/logs/clover.xml \
               --coverage-text
         working-directory: './'
       - name: Upload coverage results to Coveralls

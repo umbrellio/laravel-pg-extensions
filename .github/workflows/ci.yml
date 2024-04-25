@@ -150,6 +150,7 @@ jobs:
               -e "s/\${DATABASE}/${{ env.DB_NAME }}/" \
               -e "s/\${HOST}/${{ env.DB_HOST }}/" \
               phpunit.xml.dist > phpunit.xml
+          ./vendor/bin/phpunit -c phpunit.xml --migrate-configuration
           ./vendor/bin/phpunit \
               --stderr \
               --exclude-group ${{ matrix.exclude_group }} \

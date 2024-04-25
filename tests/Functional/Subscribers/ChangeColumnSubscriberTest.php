@@ -76,21 +76,6 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
 
     /**
      * @test
-     * @group forPHP7
-     * @dataProvider provideSchemas
-     */
-    public function changeSchema7(string $column, Closure $callback, array $expectedSQL): void
-    {
-        $callback($this->blueprint, $column);
-        $eventArgs = $this->getEventArgsForColumn($column);
-        $this->subscriber->onSchemaAlterTableChangeColumn($eventArgs);
-
-        $this->assertSame($expectedSQL, $eventArgs->getSql());
-    }
-
-    /**
-     * @test
-     * @group forPHP8
      * @dataProvider provideSchemas
      */
     public function changeSchema8(string $column, Closure $callback, array $expectedSQL): void

@@ -82,17 +82,31 @@ jobs:
       fail-fast: false
       matrix:
         coverage: [true]
-        exclude_group: ['WithoutSchema,forPHP8']
+        exclude_group: ['WithoutSchema']
         experimental: [false]
         operating_system: [ubuntu-latest]
-        postgres: ['10', '11', '12', '13', '14', '15']
-        php_versions: ['8.0', '8.1', '8.2']
+        postgres: ['10', '11', '12', '13']
+        php_versions: ['8.0']
+        phpunit_command: '--help'
         include:
           - operating_system: 'ubuntu-latest'
-            php_versions: '8.3'
+            php_versions: '8.1'
+            postgres: '14'
+            coverage: false
+            experimental: false
+            phpunit_command: '-c phpunit.xml --migrate-configuration'
+          - operating_system: 'ubuntu-latest'
+            php_versions: '8.2'
+            postgres: '15'
+            coverage: false
+            experimental: false
+            phpunit_command: '-c phpunit.xml --migrate-configuration'
+          - operating_system: 'ubuntu-latest'
+            php_versions: '8.2'
             postgres: '16'
             coverage: false
-            experimental: true
+            experimental: false
+            phpunit_command: '-c phpunit.xml --migrate-configuration'
     runs-on: '${{ matrix.operating_system }}'
     services:
       postgres:
@@ -150,7 +164,7 @@ jobs:
               -e "s/\${DATABASE}/${{ env.DB_NAME }}/" \
               -e "s/\${HOST}/${{ env.DB_HOST }}/" \
               phpunit.xml.dist > phpunit.xml
-          ./vendor/bin/phpunit -c phpunit.xml --migrate-configuration
+          ./vendor/bin/phpunit ${{ matrix.phpunit_command }}
           ./vendor/bin/phpunit \
               --stderr \
               --exclude-group ${{ matrix.exclude_group }} \

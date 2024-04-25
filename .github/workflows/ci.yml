@@ -37,6 +37,10 @@ jobs:
           - ubuntu-latest
         php_versions:
           - '7.4'
+          - '8.0'
+          - '8.1'
+          - '8.2'
+          - '8.3'
       fail-fast: false
     env:
       PHP_CS_FIXER_FUTURE_MODE: '0'
@@ -78,67 +82,61 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        coverage: [false]
+        coverage: [true]
         exclude_group: ['WithoutSchema,forPHP8']
         experimental: [false]
         operating_system: [ubuntu-latest]
-        postgres: ['10', '11', '12']
-        php_versions: ['7.3', '7.4']
+        postgres: ['9.6']
+        php_versions: ['7.3']
         include:
           - operating_system: 'ubuntu-latest'
             php_versions: '7.3'
-            postgres: '9.6'
-            experimental: false
-            coverage: true
-            exclude_group: WithoutSchema,forPHP8
-          - operating_system: 'ubuntu-latest'
-            php_versions: '7.3'
-            postgres: '13'
+            postgres: '10'
             experimental: false
             coverage: false
             exclude_group: WithoutSchema,forPHP8
           - operating_system: 'ubuntu-latest'
             php_versions: '7.4'
-            postgres: '13'
+            postgres: '11'
             experimental: false
             coverage: false
             exclude_group: WithoutSchema,forPHP8
           - operating_system: 'ubuntu-latest'
             php_versions: '8.0'
-            postgres: '10'
-            experimental: false
-            coverage: false
-            exclude_group: WithoutSchema,forPHP7
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.0'
-            postgres: '11'
-            experimental: false
-            coverage: false
-            exclude_group: WithoutSchema,forPHP7
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.0'
             postgres: '12'
             experimental: false
-            coverage: true
+            coverage: false
             exclude_group: WithoutSchema,forPHP7
           - operating_system: 'ubuntu-latest'
             php_versions: '8.0'
             postgres: '13'
-            coverage: false
             experimental: false
+            coverage: false
             exclude_group: WithoutSchema,forPHP7
           - operating_system: 'ubuntu-latest'
-            php_versions: '8.1'
+            php_versions: '8.0'
             postgres: '14'
             coverage: false
             experimental: false
             exclude_group: WithoutSchema,forPHP7
           - operating_system: 'ubuntu-latest'
-            php_versions: '8.2'
+            php_versions: '8.1'
             postgres: '15'
             coverage: false
             experimental: false
             exclude_group: WithoutSchema,forPHP7
+          - operating_system: 'ubuntu-latest'
+            php_versions: '8.2'
+            postgres: '16'
+            coverage: false
+            experimental: true
+            exclude_group: WithoutSchema,forPHP7
+          - operating_system: 'ubuntu-latest'
+            php_versions: '8.3'
+            postgres: '16'
+            coverage: false
+            experimental: true
+            exclude_group: forPHP7
     runs-on: '${{ matrix.operating_system }}'
     services:
       postgres:

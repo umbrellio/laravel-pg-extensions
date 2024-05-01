@@ -2,46 +2,38 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Unit\Schema\Types;
+namespace Umbrellio\Postgres\Tests\Unit\Schema\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
+use Doctrine\DBAL\Types\Type;
+use PHPUnit\Framework\Attributes\Test;
 use Umbrellio\Postgres\Schema\Types\TsRangeType;
 use Umbrellio\Postgres\Tests\TestCase;
 
 class TsRangeTypeTest extends TestCase
 {
-    /**
-     * @var AbstractPlatform
-     */
-    private $abstractPlatform;
+    private AbstractPlatform $abstractPlatform;
 
-    /**
-     * @var TsRangeType
-     */
-    private $type;
+    private Type $type;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->type = $this
-            ->getMockBuilder(TsRangeType::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->abstractPlatform = $this->getMockForAbstractClass(AbstractPlatform::class);
+        $this->type = new TsRangeType();
+        $this->abstractPlatform = $this
+            ->getMockBuilder(PostgreSQLPlatform::class)
+            ->getMock();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getSQLDeclaration(): void
     {
         $this->assertSame(TsRangeType::TYPE_NAME, $this->type->getSQLDeclaration([], $this->abstractPlatform));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getTypeName(): void
     {
         $this->assertSame(TsRangeType::TYPE_NAME, $this->type->getName());

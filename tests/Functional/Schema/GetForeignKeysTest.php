@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests\Functional;
+namespace Umbrellio\Postgres\Tests\Functional\Schema;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\Test;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
@@ -46,9 +47,7 @@ class GetForeignKeysTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getForeignKeys(): void
     {
         $foreignKeys = Schema::getForeignKeys('test_table');

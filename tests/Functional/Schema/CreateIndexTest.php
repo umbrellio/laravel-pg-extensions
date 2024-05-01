@@ -11,6 +11,9 @@ use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Umbrellio\Postgres\Helpers\IndexAssertions;
 use Umbrellio\Postgres\Helpers\TableAssertions;
 use Umbrellio\Postgres\Schema\Blueprint;
@@ -26,9 +29,7 @@ class CreateIndexTest extends FunctionalTestCase
 
     use InteractsWithDatabase;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createIndexIfNotExists(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -41,8 +42,10 @@ class CreateIndexTest extends FunctionalTestCase
         });
 
         $this->seeTable('test_table');
+//        dd(Schema::getIndexListing('test_table'));
 
         Schema::table('test_table', function (Blueprint $table) {
+//            dd($table->hasIndex(['name'], true));
             if (! $table->hasIndex(['name'], true)) {
                 $table->unique(['name']);
             }
@@ -51,10 +54,8 @@ class CreateIndexTest extends FunctionalTestCase
         $this->seeIndex('test_table_name_unique');
     }
 
-    /**
-     * @test
-     * @group WithSchema
-     */
+    #[Test]
+    #[Group('WithSchema')]
     public function createIndexWithSchema(): void
     {
         $this->createIndexDefinition();
@@ -64,10 +65,8 @@ class CreateIndexTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     * @group WithoutSchema
-     */
+    #[Test]
+    #[Group('WithoutSchema')]
     public function createIndexWithoutSchema(): void
     {
         $this->createIndexDefinition();
@@ -77,10 +76,8 @@ class CreateIndexTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     * @dataProvider provideIndexes
-     */
+    #[Test]
+    #[DataProvider('provideIndexes')]
     public function createPartialUnique(string $expected, Closure $callback): void
     {
         Schema::create('test_table', function (Blueprint $table) use ($callback) {
@@ -109,9 +106,7 @@ class CreateIndexTest extends FunctionalTestCase
         $this->notSeeIndex('test_table_name_unique');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createSpecifyIndex(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -218,9 +213,7 @@ class CreateIndexTest extends FunctionalTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addExcludeConstraints(): void
     {
         DB::statement('CREATE EXTENSION IF NOT EXISTS btree_gist');
@@ -251,9 +244,7 @@ class CreateIndexTest extends FunctionalTestCase
         $this->dontSeeConstraint('test_table', 'test_table_period_start_period_end_excl');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addCheckConstraints(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -282,9 +273,7 @@ class CreateIndexTest extends FunctionalTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function dropCheckConstraints(): void
     {
         Schema::create('test_table', function (Blueprint $table) {

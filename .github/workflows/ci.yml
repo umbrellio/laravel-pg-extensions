@@ -36,9 +36,6 @@ jobs:
         operating_system:
           - ubuntu-latest
         php_versions:
-          - '8.0'
-          - '8.1'
-          - '8.2'
           - '8.3'
       fail-fast: false
     env:
@@ -85,27 +82,21 @@ jobs:
         exclude_group: ['WithSchema']
         experimental: [false]
         operating_system: [ubuntu-latest]
-        postgres: ['10', '11', '12', '13']
-        php_versions: ['8.0']
-        phpunit_command: [--help]
+        postgres: ['10', '11', '12', '13', '14']
+        php_versions: ['8.3']
+        phpunit_command: [-c phpunit.xml --migrate-configuration]
         include:
           - operating_system: 'ubuntu-latest'
-            php_versions: '8.1'
-            postgres: '14'
-            coverage: false
-            experimental: false
-            phpunit_command: -c phpunit.xml --migrate-configuration
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.2'
+            php_versions: '8.3'
             postgres: '15'
             coverage: false
-            experimental: false
+            experimental: true
             phpunit_command: -c phpunit.xml --migrate-configuration
           - operating_system: 'ubuntu-latest'
-            php_versions: '8.2'
+            php_versions: '8.4'
             postgres: '16'
             coverage: false
-            experimental: false
+            experimental: true
             phpunit_command: -c phpunit.xml --migrate-configuration
     runs-on: '${{ matrix.operating_system }}'
     services:

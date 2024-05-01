@@ -12,6 +12,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Umbrellio\Postgres\Connectors\ConnectionFactory;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\_data\CustomSQLiteConnection;
@@ -25,9 +27,7 @@ class ConnectionTest extends FunctionalTestCase
 
     protected $emulatePrepares = true;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function connectionFactory(): void
     {
         $factory = new ConnectionFactory(app());
@@ -35,9 +35,7 @@ class ConnectionTest extends FunctionalTestCase
         $this->assertInstanceOf(SQLiteConnection::class, $factory->make(config('database.connections.sqlite')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function resolverFor(): void
     {
         Connection::resolverFor('sqlite', function ($connection, $database, $prefix, $config) {
@@ -52,10 +50,8 @@ class ConnectionTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     * @dataProvider boolDataProvider
-     */
+    #[Test]
+    #[DataProvider('boolDataProvider')]
     public function boolTrueBindingsWorks($value)
     {
         $table = 'test_table';
@@ -71,10 +67,8 @@ class ConnectionTest extends FunctionalTestCase
         $this->assertSame(1, $result->count());
     }
 
-    /**
-     * @test
-     * @dataProvider intDataProvider
-     */
+    #[Test]
+    #[DataProvider('intDataProvider')]
     public function intBindingsWorks($value)
     {
         $table = 'test_table';
@@ -90,9 +84,7 @@ class ConnectionTest extends FunctionalTestCase
         $this->assertSame(1, $result->count());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function stringBindingsWorks()
     {
         $table = 'test_table';
@@ -108,9 +100,7 @@ class ConnectionTest extends FunctionalTestCase
         $this->assertSame(1, $result->count());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function nullBindingsWorks()
     {
         $table = 'test_table';
@@ -127,10 +117,8 @@ class ConnectionTest extends FunctionalTestCase
         $this->assertSame(1, $result->count());
     }
 
-    /**
-     * @test
-     * @dataProvider dateDataProvider
-     */
+    #[Test]
+    #[DataProvider('dateDataProvider')]
     public function dateTimeBindingsWorks($value)
     {
         $table = 'test_table';

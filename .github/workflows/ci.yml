@@ -84,28 +84,25 @@ jobs:
         operating_system: [ubuntu-latest]
         postgres: ['10', '11', '12', '13', '14']
         php_versions: ['8.3']
-        phpunit_command: [-c phpunit.xml --migrate-configuration]
         include:
           - operating_system: 'ubuntu-latest'
             php_versions: '8.3'
             postgres: '15'
             coverage: false
             experimental: true
-            phpunit_command: -c phpunit.xml --migrate-configuration
           - operating_system: 'ubuntu-latest'
             php_versions: '8.4'
             postgres: '16'
             coverage: false
             experimental: true
-            phpunit_command: -c phpunit.xml --migrate-configuration
     runs-on: '${{ matrix.operating_system }}'
     services:
       postgres:
         image: 'postgres:${{ matrix.postgres }}'
         env:
-          POSTGRES_USER: ${{ env.DB_USER }}
-          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
-          POSTGRES_DB: ${{ env.DB_NAME }}
+          POSTGRESQL_USER: ${{ env.DB_USER }}
+          POSTGRESQL_PASSWORD: ${{ env.DB_PASSWORD }}
+          POSTGRESQL_DB: ${{ env.DB_NAME }}
         ports:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
@@ -155,7 +152,7 @@ jobs:
               -e "s/\${DATABASE}/${{ env.DB_NAME }}/" \
               -e "s/\${HOST}/${{ env.DB_HOST }}/" \
               phpunit.xml.dist > phpunit.xml
-          ./vendor/bin/phpunit ${{ matrix.phpunit_command }}
+          ./vendor/bin/phpunit -c phpunit.xml --migrate-configuration
           ./vendor/bin/phpunit \
               --stderr \
               --exclude-group ${{ matrix.exclude_group }} \

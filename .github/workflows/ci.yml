@@ -100,9 +100,9 @@ jobs:
       postgres:
         image: 'postgres:${{ matrix.postgres }}'
         env:
-          POSTGRES USER: ${{ env.DB_USER }}
-          POSTGRES PASSWORD: ${{ env.DB_PASSWORD }}
-          POSTGRES DB: ${{ env.DB_NAME }}
+          POSTGRES_USER: ${{ env.DB_USER }}
+          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
+          POSTGRES_DB: ${{ env.DB_NAME }}
         ports:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
@@ -156,7 +156,6 @@ jobs:
               --stderr \
               --exclude-group ${{ matrix.exclude_group }} \
               --coverage-text
-              --configuration phpunit.xml
           cat build/logs/clover.xml
         working-directory: './'
       - name: Upload coverage results to Coveralls

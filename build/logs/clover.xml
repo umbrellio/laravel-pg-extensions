@@ -1,0 +1,843 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1714516181">
+  <project timestamp="1714516181">
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Compilers/AttachPartitionCompiler.php">
+      <class name="Umbrellio\Postgres\Compilers\AttachPartitionCompiler" namespace="global">
+        <metrics complexity="6" methods="3" coveredmethods="3" conditionals="9" coveredconditionals="9" statements="17" coveredstatements="17" elements="29" coveredelements="29"/>
+      </class>
+      <line num="15" type="method" name="compile" visibility="public" complexity="1" crap="1" count="4"/>
+      <line num="17" type="stmt" count="4"/>
+      <line num="18" type="stmt" count="4"/>
+      <line num="19" type="stmt" count="4"/>
+      <line num="20" type="stmt" count="4"/>
+      <line num="21" type="stmt" count="4"/>
+      <line num="22" type="stmt" count="4"/>
+      <line num="25" type="method" name="compileForValues" visibility="private" complexity="2" crap="2" count="4"/>
+      <line num="27" type="stmt" count="4"/>
+      <line num="28" type="stmt" count="4"/>
+      <line num="29" type="stmt" count="3"/>
+      <line num="30" type="stmt" count="3"/>
+      <line num="31" type="stmt" count="3"/>
+      <line num="34" type="stmt" count="1"/>
+      <line num="37" type="method" name="formatValue" visibility="private" complexity="3" crap="3" count="3"/>
+      <line num="39" type="stmt" count="3"/>
+      <line num="40" type="stmt" count="1"/>
+      <line num="43" type="stmt" count="2"/>
+      <line num="44" type="stmt" count="1"/>
+      <line num="47" type="stmt" count="1"/>
+      <metrics loc="50" ncloc="50" classes="1" methods="3" coveredmethods="3" conditionals="9" coveredconditionals="9" statements="17" coveredstatements="17" elements="29" coveredelements="29"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Compilers/CheckCompiler.php">
+      <class name="Umbrellio\Postgres\Compilers\CheckCompiler" namespace="global">
+        <metrics complexity="1" methods="1" coveredmethods="1" conditionals="1" coveredconditionals="1" statements="7" coveredstatements="7" elements="9" coveredelements="9"/>
+      </class>
+      <line num="16" type="method" name="compile" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="18" type="stmt" count="1"/>
+      <line num="20" type="stmt" count="1"/>
+      <line num="21" type="stmt" count="1"/>
+      <line num="22" type="stmt" count="1"/>
+      <line num="23" type="stmt" count="1"/>
+      <line num="24" type="stmt" count="1"/>
+      <line num="25" type="stmt" count="1"/>
+      <metrics loc="28" ncloc="28" classes="1" methods="1" coveredmethods="1" conditionals="1" coveredconditionals="1" statements="7" coveredstatements="7" elements="9" coveredelements="9"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Compilers/CreateCompiler.php">
+      <class name="Umbrellio\Postgres\Compilers\CreateCompiler" namespace="global">
+        <metrics complexity="8" methods="4" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="15" coveredstatements="0" elements="19" coveredelements="0"/>
+      </class>
+      <line num="13" type="method" name="compile" visibility="public" complexity="3" crap="12" count="0"/>
+      <line num="15" type="stmt" count="0"/>
+      <line num="16" type="stmt" count="0"/>
+      <line num="17" type="stmt" count="0"/>
+      <line num="18" type="stmt" count="0"/>
+      <line num="19" type="stmt" count="0"/>
+      <line num="20" type="stmt" count="0"/>
+      <line num="21" type="stmt" count="0"/>
+      <line num="22" type="stmt" count="0"/>
+      <line num="23" type="stmt" count="0"/>
+      <line num="25" type="stmt" count="0"/>
+      <line num="28" type="method" name="beforeTable" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="30" type="stmt" count="0"/>
+      <line num="33" type="method" name="compileLike" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="35" type="stmt" count="0"/>
+      <line num="36" type="stmt" count="0"/>
+      <line num="37" type="stmt" count="0"/>
+      <line num="40" type="method" name="compileColumns" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="42" type="stmt" count="0"/>
+      <metrics loc="45" ncloc="45" classes="1" methods="4" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="15" coveredstatements="0" elements="19" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Compilers/ExcludeCompiler.php">
+      <class name="Umbrellio\Postgres\Compilers\ExcludeCompiler" namespace="global">
+        <metrics complexity="10" methods="6" coveredmethods="6" conditionals="14" coveredconditionals="14" statements="30" coveredstatements="30" elements="50" coveredelements="50"/>
+      </class>
+      <line num="17" type="method" name="compile" visibility="public" complexity="1" crap="1" count="5"/>
+      <line num="19" type="stmt" count="5"/>
+      <line num="20" type="stmt" count="5"/>
+      <line num="21" type="stmt" count="5"/>
+      <line num="22" type="stmt" count="5"/>
+      <line num="23" type="stmt" count="5"/>
+      <line num="24" type="stmt" count="5"/>
+      <line num="25" type="stmt" count="5"/>
+      <line num="26" type="stmt" count="5"/>
+      <line num="29" type="method" name="compileExclude" visibility="private" complexity="1" crap="1" count="5"/>
+      <line num="31" type="stmt" count="5"/>
+      <line num="32" type="stmt" count="5"/>
+      <line num="33" type="stmt" count="5"/>
+      <line num="34" type="stmt" count="5"/>
+      <line num="36" type="stmt" count="5"/>
+      <line num="39" type="method" name="compileWith" visibility="private" complexity="2" crap="2" count="5"/>
+      <line num="41" type="stmt" count="5"/>
+      <line num="42" type="stmt" count="5"/>
+      <line num="43" type="stmt" count="1"/>
+      <line num="44" type="stmt" count="5"/>
+      <line num="46" type="stmt" count="5"/>
+      <line num="47" type="stmt" count="1"/>
+      <line num="50" type="stmt" count="4"/>
+      <line num="53" type="method" name="compileTablespace" visibility="private" complexity="2" crap="2" count="5"/>
+      <line num="55" type="stmt" count="5"/>
+      <line num="56" type="stmt" count="1"/>
+      <line num="59" type="stmt" count="4"/>
+      <line num="62" type="method" name="compileMethod" visibility="private" complexity="2" crap="2" count="5"/>
+      <line num="64" type="stmt" count="5"/>
+      <line num="65" type="stmt" count="1"/>
+      <line num="68" type="stmt" count="4"/>
+      <line num="71" type="method" name="compileWheres" visibility="private" complexity="2" crap="2" count="5"/>
+      <line num="73" type="stmt" count="5"/>
+      <line num="75" type="stmt" count="5"/>
+      <line num="76" type="stmt" count="2"/>
+      <line num="79" type="stmt" count="3"/>
+      <metrics loc="82" ncloc="82" classes="1" methods="6" coveredmethods="6" conditionals="14" coveredconditionals="14" statements="30" coveredstatements="30" elements="50" coveredelements="50"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Compilers/Traits/WheresBuilder.php">
+      <class name="Umbrellio\Postgres\Compilers\Traits\WheresBuilder" namespace="global">
+        <metrics complexity="16" methods="12" coveredmethods="7" conditionals="21" coveredconditionals="9" statements="52" coveredstatements="24" elements="85" coveredelements="40"/>
+      </class>
+      <line num="13" type="method" name="whereRaw" visibility="protected" complexity="1" crap="1" count="1"/>
+      <line num="15" type="stmt" count="1"/>
+      <line num="16" type="stmt" count="1"/>
+      <line num="17" type="stmt" count="1"/>
+      <line num="18" type="stmt" count="1"/>
+      <line num="21" type="method" name="whereBasic" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="23" type="stmt" count="0"/>
+      <line num="24" type="stmt" count="0"/>
+      <line num="25" type="stmt" count="0"/>
+      <line num="26" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="0"/>
+      <line num="30" type="method" name="whereColumn" visibility="protected" complexity="1" crap="1" count="1"/>
+      <line num="32" type="stmt" count="1"/>
+      <line num="33" type="stmt" count="1"/>
+      <line num="34" type="stmt" count="1"/>
+      <line num="35" type="stmt" count="1"/>
+      <line num="36" type="stmt" count="1"/>
+      <line num="39" type="method" name="whereIn" visibility="protected" complexity="2" crap="6" count="0"/>
+      <line num="41" type="stmt" count="0"/>
+      <line num="42" type="stmt" count="0"/>
+      <line num="43" type="stmt" count="0"/>
+      <line num="44" type="stmt" count="0"/>
+      <line num="45" type="stmt" count="0"/>
+      <line num="46" type="stmt" count="0"/>
+      <line num="48" type="stmt" count="0"/>
+      <line num="51" type="method" name="whereNotIn" visibility="protected" complexity="2" crap="6" count="0"/>
+      <line num="53" type="stmt" count="0"/>
+      <line num="54" type="stmt" count="0"/>
+      <line num="55" type="stmt" count="0"/>
+      <line num="56" type="stmt" count="0"/>
+      <line num="57" type="stmt" count="0"/>
+      <line num="58" type="stmt" count="0"/>
+      <line num="60" type="stmt" count="0"/>
+      <line num="63" type="method" name="whereNull" visibility="protected" complexity="1" crap="1" count="2"/>
+      <line num="65" type="stmt" count="2"/>
+      <line num="68" type="method" name="whereNotNull" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="70" type="stmt" count="0"/>
+      <line num="73" type="method" name="whereBetween" visibility="protected" complexity="2" crap="6" count="0"/>
+      <line num="75" type="stmt" count="0"/>
+      <line num="76" type="stmt" count="0"/>
+      <line num="77" type="stmt" count="0"/>
+      <line num="78" type="stmt" count="0"/>
+      <line num="79" type="stmt" count="0"/>
+      <line num="80" type="stmt" count="0"/>
+      <line num="81" type="stmt" count="0"/>
+      <line num="84" type="method" name="wrapValues" visibility="protected" complexity="1" crap="1" count="1"/>
+      <line num="86" type="stmt" count="1"/>
+      <line num="87" type="stmt" count="0"/>
+      <line num="88" type="stmt" count="1"/>
+      <line num="91" type="method" name="wrapValue" visibility="protected" complexity="2" crap="2" count="1"/>
+      <line num="93" type="stmt" count="1"/>
+      <line num="94" type="stmt" count="1"/>
+      <line num="96" type="stmt" count="1"/>
+      <line num="99" type="method" name="removeLeadingBoolean" visibility="protected" complexity="1" crap="1" count="3"/>
+      <line num="101" type="stmt" count="3"/>
+      <line num="104" type="method" name="build" visibility="private" complexity="1" crap="1" count="6"/>
+      <line num="106" type="stmt" count="6"/>
+      <line num="107" type="stmt" count="6"/>
+      <line num="108" type="stmt" count="3"/>
+      <line num="109" type="stmt" count="3"/>
+      <line num="110" type="stmt" count="3"/>
+      <line num="111" type="stmt" count="3"/>
+      <line num="112" type="stmt" count="6"/>
+      <line num="113" type="stmt" count="6"/>
+      <metrics loc="116" ncloc="116" classes="1" methods="12" coveredmethods="7" conditionals="21" coveredconditionals="9" statements="52" coveredstatements="24" elements="85" coveredelements="40"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Compilers/UniqueCompiler.php">
+      <class name="Umbrellio\Postgres\Compilers\UniqueCompiler" namespace="global">
+        <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="0" elements="9" coveredelements="0"/>
+      </class>
+      <line num="17" type="method" name="compile" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="23" type="stmt" count="0"/>
+      <line num="25" type="stmt" count="0"/>
+      <line num="26" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="0"/>
+      <line num="28" type="stmt" count="0"/>
+      <line num="29" type="stmt" count="0"/>
+      <line num="30" type="stmt" count="0"/>
+      <line num="31" type="stmt" count="0"/>
+      <metrics loc="34" ncloc="34" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="0" elements="9" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Connectors/ConnectionFactory.php">
+      <class name="Umbrellio\Postgres\Connectors\ConnectionFactory" namespace="global">
+        <metrics complexity="3" methods="1" coveredmethods="0" conditionals="5" coveredconditionals="0" statements="6" coveredstatements="0" elements="12" coveredelements="0"/>
+      </class>
+      <line num="13" type="method" name="createConnection" visibility="protected" complexity="3" crap="12" count="0"/>
+      <line num="15" type="stmt" count="0"/>
+      <line num="16" type="stmt" count="0"/>
+      <line num="17" type="stmt" count="0"/>
+      <line num="20" type="stmt" count="0"/>
+      <line num="21" type="stmt" count="0"/>
+      <line num="24" type="stmt" count="0"/>
+      <metrics loc="27" ncloc="27" classes="1" methods="1" coveredmethods="0" conditionals="5" coveredconditionals="0" statements="6" coveredstatements="0" elements="12" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Extensions/AbstractComponent.php">
+      <class name="Umbrellio\Postgres\Extensions\AbstractComponent" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="10" ncloc="10" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Extensions/AbstractExtension.php">
+      <class name="Umbrellio\Postgres\Extensions\AbstractExtension" namespace="global">
+        <metrics complexity="4" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="43" ncloc="39" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Extensions/Connectors/AbstractConnection.php">
+      <class name="Umbrellio\Postgres\Extensions\Connectors\AbstractConnection" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="16" ncloc="13" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Extensions/Exceptions/ExtensionInvalidException.php">
+      <class name="Umbrellio\Postgres\Extensions\Exceptions\ExtensionInvalidException" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="12" ncloc="12" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Extensions/Exceptions/MacroableMissedException.php">
+      <class name="Umbrellio\Postgres\Extensions\Exceptions\MacroableMissedException" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="12" ncloc="12" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Extensions/Exceptions/MixinInvalidException.php">
+      <class name="Umbrellio\Postgres\Extensions\Exceptions\MixinInvalidException" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="12" ncloc="12" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Extensions/Schema/AbstractBlueprint.php">
+      <class name="Umbrellio\Postgres\Extensions\Schema\AbstractBlueprint" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="16" ncloc="13" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Extensions/Schema/AbstractBuilder.php">
+      <class name="Umbrellio\Postgres\Extensions\Schema\AbstractBuilder" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="16" ncloc="13" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Extensions/Schema/Grammar/AbstractGrammar.php">
+      <class name="Umbrellio\Postgres\Extensions\Schema\Grammar\AbstractGrammar" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="16" ncloc="13" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Helpers/ColumnAssertions.php">
+      <class name="Umbrellio\Postgres\Helpers\ColumnAssertions" namespace="global">
+        <metrics complexity="12" methods="7" coveredmethods="0" conditionals="20" coveredconditionals="0" statements="28" coveredstatements="0" elements="55" coveredelements="0"/>
+      </class>
+      <line num="16" type="method" name="assertCommentOnColumn" visibility="protected" complexity="2" crap="6" count="0"/>
+      <line num="18" type="stmt" count="0"/>
+      <line num="20" type="stmt" count="0"/>
+      <line num="21" type="stmt" count="0"/>
+      <line num="24" type="stmt" count="0"/>
+      <line num="27" type="method" name="assertDefaultOnColumn" visibility="protected" complexity="2" crap="6" count="0"/>
+      <line num="29" type="stmt" count="0"/>
+      <line num="31" type="stmt" count="0"/>
+      <line num="32" type="stmt" count="0"/>
+      <line num="35" type="stmt" count="0"/>
+      <line num="38" type="method" name="assertLaravelTypeColumn" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="40" type="stmt" count="0"/>
+      <line num="43" type="method" name="assertPostgresTypeColumn" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="45" type="stmt" count="0"/>
+      <line num="48" type="method" name="getCommentListing" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="50" type="stmt" count="0"/>
+      <line num="51" type="stmt" count="0"/>
+      <line num="58" type="stmt" count="0"/>
+      <line num="59" type="stmt" count="0"/>
+      <line num="60" type="stmt" count="0"/>
+      <line num="62" type="stmt" count="0"/>
+      <line num="65" type="method" name="getTypeListing" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="67" type="stmt" count="0"/>
+      <line num="68" type="stmt" count="0"/>
+      <line num="72" type="stmt" count="0"/>
+      <line num="73" type="stmt" count="0"/>
+      <line num="74" type="stmt" count="0"/>
+      <line num="76" type="stmt" count="0"/>
+      <line num="79" type="method" name="getDefaultListing" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="81" type="stmt" count="0"/>
+      <line num="82" type="stmt" count="0"/>
+      <line num="86" type="stmt" count="0"/>
+      <line num="87" type="stmt" count="0"/>
+      <line num="88" type="stmt" count="0"/>
+      <line num="90" type="stmt" count="0"/>
+      <metrics loc="93" ncloc="93" classes="1" methods="7" coveredmethods="0" conditionals="20" coveredconditionals="0" statements="28" coveredstatements="0" elements="55" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Helpers/IndexAssertions.php">
+      <class name="Umbrellio\Postgres\Helpers\IndexAssertions" namespace="global">
+        <metrics complexity="11" methods="8" coveredmethods="0" conditionals="14" coveredconditionals="0" statements="16" coveredstatements="0" elements="38" coveredelements="0"/>
+      </class>
+      <line num="27" type="method" name="seeIndex" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="29" type="stmt" count="0"/>
+      <line num="32" type="method" name="notSeeIndex" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="34" type="stmt" count="0"/>
+      <line num="37" type="method" name="assertSameIndex" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="39" type="stmt" count="0"/>
+      <line num="41" type="stmt" count="0"/>
+      <line num="42" type="stmt" count="0"/>
+      <line num="45" type="method" name="assertRegExpIndex" visibility="protected" complexity="2" crap="6" count="0"/>
+      <line num="47" type="stmt" count="0"/>
+      <line num="49" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
+      <line num="53" type="method" name="dontSeeConstraint" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="55" type="stmt" count="0"/>
+      <line num="58" type="method" name="seeConstraint" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="60" type="stmt" count="0"/>
+      <line num="63" type="method" name="getIndexListing" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="65" type="stmt" count="0"/>
+      <line num="67" type="stmt" count="0"/>
+      <line num="70" type="method" name="existConstraintOnTable" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="72" type="stmt" count="0"/>
+      <line num="78" type="stmt" count="0"/>
+      <line num="79" type="stmt" count="0"/>
+      <line num="80" type="stmt" count="0"/>
+      <metrics loc="83" ncloc="83" classes="1" methods="8" coveredmethods="0" conditionals="14" coveredconditionals="0" statements="16" coveredstatements="0" elements="38" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Helpers/TableAssertions.php">
+      <class name="Umbrellio\Postgres\Helpers\TableAssertions" namespace="global">
+        <metrics complexity="4" methods="4" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="0" elements="9" coveredelements="0"/>
+      </class>
+      <line num="15" type="method" name="assertCompareTables" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="17" type="stmt" count="0"/>
+      <line num="20" type="method" name="assertSameTable" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="22" type="stmt" count="0"/>
+      <line num="24" type="stmt" count="0"/>
+      <line num="27" type="method" name="seeTable" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="29" type="stmt" count="0"/>
+      <line num="32" type="method" name="getTableDefinition" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="34" type="stmt" count="0"/>
+      <metrics loc="37" ncloc="37" classes="1" methods="4" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="0" elements="9" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Helpers/ViewAssertions.php">
+      <class name="Umbrellio\Postgres\Helpers\ViewAssertions" namespace="global">
+        <metrics complexity="4" methods="4" coveredmethods="0" conditionals="4" coveredconditionals="0" statements="9" coveredstatements="0" elements="17" coveredelements="0"/>
+      </class>
+      <line num="17" type="method" name="assertSameView" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="19" type="stmt" count="0"/>
+      <line num="21" type="stmt" count="0"/>
+      <line num="24" type="method" name="seeView" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="26" type="stmt" count="0"/>
+      <line num="29" type="method" name="notSeeView" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="31" type="stmt" count="0"/>
+      <line num="34" type="method" name="getViewDefinition" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="36" type="stmt" count="0"/>
+      <line num="37" type="stmt" count="0"/>
+      <line num="38" type="stmt" count="0"/>
+      <line num="39" type="stmt" count="0"/>
+      <line num="40" type="stmt" count="0"/>
+      <metrics loc="43" ncloc="43" classes="1" methods="4" coveredmethods="0" conditionals="4" coveredconditionals="0" statements="9" coveredstatements="0" elements="17" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/PostgresConnection.php">
+      <class name="Umbrellio\Postgres\PostgresConnection" namespace="global">
+        <metrics complexity="24" methods="8" coveredmethods="0" conditionals="37" coveredconditionals="0" statements="38" coveredstatements="0" elements="83" coveredelements="0"/>
+      </class>
+      <line num="53" type="method" name="getSchemaBuilder" visibility="public" complexity="2" crap="6" count="0"/>
+      <line num="55" type="stmt" count="0"/>
+      <line num="56" type="stmt" count="0"/>
+      <line num="58" type="stmt" count="0"/>
+      <line num="61" type="method" name="useDefaultPostProcessor" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="63" type="stmt" count="0"/>
+      <line num="65" type="stmt" count="0"/>
+      <line num="66" type="stmt" count="0"/>
+      <line num="69" type="method" name="getDoctrineConnection" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="71" type="stmt" count="0"/>
+      <line num="72" type="stmt" count="0"/>
+      <line num="73" type="stmt" count="0"/>
+      <line num="76" type="method" name="bindValues" visibility="public" complexity="7" crap="56" count="0"/>
+      <line num="78" type="stmt" count="0"/>
+      <line num="79" type="stmt" count="0"/>
+      <line num="80" type="stmt" count="0"/>
+      <line num="83" type="stmt" count="0"/>
+      <line num="84" type="stmt" count="0"/>
+      <line num="85" type="stmt" count="0"/>
+      <line num="87" type="stmt" count="0"/>
+      <line num="88" type="stmt" count="0"/>
+      <line num="89" type="stmt" count="0"/>
+      <line num="92" type="stmt" count="0"/>
+      <line num="95" type="stmt" count="0"/>
+      <line num="98" type="stmt" count="0"/>
+      <line num="102" type="method" name="prepareBindings" visibility="public" complexity="4" crap="20" count="0"/>
+      <line num="104" type="stmt" count="0"/>
+      <line num="105" type="stmt" count="0"/>
+      <line num="107" type="stmt" count="0"/>
+      <line num="108" type="stmt" count="0"/>
+      <line num="109" type="stmt" count="0"/>
+      <line num="113" type="stmt" count="0"/>
+      <line num="116" type="stmt" count="0"/>
+      <line num="119" type="method" name="getDefaultSchemaGrammar" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="121" type="stmt" count="0"/>
+      <line num="124" type="method" name="registerInitialTypes" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="126" type="stmt" count="0"/>
+      <line num="127" type="stmt" count="0"/>
+      <line num="145" type="method" name="overrideDoctrineBehavior" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="147" type="stmt" count="0"/>
+      <line num="148" type="stmt" count="0"/>
+      <line num="149" type="stmt" count="0"/>
+      <line num="151" type="stmt" count="0"/>
+      <line num="152" type="stmt" count="0"/>
+      <line num="153" type="stmt" count="0"/>
+      <line num="154" type="stmt" count="0"/>
+      <metrics loc="157" ncloc="149" classes="1" methods="8" coveredmethods="0" conditionals="37" coveredconditionals="0" statements="38" coveredstatements="0" elements="83" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Blueprint.php">
+      <class name="Umbrellio\Postgres\Schema\Blueprint" namespace="global">
+        <metrics complexity="24" methods="19" coveredmethods="9" conditionals="24" coveredconditionals="9" statements="33" coveredstatements="15" elements="76" coveredelements="33"/>
+      </class>
+      <line num="31" type="method" name="attachPartition" visibility="public" complexity="1" crap="1" count="4"/>
+      <line num="33" type="stmt" count="4"/>
+      <line num="36" type="method" name="detachPartition" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="38" type="stmt" count="1"/>
+      <line num="44" type="method" name="like" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="46" type="stmt" count="0"/>
+      <line num="49" type="method" name="ifNotExists" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="51" type="stmt" count="0"/>
+      <line num="58" type="method" name="uniquePartial" visibility="public" complexity="2" crap="6" count="0"/>
+      <line num="60" type="stmt" count="0"/>
+      <line num="62" type="stmt" count="0"/>
+      <line num="64" type="stmt" count="0"/>
+      <line num="65" type="stmt" count="0"/>
+      <line num="66" type="stmt" count="0"/>
+      <line num="67" type="stmt" count="0"/>
+      <line num="68" type="stmt" count="0"/>
+      <line num="71" type="method" name="dropUniquePartial" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="73" type="stmt" count="0"/>
+      <line num="80" type="method" name="exclude" visibility="public" complexity="2" crap="2" count="5"/>
+      <line num="82" type="stmt" count="5"/>
+      <line num="84" type="stmt" count="5"/>
+      <line num="86" type="stmt" count="5"/>
+      <line num="93" type="method" name="check" visibility="public" complexity="2" crap="2" count="1"/>
+      <line num="95" type="stmt" count="1"/>
+      <line num="97" type="stmt" count="1"/>
+      <line num="99" type="stmt" count="1"/>
+      <line num="102" type="method" name="dropExclude" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="104" type="stmt" count="0"/>
+      <line num="107" type="method" name="dropCheck" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="109" type="stmt" count="0"/>
+      <line num="112" type="method" name="hasIndex" visibility="public" complexity="3" crap="12" count="0"/>
+      <line num="114" type="stmt" count="0"/>
+      <line num="115" type="stmt" count="0"/>
+      <line num="118" type="stmt" count="0"/>
+      <line num="124" type="method" name="createView" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="126" type="stmt" count="0"/>
+      <line num="129" type="method" name="dropView" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="131" type="stmt" count="0"/>
+      <line num="139" type="method" name="numeric" visibility="public" complexity="1" crap="1" count="3"/>
+      <line num="141" type="stmt" count="3"/>
+      <line num="147" type="method" name="tsrange" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="149" type="stmt" count="1"/>
+      <line num="155" type="method" name="tstzrange" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="157" type="stmt" count="1"/>
+      <line num="163" type="method" name="daterange" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="165" type="stmt" count="1"/>
+      <line num="168" type="method" name="getSchemaManager" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="170" type="stmt" count="0"/>
+      <line num="173" type="method" name="addExtendedCommand" visibility="private" complexity="1" crap="1" count="6"/>
+      <line num="175" type="stmt" count="6"/>
+      <line num="176" type="stmt" count="6"/>
+      <line num="177" type="stmt" count="6"/>
+      <metrics loc="180" ncloc="145" classes="1" methods="19" coveredmethods="9" conditionals="24" coveredconditionals="9" statements="33" coveredstatements="15" elements="76" coveredelements="33"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Builder.php">
+      <class name="Umbrellio\Postgres\Schema\Builder" namespace="global">
+        <metrics complexity="7" methods="6" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="0" elements="23" coveredelements="0"/>
+      </class>
+      <line num="17" type="method" name="createView" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="19" type="stmt" count="0"/>
+      <line num="20" type="stmt" count="0"/>
+      <line num="21" type="stmt" count="0"/>
+      <line num="24" type="method" name="dropView" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="26" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="0"/>
+      <line num="28" type="stmt" count="0"/>
+      <line num="31" type="method" name="hasView" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="33" type="stmt" count="0"/>
+      <line num="34" type="stmt" count="0"/>
+      <line num="35" type="stmt" count="0"/>
+      <line num="36" type="stmt" count="0"/>
+      <line num="39" type="method" name="getForeignKeys" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="41" type="stmt" count="0"/>
+      <line num="44" type="method" name="getViewDefinition" visibility="public" complexity="2" crap="6" count="0"/>
+      <line num="46" type="stmt" count="0"/>
+      <line num="47" type="stmt" count="0"/>
+      <line num="48" type="stmt" count="0"/>
+      <line num="49" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
+      <line num="57" type="method" name="createBlueprint" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="59" type="stmt" count="0"/>
+      <metrics loc="62" ncloc="58" classes="1" methods="6" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="0" elements="23" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Builders/Constraints/Check/CheckBuilder.php">
+      <class name="Umbrellio\Postgres\Schema\Builders\Constraints\Check\CheckBuilder" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="14" ncloc="14" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Builders/Constraints/Exclude/ExcludeBuilder.php">
+      <class name="Umbrellio\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder" namespace="global">
+        <metrics complexity="4" methods="4" coveredmethods="4" conditionals="4" coveredconditionals="4" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
+      </class>
+      <line num="14" type="method" name="method" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="16" type="stmt" count="1"/>
+      <line num="17" type="stmt" count="1"/>
+      <line num="20" type="method" name="with" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="22" type="stmt" count="1"/>
+      <line num="23" type="stmt" count="1"/>
+      <line num="26" type="method" name="tableSpace" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="28" type="stmt" count="1"/>
+      <line num="29" type="stmt" count="1"/>
+      <line num="32" type="method" name="using" visibility="public" complexity="1" crap="1" count="5"/>
+      <line num="34" type="stmt" count="5"/>
+      <line num="35" type="stmt" count="5"/>
+      <metrics loc="38" ncloc="38" classes="1" methods="4" coveredmethods="4" conditionals="4" coveredconditionals="4" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Builders/Indexes/Unique/UniqueBuilder.php">
+      <class name="Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder" namespace="global">
+        <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="0" elements="4" coveredelements="0"/>
+      </class>
+      <line num="11" type="method" name="__call" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="13" type="stmt" count="0"/>
+      <line num="14" type="stmt" count="0"/>
+      <line num="15" type="stmt" count="0"/>
+      <metrics loc="18" ncloc="18" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="0" elements="4" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Builders/Indexes/Unique/UniquePartialBuilder.php">
+      <class name="Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniquePartialBuilder" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="14" ncloc="14" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Builders/WhereBuilderTrait.php">
+      <class name="Umbrellio\Postgres\Schema\Builders\WhereBuilderTrait" namespace="global">
+        <metrics complexity="12" methods="10" coveredmethods="3" conditionals="16" coveredconditionals="6" statements="11" coveredstatements="5" elements="37" coveredelements="14"/>
+      </class>
+      <line num="16" type="method" name="whereRaw" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="18" type="stmt" count="1"/>
+      <line num="21" type="method" name="where" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="23" type="stmt" count="0"/>
+      <line num="26" type="method" name="whereColumn" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="28" type="stmt" count="1"/>
+      <line num="31" type="method" name="whereIn" visibility="public" complexity="2" crap="6" count="0"/>
+      <line num="33" type="stmt" count="0"/>
+      <line num="36" type="method" name="whereNotIn" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="38" type="stmt" count="0"/>
+      <line num="41" type="method" name="whereNull" visibility="public" complexity="2" crap="2.50" count="2"/>
+      <line num="43" type="stmt" count="2"/>
+      <line num="46" type="method" name="whereBetween" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="48" type="stmt" count="0"/>
+      <line num="51" type="method" name="whereNotBetween" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="53" type="stmt" count="0"/>
+      <line num="56" type="method" name="whereNotNull" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="58" type="stmt" count="0"/>
+      <line num="61" type="method" name="compileWhere" visibility="protected" complexity="1" crap="1" count="3"/>
+      <line num="63" type="stmt" count="3"/>
+      <line num="64" type="stmt" count="3"/>
+      <metrics loc="67" ncloc="64" classes="1" methods="10" coveredmethods="3" conditionals="16" coveredconditionals="6" statements="11" coveredstatements="5" elements="37" coveredelements="14"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Definitions/AttachPartitionDefinition.php">
+      <class name="Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="15" ncloc="12" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Definitions/CheckDefinition.php">
+      <class name="Umbrellio\Postgres\Schema\Definitions\CheckDefinition" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="15" ncloc="12" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Definitions/ExcludeDefinition.php">
+      <class name="Umbrellio\Postgres\Schema\Definitions\ExcludeDefinition" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="19" ncloc="12" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Definitions/ForeignKeyDefinition.php">
+      <class name="Umbrellio\Postgres\Schema\Definitions\ForeignKeyDefinition" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="15" ncloc="10" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Definitions/LikeDefinition.php">
+      <class name="Umbrellio\Postgres\Schema\Definitions\LikeDefinition" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="15" ncloc="12" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Definitions/UniqueDefinition.php">
+      <class name="Umbrellio\Postgres\Schema\Definitions\UniqueDefinition" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="23" ncloc="12" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Definitions/ViewDefinition.php">
+      <class name="Umbrellio\Postgres\Schema\Definitions\ViewDefinition" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="15" ncloc="12" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Grammars/PostgresGrammar.php">
+      <class name="Umbrellio\Postgres\Schema\Grammars\PostgresGrammar" namespace="global">
+        <metrics complexity="20" methods="15" coveredmethods="8" conditionals="26" coveredconditionals="14" statements="45" coveredstatements="19" elements="86" coveredelements="41"/>
+      </class>
+      <line num="26" type="method" name="compileCreate" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="28" type="stmt" count="0"/>
+      <line num="29" type="stmt" count="0"/>
+      <line num="31" type="stmt" count="0"/>
+      <line num="32" type="stmt" count="0"/>
+      <line num="33" type="stmt" count="0"/>
+      <line num="34" type="stmt" count="0"/>
+      <line num="35" type="stmt" count="0"/>
+      <line num="36" type="stmt" count="0"/>
+      <line num="39" type="method" name="compileAttachPartition" visibility="public" complexity="1" crap="1" count="4"/>
+      <line num="41" type="stmt" count="4"/>
+      <line num="44" type="method" name="compileDetachPartition" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="46" type="stmt" count="1"/>
+      <line num="47" type="stmt" count="1"/>
+      <line num="48" type="stmt" count="1"/>
+      <line num="49" type="stmt" count="1"/>
+      <line num="50" type="stmt" count="1"/>
+      <line num="53" type="method" name="compileCreateView" visibility="public" complexity="2" crap="6" count="0"/>
+      <line num="55" type="stmt" count="0"/>
+      <line num="56" type="stmt" count="0"/>
+      <line num="57" type="stmt" count="0"/>
+      <line num="58" type="stmt" count="0"/>
+      <line num="59" type="stmt" count="0"/>
+      <line num="60" type="stmt" count="0"/>
+      <line num="61" type="stmt" count="0"/>
+      <line num="62" type="stmt" count="0"/>
+      <line num="63" type="stmt" count="0"/>
+      <line num="66" type="method" name="compileDropView" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="68" type="stmt" count="0"/>
+      <line num="71" type="method" name="compileViewExists" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="73" type="stmt" count="0"/>
+      <line num="76" type="method" name="compileForeignKeysListing" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="78" type="stmt" count="0"/>
+      <line num="92" type="stmt" count="0"/>
+      <line num="95" type="method" name="compileViewDefinition" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="97" type="stmt" count="0"/>
+      <line num="100" type="method" name="compileUniquePartial" visibility="public" complexity="2" crap="6" count="0"/>
+      <line num="102" type="stmt" count="0"/>
+      <line num="103" type="stmt" count="0"/>
+      <line num="104" type="stmt" count="0"/>
+      <line num="106" type="stmt" count="0"/>
+      <line num="109" type="method" name="compileExclude" visibility="public" complexity="1" crap="1" count="5"/>
+      <line num="111" type="stmt" count="5"/>
+      <line num="114" type="method" name="compileCheck" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="116" type="stmt" count="1"/>
+      <line num="119" type="method" name="typeNumeric" visibility="protected" complexity="4" crap="6.00" count="3"/>
+      <line num="121" type="stmt" count="3"/>
+      <line num="122" type="stmt" count="3"/>
+      <line num="123" type="stmt" count="3"/>
+      <line num="125" type="stmt" count="3"/>
+      <line num="126" type="stmt" count="1"/>
+      <line num="129" type="stmt" count="2"/>
+      <line num="130" type="stmt" count="1"/>
+      <line num="133" type="stmt" count="1"/>
+      <line num="136" type="method" name="typeTsrange" visibility="protected" complexity="1" crap="1" count="1"/>
+      <line num="138" type="stmt" count="1"/>
+      <line num="141" type="method" name="typeTstzrange" visibility="protected" complexity="1" crap="1" count="1"/>
+      <line num="143" type="stmt" count="1"/>
+      <line num="146" type="method" name="typeDaterange" visibility="protected" complexity="1" crap="1" count="1"/>
+      <line num="148" type="stmt" count="1"/>
+      <metrics loc="151" ncloc="146" classes="1" methods="15" coveredmethods="8" conditionals="26" coveredconditionals="14" statements="45" coveredstatements="19" elements="86" coveredelements="41"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Subscribers/SchemaAlterTableChangeColumnSubscriber.php">
+      <class name="Umbrellio\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber" namespace="global">
+        <metrics complexity="39" methods="14" coveredmethods="1" conditionals="67" coveredconditionals="1" statements="93" coveredstatements="1" elements="174" coveredelements="3"/>
+      </class>
+      <line num="22" type="method" name="onSchemaAlterTableChangeColumn" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="24" type="stmt" count="0"/>
+      <line num="26" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="0"/>
+      <line num="28" type="stmt" count="0"/>
+      <line num="29" type="stmt" count="0"/>
+      <line num="30" type="stmt" count="0"/>
+      <line num="32" type="stmt" count="0"/>
+      <line num="35" type="method" name="getSubscribedEvents" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="37" type="stmt" count="1"/>
+      <line num="40" type="method" name="getAlterTableChangeColumnSQL" visibility="public" complexity="2" crap="6" count="0"/>
+      <line num="45" type="stmt" count="0"/>
+      <line num="47" type="stmt" count="0"/>
+      <line num="49" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
+      <line num="51" type="stmt" count="0"/>
+      <line num="52" type="stmt" count="0"/>
+      <line num="54" type="stmt" count="0"/>
+      <line num="56" type="stmt" count="0"/>
+      <line num="58" type="stmt" count="0"/>
+      <line num="60" type="stmt" count="0"/>
+      <line num="62" type="stmt" count="0"/>
+      <line num="64" type="stmt" count="0"/>
+      <line num="65" type="stmt" count="0"/>
+      <line num="68" type="stmt" count="0"/>
+      <line num="69" type="stmt" count="0"/>
+      <line num="70" type="stmt" count="0"/>
+      <line num="71" type="stmt" count="0"/>
+      <line num="72" type="stmt" count="0"/>
+      <line num="73" type="stmt" count="0"/>
+      <line num="74" type="stmt" count="0"/>
+      <line num="75" type="stmt" count="0"/>
+      <line num="77" type="stmt" count="0"/>
+      <line num="80" type="method" name="compileAlterColumnComment" visibility="public" complexity="4" crap="20" count="0"/>
+      <line num="87" type="stmt" count="0"/>
+      <line num="88" type="stmt" count="0"/>
+      <line num="90" type="stmt" count="0"/>
+      <line num="91" type="stmt" count="0"/>
+      <line num="93" type="stmt" count="0"/>
+      <line num="97" type="method" name="compileAlterColumnNull" visibility="public" complexity="3" crap="12" count="0"/>
+      <line num="104" type="stmt" count="0"/>
+      <line num="105" type="stmt" count="0"/>
+      <line num="106" type="stmt" count="0"/>
+      <line num="107" type="stmt" count="0"/>
+      <line num="108" type="stmt" count="0"/>
+      <line num="109" type="stmt" count="0"/>
+      <line num="110" type="stmt" count="0"/>
+      <line num="114" type="method" name="compileAlterColumnDefault" visibility="public" complexity="4" crap="20" count="0"/>
+      <line num="122" type="stmt" count="0"/>
+      <line num="123" type="stmt" count="0"/>
+      <line num="124" type="stmt" count="0"/>
+      <line num="125" type="stmt" count="0"/>
+      <line num="126" type="stmt" count="0"/>
+      <line num="130" type="method" name="compileAlterColumnSequence" visibility="public" complexity="3" crap="12" count="0"/>
+      <line num="139" type="stmt" count="0"/>
+      <line num="140" type="stmt" count="0"/>
+      <line num="143" type="stmt" count="0"/>
+      <line num="144" type="stmt" count="0"/>
+      <line num="145" type="stmt" count="0"/>
+      <line num="148" type="stmt" count="0"/>
+      <line num="150" type="stmt" count="0"/>
+      <line num="151" type="stmt" count="0"/>
+      <line num="152" type="stmt" count="0"/>
+      <line num="155" type="method" name="compileAlterColumnType" visibility="public" complexity="8" crap="72" count="0"/>
+      <line num="163" type="stmt" count="0"/>
+      <line num="164" type="stmt" count="0"/>
+      <line num="165" type="stmt" count="0"/>
+      <line num="166" type="stmt" count="0"/>
+      <line num="168" type="stmt" count="0"/>
+      <line num="171" type="stmt" count="0"/>
+      <line num="173" type="stmt" count="0"/>
+      <line num="174" type="stmt" count="0"/>
+      <line num="176" type="stmt" count="0"/>
+      <line num="177" type="stmt" count="0"/>
+      <line num="180" type="stmt" count="0"/>
+      <line num="182" type="stmt" count="0"/>
+      <line num="183" type="stmt" count="0"/>
+      <line num="185" type="stmt" count="0"/>
+      <line num="186" type="stmt" count="0"/>
+      <line num="190" type="stmt" count="0"/>
+      <line num="191" type="stmt" count="0"/>
+      <line num="192" type="stmt" count="0"/>
+      <line num="193" type="stmt" count="0"/>
+      <line num="194" type="stmt" count="0"/>
+      <line num="195" type="stmt" count="0"/>
+      <line num="196" type="stmt" count="0"/>
+      <line num="199" type="method" name="getDefaultValueDeclarationSQL" visibility="public" complexity="2" crap="6" count="0"/>
+      <line num="201" type="stmt" count="0"/>
+      <line num="202" type="stmt" count="0"/>
+      <line num="203" type="stmt" count="0"/>
+      <line num="206" type="stmt" count="0"/>
+      <line num="209" type="method" name="typeChangeBreaksDefaultValue" visibility="public" complexity="4" crap="20" count="0"/>
+      <line num="211" type="stmt" count="0"/>
+      <line num="212" type="stmt" count="0"/>
+      <line num="214" type="stmt" count="0"/>
+      <line num="216" type="stmt" count="0"/>
+      <line num="219" type="method" name="isNumericType" visibility="public" complexity="3" crap="12" count="0"/>
+      <line num="221" type="stmt" count="0"/>
+      <line num="223" type="stmt" count="0"/>
+      <line num="226" type="method" name="quoteName" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="228" type="stmt" count="0"/>
+      <line num="229" type="stmt" count="0"/>
+      <line num="230" type="stmt" count="0"/>
+      <line num="233" type="method" name="getOldColumnComment" visibility="public" complexity="2" crap="6" count="0"/>
+      <line num="235" type="stmt" count="0"/>
+      <line num="238" type="method" name="getColumnComment" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="240" type="stmt" count="0"/>
+      <metrics loc="243" ncloc="243" classes="1" methods="14" coveredmethods="1" conditionals="67" coveredconditionals="1" statements="93" coveredstatements="1" elements="174" coveredelements="3"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Types/DateRangeType.php">
+      <class name="Umbrellio\Postgres\Schema\Types\DateRangeType" namespace="global">
+        <metrics complexity="2" methods="2" coveredmethods="2" conditionals="2" coveredconditionals="2" statements="2" coveredstatements="2" elements="6" coveredelements="6"/>
+      </class>
+      <line num="14" type="method" name="getSQLDeclaration" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="16" type="stmt" count="1"/>
+      <line num="19" type="method" name="getName" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="21" type="stmt" count="1"/>
+      <metrics loc="24" ncloc="24" classes="1" methods="2" coveredmethods="2" conditionals="2" coveredconditionals="2" statements="2" coveredstatements="2" elements="6" coveredelements="6"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Types/NumericType.php">
+      <class name="Umbrellio\Postgres\Schema\Types\NumericType" namespace="global">
+        <metrics complexity="2" methods="2" coveredmethods="2" conditionals="2" coveredconditionals="2" statements="2" coveredstatements="2" elements="6" coveredelements="6"/>
+      </class>
+      <line num="14" type="method" name="getSQLDeclaration" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="16" type="stmt" count="1"/>
+      <line num="19" type="method" name="getName" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="21" type="stmt" count="1"/>
+      <metrics loc="24" ncloc="24" classes="1" methods="2" coveredmethods="2" conditionals="2" coveredconditionals="2" statements="2" coveredstatements="2" elements="6" coveredelements="6"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Types/TsRangeType.php">
+      <class name="Umbrellio\Postgres\Schema\Types\TsRangeType" namespace="global">
+        <metrics complexity="2" methods="2" coveredmethods="2" conditionals="2" coveredconditionals="2" statements="2" coveredstatements="2" elements="6" coveredelements="6"/>
+      </class>
+      <line num="14" type="method" name="getSQLDeclaration" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="16" type="stmt" count="1"/>
+      <line num="19" type="method" name="getName" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="21" type="stmt" count="1"/>
+      <metrics loc="24" ncloc="24" classes="1" methods="2" coveredmethods="2" conditionals="2" coveredconditionals="2" statements="2" coveredstatements="2" elements="6" coveredelements="6"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/Schema/Types/TsTzRangeType.php">
+      <class name="Umbrellio\Postgres\Schema\Types\TsTzRangeType" namespace="global">
+        <metrics complexity="2" methods="2" coveredmethods="2" conditionals="2" coveredconditionals="2" statements="2" coveredstatements="2" elements="6" coveredelements="6"/>
+      </class>
+      <line num="14" type="method" name="getSQLDeclaration" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="16" type="stmt" count="1"/>
+      <line num="19" type="method" name="getName" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="21" type="stmt" count="1"/>
+      <metrics loc="24" ncloc="24" classes="1" methods="2" coveredmethods="2" conditionals="2" coveredconditionals="2" statements="2" coveredstatements="2" elements="6" coveredelements="6"/>
+    </file>
+    <file name="/Users/korben/umbrellio/laravel-pg-extensions/src/UmbrellioPostgresProvider.php">
+      <class name="Umbrellio\Postgres\UmbrellioPostgresProvider" namespace="global">
+        <metrics complexity="1" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="40" ncloc="37" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <metrics files="42" loc="1988" ncloc="1879" classes="23" methods="136" coveredmethods="50" conditionals="270" coveredconditionals="75" statements="449" coveredstatements="134" elements="855" coveredelements="259"/>
+  </project>
+</coverage>

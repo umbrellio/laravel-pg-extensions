@@ -100,9 +100,9 @@ jobs:
       postgres:
         image: 'postgres:${{ matrix.postgres }}'
         env:
-          POSTGRESQL_USER: ${{ env.DB_USER }}
-          POSTGRESQL_PASSWORD: ${{ env.DB_PASSWORD }}
-          POSTGRESQL_DB: ${{ env.DB_NAME }}
+          POSTGRES USER: ${{ env.DB_USER }}
+          POSTGRES PASSWORD: ${{ env.DB_PASSWORD }}
+          POSTGRES DB: ${{ env.DB_NAME }}
         ports:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
@@ -152,7 +152,6 @@ jobs:
               -e "s/\${DATABASE}/${{ env.DB_NAME }}/" \
               -e "s/\${HOST}/${{ env.DB_HOST }}/" \
               phpunit.xml.dist > phpunit.xml
-          ./vendor/bin/phpunit -c phpunit.xml --migrate-configuration
           ./vendor/bin/phpunit \
               --stderr \
               --exclude-group ${{ matrix.exclude_group }} \

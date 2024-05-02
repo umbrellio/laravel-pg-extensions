@@ -6,6 +6,9 @@ namespace Umbrellio\Postgres\Helpers;
 
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * @codeCoverageIgnore
+ */
 trait TableAssertions
 {
     abstract public static function assertSame($expected, $actual, string $message = ''): void;

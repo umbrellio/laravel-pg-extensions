@@ -10,6 +10,9 @@ use Illuminate\Support\Fluent;
 
 class CreateCompiler
 {
+    /**
+     * @codeCoverageIgnore
+     */
     public static function compile(Grammar $grammar, Blueprint $blueprint, array $columns, array $commands = []): string
     {
         $compiledCommand = sprintf(

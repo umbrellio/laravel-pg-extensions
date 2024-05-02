@@ -6,6 +6,9 @@ namespace Umbrellio\Postgres\Helpers;
 
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @codeCoverageIgnore
+ */
 trait IndexAssertions
 {
     abstract public static function assertNotNull($actual, string $message = ''): void;

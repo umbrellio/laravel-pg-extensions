@@ -118,6 +118,7 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get install -y libpq-dev postgresql-client
+          sudo apt install -y php8.3-xdebug
       - name: 'Setup cache environment'
         id: cache-env
         uses: shivammathur/cache-extensions@v1

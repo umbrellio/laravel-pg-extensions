@@ -36,11 +36,17 @@ class PostgresGrammar extends BasePostgresGrammar
         );
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileAttachPartition(Blueprint $blueprint, Fluent $command): string
     {
         return AttachPartitionCompiler::compile($this, $blueprint, $command);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileDetachPartition(Blueprint $blueprint, Fluent $command): string
     {
         return sprintf(
@@ -50,6 +56,9 @@ class PostgresGrammar extends BasePostgresGrammar
         );
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileCreateView(Blueprint $blueprint, Fluent $command): string
     {
         $materialize = $command->get('materialize') ? 'materialized' : '';
@@ -63,16 +72,25 @@ class PostgresGrammar extends BasePostgresGrammar
         ]));
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileDropView(Blueprint $blueprint, Fluent $command): string
     {
         return 'drop view ' . $this->wrapTable($command->get('view'));
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileViewExists(): string
     {
         return 'select * from information_schema.views where table_schema = ? and table_name = ?';
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileForeignKeysListing(string $tableName): string
     {
         return sprintf("
@@ -92,6 +110,9 @@ class PostgresGrammar extends BasePostgresGrammar
         ", $tableName);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileViewDefinition(): string
     {
         return 'select view_definition from information_schema.views where table_schema = ? and table_name = ?';

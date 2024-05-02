@@ -50,7 +50,6 @@ class Blueprint extends BaseBlueprint
 
     /**
      * @codeCoverageIgnore
-     * @return Fluent
      */
     public function ifNotExists(): Fluent
     {
@@ -183,6 +182,7 @@ class Blueprint extends BaseBlueprint
      */
     protected function getSchemaManager()
     {
+        /** @scrutinizer ignore-call */
         $connection = Schema::getConnection();
         $doctrineConnection = DriverManager::getConnection($connection->getConfig());
         return $doctrineConnection->getSchemaManager();

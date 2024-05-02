@@ -23,7 +23,7 @@ env:
   php_extensions: 'apcu, bcmath, ctype, curl, dom, iconv, intl, json, mbstring, opcache, openssl, pdo, pdo_pgsql, pcntl, pcov, posix, redis, session, simplexml, sockets, tokenizer, xml, xmlwriter, zip'
   key: cache-v0.1
   DB_USER: 'postgres'
-  DB_NAME: 'testing'
+  DB_NAME: 'postgres'
   DB_PASSWORD: 'postgres'
   DB_HOST: '127.0.0.1'
 

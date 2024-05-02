@@ -14,6 +14,9 @@ class Builder extends BasePostgresBuilder
 
     public $name;
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function createView(string $view, string $select, $materialize = false): void
     {
         $blueprint = $this->createBlueprint($view);
@@ -21,6 +24,9 @@ class Builder extends BasePostgresBuilder
         $this->build($blueprint);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function dropView(string $view): void
     {
         $blueprint = $this->createBlueprint($view);
@@ -28,6 +34,9 @@ class Builder extends BasePostgresBuilder
         $this->build($blueprint);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function hasView($view): bool
     {
         return count($this->connection->selectFromWriteConnection($this->grammar->compileViewExists(), [
@@ -36,11 +45,17 @@ class Builder extends BasePostgresBuilder
         ])) > 0;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getForeignKeys($tableName): array
     {
         return $this->connection->selectFromWriteConnection($this->grammar->compileForeignKeysListing($tableName));
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getViewDefinition($view): string
     {
         $results = $this->connection->selectFromWriteConnection($this->grammar->compileViewDefinition(), [

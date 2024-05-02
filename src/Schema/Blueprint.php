@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Schema;
 
+use Doctrine\DBAL\DriverManager;
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
 use Illuminate\Database\Schema\ColumnDefinition;
 use Illuminate\Support\Facades\Schema;
@@ -167,7 +168,9 @@ class Blueprint extends BaseBlueprint
 
     protected function getSchemaManager()
     {
-        return Schema::getConnection()->getDoctrineSchemaManager();
+        $connection = Schema::getConnection();
+        $doctrineConnection = DriverManager::getConnection($connection->getConfig());
+        return $doctrineConnection->getSchemaManager();
     }
 
     private function addExtendedCommand(string $fluent, string $name, array $parameters = []): Fluent

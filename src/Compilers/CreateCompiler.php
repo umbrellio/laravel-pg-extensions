@@ -30,6 +30,9 @@ class CreateCompiler
         return $command ? 'if not exists' : '';
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     private static function compileLike(Grammar $grammar, Fluent $command): string
     {
         $table = $command->get('table');

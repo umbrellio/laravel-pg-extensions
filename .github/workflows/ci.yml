@@ -20,10 +20,10 @@ on:
 
 env:
   COVERAGE: '1'
-  php_extensions: 'apcu, bcmath, ctype, curl, dom, iconv, intl, json, mbstring, opcache, openssl, pdo, pdo_pgsql, pcntl, pcov, posix, redis, session, simplexml, sockets, tokenizer, xml, xmlwriter, zip'
+  php_extensions: 'apcu, bcmath, ctype, curl, dom, iconv, intl, json, mbstring, opcache, openssl, pdo, pdo_pgsql, pcntl, pcov, posix, redis, session, simplexml, sockets, tokenizer, xml, xmlwriter, zip, xdebug'
   key: cache-v0.1
   DB_USER: 'postgres'
-  DB_NAME: 'testing'
+  DB_NAME: 'postgres'
   DB_PASSWORD: 'postgres'
   DB_HOST: '127.0.0.1'
 
@@ -36,7 +36,7 @@ jobs:
         operating_system:
           - ubuntu-latest
         php_versions:
-          - '7.4'
+          - '8.3'
       fail-fast: false
     env:
       PHP_CS_FIXER_FUTURE_MODE: '0'
@@ -78,67 +78,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        coverage: [false]
-        exclude_group: ['WithoutSchema,forPHP8']
+        coverage: [true]
         experimental: [false]
         operating_system: [ubuntu-latest]
-        postgres: ['10', '11', '12']
-        php_versions: ['7.3', '7.4']
+        postgres: ['10', '11', '12', '13', '14']
+        php_versions: ['8.3']
         include:
           - operating_system: 'ubuntu-latest'
-            php_versions: '7.3'
-            postgres: '9.6'
-            experimental: false
-            coverage: true
-            exclude_group: WithoutSchema,forPHP8
-          - operating_system: 'ubuntu-latest'
-            php_versions: '7.3'
-            postgres: '13'
-            experimental: false
-            coverage: false
-            exclude_group: WithoutSchema,forPHP8
-          - operating_system: 'ubuntu-latest'
-            php_versions: '7.4'
-            postgres: '13'
-            experimental: false
-            coverage: false
-            exclude_group: WithoutSchema,forPHP8
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.0'
-            postgres: '10'
-            experimental: false
-            coverage: false
-            exclude_group: WithoutSchema,forPHP7
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.0'
-            postgres: '11'
-            experimental: false
-            coverage: false
-            exclude_group: WithoutSchema,forPHP7
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.0'
-            postgres: '12'
-            experimental: false
-            coverage: true
-            exclude_group: WithoutSchema,forPHP7
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.0'
-            postgres: '13'
-            coverage: false
-            experimental: false
-            exclude_group: WithoutSchema,forPHP7
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.1'
-            postgres: '14'
-            coverage: false
-            experimental: false
-            exclude_group: WithoutSchema,forPHP7
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.2'
+            php_versions: '8.3'
             postgres: '15'
             coverage: false
-            experimental: false
-            exclude_group: WithoutSchema,forPHP7
+            experimental: true
+          - operating_system: 'ubuntu-latest'
+            php_versions: '8.4'
+            postgres: '16'
+            coverage: false
+            experimental: true
     runs-on: '${{ matrix.operating_system }}'
     services:
       postgres:
@@ -181,8 +136,8 @@ jobs:
         with:
           php-version: ${{ matrix.php_versions }}
           extensions: ${{ env.php_extensions }}
-          ini-values: 'pcov.directory=src, date.timezone=UTC, upload_max_filesize=20M, post_max_size=20M, memory_limit=512M, short_open_tag=Off'
-          coverage: pcov
+          ini-values: 'date.timezone=UTC, upload_max_filesize=20M, post_max_size=20M, memory_limit=512M, short_open_tag=Off, xdebug.mode="develop,coverage"'
+          coverage: xdebug
           tools: 'phpunit'
       - name: 'Install PHP dependencies with Composer'
         continue-on-error: ${{ matrix.experimental }}
@@ -191,6 +146,7 @@ jobs:
       - name: 'Run Unit Tests with PHPUnit'
         continue-on-error: ${{ matrix.experimental }}
         run: |
+          php -v
           sed -e "s/\${USERNAME}/${{ env.DB_USER }}/" \
               -e "s/\${PASSWORD}/${{ env.DB_PASSWORD }}/" \
               -e "s/\${DATABASE}/${{ env.DB_NAME }}/" \
@@ -198,9 +154,9 @@ jobs:
               phpunit.xml.dist > phpunit.xml
           ./vendor/bin/phpunit \
               --stderr \
-              --exclude-group ${{ matrix.exclude_group }} \
               --coverage-clover build/logs/clover.xml \
               --coverage-text
+          cat build/logs/clover.xml
         working-directory: './'
       - name: Upload coverage results to Coveralls
         if: ${{ !matrix.experimental && matrix.coverage }}

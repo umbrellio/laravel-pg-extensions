@@ -3,5 +3,6 @@
 .ecs_cache
 phpunit.xml
 .phpunit.result.cache
-/build
+.phpunit.cache
 composer.lock
+/build

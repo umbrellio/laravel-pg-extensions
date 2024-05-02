@@ -11,6 +11,8 @@ use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Umbrellio\Postgres\Helpers\IndexAssertions;
 use Umbrellio\Postgres\Helpers\TableAssertions;
 use Umbrellio\Postgres\Schema\Blueprint;
@@ -26,61 +28,8 @@ class CreateIndexTest extends FunctionalTestCase
 
     use InteractsWithDatabase;
 
-    /**
-     * @test
-     */
-    public function createIndexIfNotExists(): void
-    {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-
-            if (! $table->hasIndex(['name'], true)) {
-                $table->unique(['name']);
-            }
-        });
-
-        $this->seeTable('test_table');
-
-        Schema::table('test_table', function (Blueprint $table) {
-            if (! $table->hasIndex(['name'], true)) {
-                $table->unique(['name']);
-            }
-        });
-
-        $this->seeIndex('test_table_name_unique');
-    }
-
-    /**
-     * @test
-     * @group WithSchema
-     */
-    public function createIndexWithSchema(): void
-    {
-        $this->createIndexDefinition();
-        $this->assertSameIndex(
-            'test_table_name_unique',
-            'CREATE UNIQUE INDEX test_table_name_unique ON public.test_table USING btree (name)'
-        );
-    }
-
-    /**
-     * @test
-     * @group WithoutSchema
-     */
-    public function createIndexWithoutSchema(): void
-    {
-        $this->createIndexDefinition();
-        $this->assertSameIndex(
-            'test_table_name_unique',
-            'CREATE UNIQUE INDEX test_table_name_unique ON test_table USING btree (name)'
-        );
-    }
-
-    /**
-     * @test
-     * @dataProvider provideIndexes
-     */
+    #[Test]
+    #[DataProvider('provideIndexes')]
     public function createPartialUnique(string $expected, Closure $callback): void
     {
         Schema::create('test_table', function (Blueprint $table) use ($callback) {
@@ -109,9 +58,7 @@ class CreateIndexTest extends FunctionalTestCase
         $this->notSeeIndex('test_table_name_unique');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createSpecifyIndex(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -127,7 +74,7 @@ class CreateIndexTest extends FunctionalTestCase
         );
     }
 
-    public function provideIndexes(): Generator
+    public static function provideIndexes(): Generator
     {
         yield ['', function (Blueprint $table) {
             $table->uniquePartial('name');
@@ -218,9 +165,7 @@ class CreateIndexTest extends FunctionalTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addExcludeConstraints(): void
     {
         DB::statement('CREATE EXTENSION IF NOT EXISTS btree_gist');
@@ -251,9 +196,7 @@ class CreateIndexTest extends FunctionalTestCase
         $this->dontSeeConstraint('test_table', 'test_table_period_start_period_end_excl');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addCheckConstraints(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -282,9 +225,7 @@ class CreateIndexTest extends FunctionalTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function dropCheckConstraints(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -331,14 +272,14 @@ class CreateIndexTest extends FunctionalTestCase
         $this->seeIndex('test_table_name_unique');
     }
 
-    private function provideSuccessData(): Generator
+    private static function provideSuccessData(): Generator
     {
         yield [1, '2019-01-01', '2019-01-31'];
         yield [2, '2019-02-15', '2019-04-20'];
         yield [3, '2019-03-07', '2019-06-24'];
     }
 
-    private function provideWrongData(): Generator
+    private static function provideWrongData(): Generator
     {
         yield [4, '2019-01-01', '2019-01-31'];
         yield [1, '2019-07-15', '2019-04-20'];

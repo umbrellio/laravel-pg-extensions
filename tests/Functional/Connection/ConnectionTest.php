@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Tests\Functional\Connection;
 
+use Generator;
 use Illuminate\Database\Connection;
 use Illuminate\Database\SQLiteConnection;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
@@ -11,6 +12,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Umbrellio\Postgres\Connectors\ConnectionFactory;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\_data\CustomSQLiteConnection;
@@ -24,9 +27,7 @@ class ConnectionTest extends FunctionalTestCase
 
     protected $emulatePrepares = true;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function connectionFactory(): void
     {
         $factory = new ConnectionFactory(app());
@@ -34,9 +35,7 @@ class ConnectionTest extends FunctionalTestCase
         $this->assertInstanceOf(SQLiteConnection::class, $factory->make(config('database.connections.sqlite')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function resolverFor(): void
     {
         Connection::resolverFor('sqlite', function ($connection, $database, $prefix, $config) {
@@ -51,10 +50,8 @@ class ConnectionTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     * @dataProvider boolDataProvider
-     */
+    #[Test]
+    #[DataProvider('boolDataProvider')]
     public function boolTrueBindingsWorks($value)
     {
         $table = 'test_table';
@@ -70,10 +67,8 @@ class ConnectionTest extends FunctionalTestCase
         $this->assertSame(1, $result->count());
     }
 
-    /**
-     * @test
-     * @dataProvider intDataProvider
-     */
+    #[Test]
+    #[DataProvider('intDataProvider')]
     public function intBindingsWorks($value)
     {
         $table = 'test_table';
@@ -89,9 +84,7 @@ class ConnectionTest extends FunctionalTestCase
         $this->assertSame(1, $result->count());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function stringBindingsWorks()
     {
         $table = 'test_table';
@@ -107,9 +100,7 @@ class ConnectionTest extends FunctionalTestCase
         $this->assertSame(1, $result->count());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function nullBindingsWorks()
     {
         $table = 'test_table';
@@ -126,10 +117,8 @@ class ConnectionTest extends FunctionalTestCase
         $this->assertSame(1, $result->count());
     }
 
-    /**
-     * @test
-     * @dataProvider dateDataProvider
-     */
+    #[Test]
+    #[DataProvider('dateDataProvider')]
     public function dateTimeBindingsWorks($value)
     {
         $table = 'test_table';
@@ -145,19 +134,19 @@ class ConnectionTest extends FunctionalTestCase
         $this->assertSame(1, $result->count());
     }
 
-    public function boolDataProvider()
+    public static function boolDataProvider(): Generator
     {
         yield 'true' => [true];
         yield 'false' => [false];
     }
 
-    public function intDataProvider()
+    public static function intDataProvider(): Generator
     {
         yield 'zero' => [0];
         yield 'non-zero' => [10];
     }
 
-    public function dateDataProvider()
+    public static function dateDataProvider(): Generator
     {
         yield 'as string' => ['2019-01-01 13:12:22'];
         yield 'as Carbon object' => [new Carbon('2019-01-01 13:12:22')];

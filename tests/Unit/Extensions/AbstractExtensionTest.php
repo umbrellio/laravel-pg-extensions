@@ -6,6 +6,7 @@ namespace Umbrellio\Postgres\Tests\Unit\Extensions;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Umbrellio\Postgres\Extensions\AbstractComponent;
 use Umbrellio\Postgres\Extensions\AbstractExtension;
 use Umbrellio\Postgres\Extensions\Exceptions\MacroableMissedException;
@@ -15,9 +16,7 @@ use Umbrellio\Postgres\Tests\TestCase;
 
 class AbstractExtensionTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function registerInvalidExtension(): void
     {
         $abstractExtension = new ExtensionStub();
@@ -28,9 +27,7 @@ class AbstractExtensionTest extends TestCase
         $abstractExtension::register();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function registerWithInvalidMixin(): void
     {
         $abstractExtension = new InvalidExtensionStub();
@@ -71,7 +68,7 @@ class ExtensionStub extends AbstractExtension
     public static function getMixins(): array
     {
         return [
-            InvalidComponentStub::class => Blueprint::class,
+            \Umbrellio\Postgres\Tests\Unit\Extensions\InvalidComponentStub::class => Blueprint::class,
         ];
     }
 }

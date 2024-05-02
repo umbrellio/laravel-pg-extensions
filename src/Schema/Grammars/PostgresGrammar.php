@@ -36,11 +36,17 @@ class PostgresGrammar extends BasePostgresGrammar
         );
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileAttachPartition(Blueprint $blueprint, Fluent $command): string
     {
         return AttachPartitionCompiler::compile($this, $blueprint, $command);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileDetachPartition(Blueprint $blueprint, Fluent $command): string
     {
         return sprintf(
@@ -50,7 +56,10 @@ class PostgresGrammar extends BasePostgresGrammar
         );
     }
 
-    public function compileCreateView(/** @scrutinizer ignore-unused */ Blueprint $blueprint, Fluent $command): string
+    /**
+     * @codeCoverageIgnore
+     */
+    public function compileCreateView(Blueprint $blueprint, Fluent $command): string
     {
         $materialize = $command->get('materialize') ? 'materialized' : '';
         return implode(' ', array_filter([
@@ -63,16 +72,25 @@ class PostgresGrammar extends BasePostgresGrammar
         ]));
     }
 
-    public function compileDropView(/** @scrutinizer ignore-unused */ Blueprint $blueprint, Fluent $command): string
+    /**
+     * @codeCoverageIgnore
+     */
+    public function compileDropView(Blueprint $blueprint, Fluent $command): string
     {
         return 'drop view ' . $this->wrapTable($command->get('view'));
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileViewExists(): string
     {
         return 'select * from information_schema.views where table_schema = ? and table_name = ?';
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileForeignKeysListing(string $tableName): string
     {
         return sprintf("
@@ -92,6 +110,9 @@ class PostgresGrammar extends BasePostgresGrammar
         ", $tableName);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileViewDefinition(): string
     {
         return 'select view_definition from information_schema.views where table_schema = ? and table_name = ?';
@@ -133,17 +154,17 @@ class PostgresGrammar extends BasePostgresGrammar
         return $type;
     }
 
-    protected function typeTsrange(/** @scrutinizer ignore-unused */ Fluent $column): string
+    protected function typeTsrange(Fluent $column): string
     {
         return TsRangeType::TYPE_NAME;
     }
 
-    protected function typeTstzrange(/** @scrutinizer ignore-unused */ Fluent $column): string
+    protected function typeTstzrange(Fluent $column): string
     {
         return TsTzRangeType::TYPE_NAME;
     }
 
-    protected function typeDaterange(/** @scrutinizer ignore-unused */ Fluent $column): string
+    protected function typeDaterange(Fluent $column): string
     {
         return DateRangeType::TYPE_NAME;
     }

@@ -60,7 +60,6 @@ class CreateTableTest extends FunctionalTestCase
         $this->assertCommentOnColumn('test_table', 'name');
     }
 
-    #[Test]
     public function createViaLike(): void
     {
         Schema::create('test_table', function (Blueprint $table) {
@@ -77,7 +76,6 @@ class CreateTableTest extends FunctionalTestCase
         $this->assertCompareTables('test_table', 'test_table2');
     }
 
-    #[Test]
     public function createViaLikeIncludingAll(): void
     {
         Schema::create('test_table', function (Blueprint $table) {

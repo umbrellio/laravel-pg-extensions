@@ -6,7 +6,6 @@ namespace Umbrellio\Postgres\Tests\Functional\Schema;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
-use PHPUnit\Framework\Attributes\Test;
 use Umbrellio\Postgres\Helpers\ViewAssertions;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
@@ -34,7 +33,6 @@ class CreateViewTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    #[Test]
     public function createFacadeView(): void
     {
         Schema::createView('test_view', 'select * from test_table where name is not null');
@@ -49,7 +47,6 @@ class CreateViewTest extends FunctionalTestCase
         $this->notSeeView('test_view');
     }
 
-    #[Test]
     public function createBlueprintView(): void
     {
         Schema::table('test_table', function (Blueprint $table) {

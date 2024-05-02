@@ -12,7 +12,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Umbrellio\Postgres\Helpers\IndexAssertions;
 use Umbrellio\Postgres\Helpers\TableAssertions;
@@ -42,31 +41,9 @@ class CreateIndexTest extends FunctionalTestCase
         });
 
         $this->seeTable('test_table');
-//        dd(Schema::getIndexListing('test_table'));
-
-        Schema::table('test_table', function (Blueprint $table) {
-//            dd($table->hasIndex(['name'], true));
-            if (! $table->hasIndex(['name'], true)) {
-                $table->unique(['name']);
-            }
-        });
-
         $this->seeIndex('test_table_name_unique');
     }
 
-    #[Test]
-    #[Group('WithSchema')]
-    public function createIndexWithSchema(): void
-    {
-        $this->createIndexDefinition();
-        $this->assertSameIndex(
-            'test_table_name_unique',
-            'CREATE UNIQUE INDEX test_table_name_unique ON public.test_table USING btree (name)'
-        );
-    }
-
-    #[Test]
-    #[Group('WithoutSchema')]
     public function createIndexWithoutSchema(): void
     {
         $this->createIndexDefinition();

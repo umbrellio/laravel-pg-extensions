@@ -66,6 +66,7 @@ class PostgresConnection extends BasePostgresConnection
         $this->registerInitialTypes();
     }
 
+    /*
     public function getDoctrineConnection(): Connection
     {
         return DriverManager::getConnection($this->getConfig());
@@ -73,9 +74,11 @@ class PostgresConnection extends BasePostgresConnection
 
     public function getDatabasePlatform(): AbstractPlatform
     {
-        return $this->getDoctrineConnection()
+        return $this
+            ->getDoctrineConnection()
             ->getDatabasePlatform();
     }
+    */
 
     public function bindValues($statement, $bindings)
     {
@@ -131,9 +134,9 @@ class PostgresConnection extends BasePostgresConnection
             if (! Type::hasType($type)) {
                 Type::addType($type, $typeClass);
             } else {
-                $this
-                    ->getDatabasePlatform()
-                    ->registerDoctrineTypeMapping($typeClass, $type);
+//                $this
+//                    ->getDatabasePlatform()
+//                    ->registerDoctrineTypeMapping($typeClass, $type);
             }
         }
     }
@@ -150,9 +153,9 @@ class PostgresConnection extends BasePostgresConnection
                 if (! Type::hasType($type)) {
                     Type::addType($type, $typeClass);
                 } else {
-                    $this
-                        ->getDatabasePlatform()
-                        ->registerDoctrineTypeMapping($typeClass, $type);
+//                    $this
+//                        ->getDatabasePlatform()
+//                        ->registerDoctrineTypeMapping($typeClass, $type);
                 }
             }
         });

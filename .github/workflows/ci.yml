@@ -79,7 +79,6 @@ jobs:
       fail-fast: false
       matrix:
         coverage: [true]
-        exclude_group: ['WithSchema']
         experimental: [false]
         operating_system: [ubuntu-latest]
         postgres: ['10', '11', '12', '13', '14']
@@ -154,7 +153,6 @@ jobs:
               phpunit.xml.dist > phpunit.xml
           ./vendor/bin/phpunit \
               --stderr \
-              --exclude-group ${{ matrix.exclude_group }} \
               --coverage-text
           cat build/logs/clover.xml
         working-directory: './'

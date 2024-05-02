@@ -39,6 +39,7 @@
     "laravel/framework": "^11.0"
   },
   "require-dev": {
+    "ext-xdebug": "^3.0",
     "umbrellio/code-style-php": "^1.0",
     "orchestra/testbench": "^9.0",
     "php-coveralls/php-coveralls": "^2.7",

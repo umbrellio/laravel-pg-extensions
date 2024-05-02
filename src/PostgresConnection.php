@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres;
 
 use DateTimeInterface;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Illuminate\Database\PostgresConnection as BasePostgresConnection;
 use Illuminate\Support\Traits\Macroable;
@@ -66,20 +63,6 @@ class PostgresConnection extends BasePostgresConnection
         $this->registerInitialTypes();
     }
 
-    /*
-    public function getDoctrineConnection(): Connection
-    {
-        return DriverManager::getConnection($this->getConfig());
-    }
-
-    public function getDatabasePlatform(): AbstractPlatform
-    {
-        return $this
-            ->getDoctrineConnection()
-            ->getDatabasePlatform();
-    }
-    */
-
     public function bindValues($statement, $bindings)
     {
         if ($this->getPdo()->getAttribute(PDO::ATTR_EMULATE_PREPARES)) {
@@ -133,10 +116,6 @@ class PostgresConnection extends BasePostgresConnection
         foreach ($this->initialTypes as $type => $typeClass) {
             if (! Type::hasType($type)) {
                 Type::addType($type, $typeClass);
-            } else {
-//                $this
-//                    ->getDatabasePlatform()
-//                    ->registerDoctrineTypeMapping($typeClass, $type);
             }
         }
     }
@@ -152,10 +131,6 @@ class PostgresConnection extends BasePostgresConnection
             foreach ($extension::getTypes() as $type => $typeClass) {
                 if (! Type::hasType($type)) {
                     Type::addType($type, $typeClass);
-                } else {
-//                    $this
-//                        ->getDatabasePlatform()
-//                        ->registerDoctrineTypeMapping($typeClass, $type);
                 }
             }
         });

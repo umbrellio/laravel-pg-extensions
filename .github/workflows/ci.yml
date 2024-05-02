@@ -40,7 +40,7 @@ jobs:
       fail-fast: false
     env:
       PHP_CS_FIXER_FUTURE_MODE: '0'
-    name: 'Lint PHP'
+    name: 'Linter PHP'
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
@@ -106,7 +106,7 @@ jobs:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-    name: 'Test / PHP ${{ matrix.php_versions }} / Postgres ${{ matrix.postgres }}'
+    name: 'Testing / PHP ${{ matrix.php_versions }} / Postgres ${{ matrix.postgres }}'
     needs:
       - lint
     steps:

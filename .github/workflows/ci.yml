@@ -153,6 +153,7 @@ jobs:
               phpunit.xml.dist > phpunit.xml
           ./vendor/bin/phpunit \
               --stderr \
+              --coverage-clover build/logs/clover.xml \
               --coverage-text
           cat build/logs/clover.xml
         working-directory: './'

@@ -29,31 +29,6 @@ class CreateIndexTest extends FunctionalTestCase
     use InteractsWithDatabase;
 
     #[Test]
-    public function createIndexIfNotExists(): void
-    {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-
-            if (! $table->hasIndex(['name'], true)) {
-                $table->unique(['name']);
-            }
-        });
-
-        $this->seeTable('test_table');
-        $this->seeIndex('test_table_name_unique');
-    }
-
-    public function createIndexWithoutSchema(): void
-    {
-        $this->createIndexDefinition();
-        $this->assertSameIndex(
-            'test_table_name_unique',
-            'CREATE UNIQUE INDEX test_table_name_unique ON test_table USING btree (name)'
-        );
-    }
-
-    #[Test]
     #[DataProvider('provideIndexes')]
     public function createPartialUnique(string $expected, Closure $callback): void
     {

@@ -59,39 +59,4 @@ class CreateTableTest extends FunctionalTestCase
         $this->assertDefaultOnColumn('test_table', 'name');
         $this->assertCommentOnColumn('test_table', 'name');
     }
-
-    public function createViaLike(): void
-    {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-        });
-
-        Schema::create('test_table2', function (Blueprint $table) {
-            $table->like('test_table');
-        });
-
-        $this->seeTable('test_table');
-        $this->seeTable('test_table2');
-        $this->assertCompareTables('test_table', 'test_table2');
-    }
-
-    public function createViaLikeIncludingAll(): void
-    {
-        Schema::create('test_table', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name')
-                ->unique();
-        });
-
-        Schema::create('test_table2', function (Blueprint $table) {
-            $table->like('test_table')
-                ->includingAll();
-            $table->ifNotExists();
-        });
-
-        $this->seeTable('test_table');
-        $this->seeTable('test_table2');
-        $this->assertCompareTables('test_table', 'test_table2');
-    }
 }

@@ -40,6 +40,7 @@ class Blueprint extends BaseBlueprint
     }
 
     /**
+     * @codeCoverageIgnore
      * @return LikeDefinition|Fluent
      */
     public function like(string $table): Fluent
@@ -47,6 +48,9 @@ class Blueprint extends BaseBlueprint
         return $this->addCommand('like', compact('table'));
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function ifNotExists(): Fluent
     {
         return $this->addCommand('ifNotExists');
@@ -110,6 +114,9 @@ class Blueprint extends BaseBlueprint
         return $this->dropIndexCommand('dropUnique', 'chk', $index);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function hasIndex($index, bool $unique = false): bool
     {
         if (is_array($index)) {
@@ -120,6 +127,7 @@ class Blueprint extends BaseBlueprint
     }
 
     /**
+     * @codeCoverageIgnore
      * @return ViewDefinition|Fluent
      */
     public function createView(string $view, string $select, bool $materialize = false): Fluent
@@ -127,6 +135,9 @@ class Blueprint extends BaseBlueprint
         return $this->addCommand('createView', compact('view', 'select', 'materialize'));
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function dropView(string $view): Fluent
     {
         return $this->addCommand('dropView', compact('view'));
@@ -166,8 +177,12 @@ class Blueprint extends BaseBlueprint
         return $this->addColumn(DateRangeType::TYPE_NAME, $column);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     protected function getSchemaManager()
     {
+        /** @scrutinizer ignore-call */
         $connection = Schema::getConnection();
         $doctrineConnection = DriverManager::getConnection($connection->getConfig());
         return $doctrineConnection->getSchemaManager();

@@ -14,7 +14,8 @@ class AttachPartitionCompiler
 {
     public static function compile(Grammar $grammar, Blueprint $blueprint, Fluent $command): string
     {
-        return sprintf('alter table %s attach partition %s %s',
+        return sprintf(
+            'alter table %s attach partition %s %s',
             $grammar->wrapTable($blueprint),
             $command->get('partition'),
             self::compileForValues($command)
@@ -23,7 +24,8 @@ class AttachPartitionCompiler
 
     private static function compileForValues(Fluent $command): string
     {
-        if ($range = $command->get('range')) {
+        $range = $command->get('range');
+        if ($range) {
             $from = self::formatValue($range['from']);
             $to = self::formatValue($range['to']);
             return "for values from ({$from}) to ({$to})";

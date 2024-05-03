@@ -8,10 +8,10 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Types\Type;
 use PHPUnit\Framework\Attributes\Test;
-use Umbrellio\Postgres\Schema\Types\TsRangeType;
+use Umbrellio\Postgres\Schema\Types\DateRangeType;
 use Umbrellio\Postgres\Tests\TestCase;
 
-class TsRangeTypeTest extends TestCase
+class DateRangeTypeTest extends TestCase
 {
     private AbstractPlatform $abstractPlatform;
 
@@ -21,7 +21,7 @@ class TsRangeTypeTest extends TestCase
     {
         parent::setUp();
 
-        $this->type = new TsRangeType();
+        $this->type = new DateRangeType();
         $this->abstractPlatform = $this
             ->getMockBuilder(PostgreSQLPlatform::class)
             ->getMock();
@@ -30,12 +30,12 @@ class TsRangeTypeTest extends TestCase
     #[Test]
     public function getSQLDeclaration(): void
     {
-        $this->assertSame(TsRangeType::TYPE_NAME, $this->type->getSQLDeclaration([], $this->abstractPlatform));
+        $this->assertSame(DateRangeType::TYPE_NAME, $this->type->getSQLDeclaration([], $this->abstractPlatform));
     }
 
     #[Test]
     public function getTypeName(): void
     {
-        $this->assertSame(TsRangeType::TYPE_NAME, $this->type->getName());
+        $this->assertSame(DateRangeType::TYPE_NAME, $this->type->getName());
     }
 }

@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Helpers;
 
 use Illuminate\Support\Facades\Schema;
-use PHPUnit\Framework\TestCase;
 
 /**
- * @mixin TestCase
+ * @codeCoverageIgnore
  */
 trait TableAssertions
 {
+    abstract public static function assertSame($expected, $actual, string $message = ''): void;
+
+    abstract public static function assertTrue($condition, string $message = ''): void;
+
     protected function assertCompareTables(string $sourceTable, string $destinationTable): void
     {
         $this->assertSame($this->getTableDefinition($sourceTable), $this->getTableDefinition($destinationTable));

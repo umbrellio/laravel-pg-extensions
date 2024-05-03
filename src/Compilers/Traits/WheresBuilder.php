@@ -38,7 +38,7 @@ trait WheresBuilder
 
     protected static function whereIn(Grammar $grammar, Blueprint $blueprint, array $where = []): string
     {
-        if (!empty($where['values'])) {
+        if (! empty($where['values'])) {
             return implode(' ', [
                 $grammar->wrap($where['column']),
                 'in',
@@ -50,7 +50,7 @@ trait WheresBuilder
 
     protected static function whereNotIn(Grammar $grammar, Blueprint $blueprint, array $where = []): string
     {
-        if (!empty($where['values'])) {
+        if (! empty($where['values'])) {
             return implode(' ', [
                 $grammar->wrap($where['column']),
                 'not in',

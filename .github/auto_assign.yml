@@ -4,13 +4,11 @@ numberOfReviewers: 1
 
 reviewers:
  - pvsaitpe
- - zlob
 
 addAssignees: true
 
 assignees:
  - pvsaintpe
- - zlob
 
 numberOfAssignees: 1
 

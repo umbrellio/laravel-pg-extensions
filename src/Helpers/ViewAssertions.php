@@ -5,13 +5,18 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres\Helpers;
 
 use Illuminate\Support\Facades\Schema;
-use PHPUnit\Framework\TestCase;
 
 /**
- * @mixin TestCase
+ * @codeCoverageIgnore
  */
 trait ViewAssertions
 {
+    abstract public static function assertSame($expected, $actual, string $message = ''): void;
+
+    abstract public static function assertTrue($condition, string $message = ''): void;
+
+    abstract public static function assertFalse($condition, string $message = ''): void;
+
     protected function assertSameView(string $expectedDef, string $view): void
     {
         $definition = $this->getViewDefinition($view);

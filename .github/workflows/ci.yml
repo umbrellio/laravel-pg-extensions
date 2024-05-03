@@ -1,32 +1,47 @@
 name: CI
 
-on:	
+on:
   push:
+    branches:
+      - master
   pull_request:
+    types:
+      - opened
+      - reopened
+      - edited
+      - synchronize
+      - labeled
+      - assigned
+      - unlabeled
+      - unlocked
+      - review_requested
+      - review_request_removed
+      - unassigned
 
 env:
   COVERAGE: '1'
-  php_extensions: 'apcu, bcmath, ctype, curl, dom, iconv, intl, json, mbstring, opcache, openssl, pdo, pdo_pgsql, pcntl, pcov, posix, redis, session, simplexml, sockets, tokenizer, xml, xmlwriter, zip'
+  php_extensions: 'apcu, bcmath, ctype, curl, dom, iconv, intl, json, mbstring, opcache, openssl, pdo, pdo_pgsql, pcntl, pcov, posix, redis, session, simplexml, sockets, tokenizer, xml, xmlwriter, zip, xdebug'
   key: cache-v0.1
   DB_USER: 'postgres'
-  DB_NAME: 'testing'
+  DB_NAME: 'postgres'
   DB_PASSWORD: 'postgres'
+  DB_HOST: '127.0.0.1'
 
-jobs:	
+jobs:
   lint:
     runs-on: '${{ matrix.operating_system }}'
-    timeout-minutes: 20	
-    strategy:	
+    timeout-minutes: 20
+    strategy:
       matrix:
         operating_system:
           - ubuntu-latest
         php_versions:
-          - '7.4'
+          - '8.3'
       fail-fast: false
-    env:	
+    env:
       PHP_CS_FIXER_FUTURE_MODE: '0'
-    name: 'Lint PHP'
-    steps:	
+    name: 'Linter PHP'
+    steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
       - name: 'Setup cache environment'
@@ -43,11 +58,11 @@ jobs:
           key: '${{ steps.cache-env.outputs.key }}'
           restore-keys: '${{ steps.cache-env.outputs.key }}'
       - name: 'Setup PHP'
-        uses: shivammathur/setup-php@v2	
-        with:	
+        uses: shivammathur/setup-php@v2
+        with:
           php-version: ${{ matrix.php_versions }}
           extensions: '${{ env.php_extensions }}'
-          ini-values: memory_limit=-1	
+          ini-values: memory_limit=-1
           tools: pecl, composer
           coverage: none
       - name: 'Setup problem matchers for PHP (aka PHP error logs)'
@@ -55,65 +70,30 @@ jobs:
       - name: 'Setup problem matchers for PHPUnit'
         run: 'echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"'
       - name: 'Install PHP dependencies with Composer'
-        run: |
-          rm composer.lock
-          composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
+        run: COMPOSER_MEMORY_LIMIT=-1 composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
         working-directory: './'
       - name: 'Linting PHP source files'
-        run: 'vendor/bin/ecs check --config=ecs.yml .'
+        run: 'vendor/bin/ecs check --config=ecs.php .'
   test:
     strategy:
       fail-fast: false
       matrix:
-        exclude_group:
-          - WithoutSchema,forPHP8
-        experimental:
-          - false
-        operating_system:
-          - ubuntu-latest
-        postgres:
-          - '10'
-          - '11'
-          - '12'
-        php_versions:
-          - '7.3'
-          - '7.4'
+        coverage: [true]
+        experimental: [false]
+        operating_system: [ubuntu-latest]
+        postgres: ['10', '11', '12', '13', '14']
+        php_versions: ['8.3']
         include:
           - operating_system: 'ubuntu-latest'
-            php_versions: '7.3'
-            postgres: '9.6'
-            experimental: false
-            exclude_group: WithoutSchema,forPHP8
+            php_versions: '8.3'
+            postgres: '15'
+            coverage: false
+            experimental: true
           - operating_system: 'ubuntu-latest'
-            php_versions: '7.3'
-            postgres: '13'
-            experimental: false
-            exclude_group: WithoutSchema,forPHP8
-          - operating_system: 'ubuntu-latest'
-            php_versions: '7.4'
-            postgres: '13'
-            experimental: false
-            exclude_group: WithoutSchema,forPHP8
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.0'
-            postgres: '10'
-            experimental: false
-            exclude_group: WithoutSchema,forPHP7
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.0'
-            postgres: '11'
-            experimental: false
-            exclude_group: WithoutSchema,forPHP7
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.0'
-            postgres: '12'
-            experimental: false
-            exclude_group: WithoutSchema,forPHP7
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.0'
-            postgres: '13'
-            experimental: false
-            exclude_group: WithoutSchema,forPHP7
+            php_versions: '8.4'
+            postgres: '16'
+            coverage: false
+            experimental: true
     runs-on: '${{ matrix.operating_system }}'
     services:
       postgres:
@@ -126,7 +106,7 @@ jobs:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-    name: 'Test / PHP ${{ matrix.php_versions }} / Postgres ${{ matrix.postgres }}'
+    name: 'Testing / PHP ${{ matrix.php_versions }} / Postgres ${{ matrix.postgres }}'
     needs:
       - lint
     steps:
@@ -156,29 +136,30 @@ jobs:
         with:
           php-version: ${{ matrix.php_versions }}
           extensions: ${{ env.php_extensions }}
-          ini-values: 'pcov.directory=src, date.timezone=UTC, upload_max_filesize=20M, post_max_size=20M, memory_limit=512M, short_open_tag=Off'
-          coverage: pcov
+          ini-values: 'date.timezone=UTC, upload_max_filesize=20M, post_max_size=20M, memory_limit=512M, short_open_tag=Off, xdebug.mode="develop,coverage"'
+          coverage: xdebug
           tools: 'phpunit'
       - name: 'Install PHP dependencies with Composer'
         continue-on-error: ${{ matrix.experimental }}
-        run: |
-          rm composer.lock
-          composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
+        run: COMPOSER_MEMORY_LIMIT=-1 composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
         working-directory: './'
       - name: 'Run Unit Tests with PHPUnit'
         continue-on-error: ${{ matrix.experimental }}
-        env:
-          # use localhost for the host here because we are running the job on the VM.
-          # If we were running the job on in a container this would be postgres
-          POSTGRES_USER: ${{ env.DB_USER }}
-          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
-          POSTGRES_DB: ${{ env.DB_NAME }}
-          POSTGRES_HOST: 127.0.0.1
-          POSTGRES_PORT: 5432
-        run: './vendor/bin/phpunit --verbose --stderr --configuration phpunit.github.xml --exclude-group ${{ matrix.exclude_group }} --coverage-clover build/logs/clover.xml --coverage-text'
+        run: |
+          php -v
+          sed -e "s/\${USERNAME}/${{ env.DB_USER }}/" \
+              -e "s/\${PASSWORD}/${{ env.DB_PASSWORD }}/" \
+              -e "s/\${DATABASE}/${{ env.DB_NAME }}/" \
+              -e "s/\${HOST}/${{ env.DB_HOST }}/" \
+              phpunit.xml.dist > phpunit.xml
+          ./vendor/bin/phpunit \
+              --stderr \
+              --coverage-clover build/logs/clover.xml \
+              --coverage-text
+          cat build/logs/clover.xml
         working-directory: './'
       - name: Upload coverage results to Coveralls
-        if: ${{ !matrix.experimental }}
+        if: ${{ !matrix.experimental && matrix.coverage }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_PARALLEL: true

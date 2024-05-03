@@ -26,7 +26,7 @@ class UniqueCompiler
             'CREATE UNIQUE INDEX %s ON %s (%s) WHERE %s',
             $fluent->get('index'),
             $blueprint->getTable(),
-            implode(',', $fluent->get('columns')),
+            implode(',', (array) $fluent->get('columns')),
             static::removeLeadingBoolean(implode(' ', $wheres))
         );
     }

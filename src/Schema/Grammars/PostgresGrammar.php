@@ -28,6 +28,10 @@ use Umbrellio\Postgres\Schema\Builders\Routines\CreateTriggerBuilder;
 use Umbrellio\Postgres\Schema\Builders\Routines\DropFunctionBuilder;
 use Umbrellio\Postgres\Schema\Builders\Routines\DropProcedureBuilder;
 use Umbrellio\Postgres\Schema\Builders\Routines\DropTriggerBuilder;
+use Umbrellio\Postgres\Schema\Types\DateRangeType;
+use Umbrellio\Postgres\Schema\Types\NumericType;
+use Umbrellio\Postgres\Schema\Types\TsRangeType;
+use Umbrellio\Postgres\Schema\Types\TsTzRangeType;
 
 class PostgresGrammar extends BasePostgresGrammar
 {
@@ -44,26 +48,39 @@ class PostgresGrammar extends BasePostgresGrammar
         );
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileAttachPartition(Blueprint $blueprint, Fluent $command): string
     {
         return AttachPartitionCompiler::compile($this, $blueprint, $command);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileDetachPartition(Blueprint $blueprint, Fluent $command): string
     {
-        return sprintf('alter table %s detach partition %s',
+        return sprintf(
+            'alter table %s detach partition %s',
             $this->wrapTable($blueprint),
             $command->get('partition')
         );
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileCreateView(Blueprint $blueprint, Fluent $command): string
     {
         $materialize = $command->get('materialize') ? 'materialized' : '';
         return implode(' ', array_filter([
-            'create', $materialize, 'view',
+            'create',
+            $materialize,
+            'view',
             $this->wrapTable($command->get('view')),
-            'as', $command->get('select'),
+            'as',
+            $command->get('select'),
         ]));
     }
 
@@ -97,16 +114,47 @@ class PostgresGrammar extends BasePostgresGrammar
         return DropProcedureCompiler::compile($this, $blueprint, $command);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileDropView(Blueprint $blueprint, Fluent $command): string
     {
         return 'drop view ' . $this->wrapTable($command->get('view'));
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileViewExists(): string
     {
         return 'select * from information_schema.views where table_schema = ? and table_name = ?';
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
+    public function compileForeignKeysListing(string $tableName): string
+    {
+        return sprintf("
+            SELECT
+                kcu.column_name as source_column_name,
+                ccu.table_name AS target_table_name,
+                ccu.column_name AS target_column_name
+            FROM
+                information_schema.table_constraints AS tc
+                    JOIN information_schema.key_column_usage AS kcu
+                         ON tc.constraint_name = kcu.constraint_name
+                             AND tc.table_schema = kcu.table_schema
+                    JOIN information_schema.constraint_column_usage AS ccu
+                         ON ccu.constraint_name = tc.constraint_name
+                             AND ccu.table_schema = tc.table_schema
+            WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_name='%s';
+        ", $tableName);
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
     public function compileViewDefinition(): string
     {
         return 'select view_definition from information_schema.views where table_schema = ? and table_name = ?';
@@ -133,16 +181,16 @@ class PostgresGrammar extends BasePostgresGrammar
 
     protected function typeNumeric(Fluent $column): string
     {
-        $type = 'numeric';
+        $type = NumericType::TYPE_NAME;
         $precision = $column->get('precision');
         $scale = $column->get('scale');
 
         if ($precision && $scale) {
-            return "${type}({$precision}, {$scale})";
+            return "{$type}({$precision}, {$scale})";
         }
 
         if ($precision) {
-            return "${type}({$precision})";
+            return "{$type}({$precision})";
         }
 
         return $type;
@@ -150,6 +198,16 @@ class PostgresGrammar extends BasePostgresGrammar
 
     protected function typeTsrange(Fluent $column): string
     {
-        return 'tsrange';
+        return TsRangeType::TYPE_NAME;
+    }
+
+    protected function typeTstzrange(Fluent $column): string
+    {
+        return TsTzRangeType::TYPE_NAME;
+    }
+
+    protected function typeDaterange(Fluent $column): string
+    {
+        return DateRangeType::TYPE_NAME;
     }
 }

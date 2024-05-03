@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Unit\Schema\Blueprint;
+namespace Umbrellio\Postgres\Tests\Unit\Schema\Blueprint;
 
 use Closure;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\TestCase;
 use Umbrellio\Postgres\Tests\Unit\Helpers\BlueprintAssertions;
@@ -23,17 +25,15 @@ class IndexTest extends TestCase
         $this->initializeMock(static::TABLE);
     }
 
-    /**
-     * @test
-     * @dataProvider provideExcludeConstraints
-     */
+    #[Test]
+    #[DataProvider('provideExcludeConstraints')]
     public function addConstraint(Closure $callback, string $expectedSQL): void
     {
         $callback($this->blueprint);
         $this->assertSameSql($expectedSQL);
     }
 
-    public function provideExcludeConstraints(): Generator
+    public static function provideExcludeConstraints(): Generator
     {
         yield [
             static function (Blueprint $table) {

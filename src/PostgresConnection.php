@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Umbrellio\Postgres;
 
 use DateTimeInterface;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Events;
+use Doctrine\DBAL\Types\Type;
 use Illuminate\Database\PostgresConnection as BasePostgresConnection;
 use Illuminate\Support\Traits\Macroable;
 use PDO;
@@ -14,29 +13,31 @@ use Umbrellio\Postgres\Extensions\AbstractExtension;
 use Umbrellio\Postgres\Extensions\Exceptions\ExtensionInvalidException;
 use Umbrellio\Postgres\Schema\Builder;
 use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
-use Umbrellio\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber;
 use Umbrellio\Postgres\Schema\Types\NumericType;
 use Umbrellio\Postgres\Schema\Types\TsRangeType;
+use Umbrellio\Postgres\Schema\Types\TsTzRangeType;
 
 class PostgresConnection extends BasePostgresConnection
 {
     use Macroable;
 
+    public $name;
+
     private static $extensions = [];
 
     private $initialTypes = [
         TsRangeType::TYPE_NAME => TsRangeType::class,
+        TsTzRangeType::TYPE_NAME => TsTzRangeType::class,
         NumericType::TYPE_NAME => NumericType::class,
     ];
 
     /**
      * @param AbstractExtension|string $extension
-     * @throws ExtensionInvalidException
      * @codeCoverageIgnore
      */
     final public static function registerExtension(string $extension): void
     {
-        if (!is_subclass_of($extension, AbstractExtension::class)) {
+        if (! is_subclass_of($extension, AbstractExtension::class)) {
             throw new ExtensionInvalidException(sprintf(
                 'Class %s must be implemented from %s',
                 $extension,
@@ -60,13 +61,6 @@ class PostgresConnection extends BasePostgresConnection
 
         $this->registerExtensions();
         $this->registerInitialTypes();
-    }
-
-    public function getDoctrineConnection(): Connection
-    {
-        $doctrineConnection = parent::getDoctrineConnection();
-        $this->overrideDoctrineBehavior($doctrineConnection);
-        return $doctrineConnection;
     }
 
     public function bindValues($statement, $bindings)
@@ -120,9 +114,9 @@ class PostgresConnection extends BasePostgresConnection
     private function registerInitialTypes(): void
     {
         foreach ($this->initialTypes as $type => $typeClass) {
-            $this
-                ->getSchemaBuilder()
-                ->registerCustomDoctrineType($typeClass, $type, $type);
+            if (! Type::hasType($type)) {
+                Type::addType($type, $typeClass);
+            }
         }
     }
 
@@ -135,20 +129,10 @@ class PostgresConnection extends BasePostgresConnection
             /** @var AbstractExtension $extension */
             $extension::register();
             foreach ($extension::getTypes() as $type => $typeClass) {
-                $this->getSchemaBuilder()
-                    ->registerCustomDoctrineType($typeClass, $type, $type);
+                if (! Type::hasType($type)) {
+                    Type::addType($type, $typeClass);
+                }
             }
         });
-    }
-
-    private function overrideDoctrineBehavior(Connection $connection): Connection
-    {
-        $eventManager = $connection->getEventManager();
-        if (!$eventManager->hasListeners(Events::onSchemaAlterTableChangeColumn)) {
-            $eventManager->addEventSubscriber(new SchemaAlterTableChangeColumnSubscriber());
-        }
-        $connection->getDatabasePlatform()
-            ->setEventManager($eventManager);
-        return $connection;
     }
 }

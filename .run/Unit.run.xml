@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Unit" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+    <CommandLine parameters="-d memory_limit=-1">
+      <PhpTestInterpreterSettings>
+        <option name="interpreterName" value="PHP 8.3" />
+      </PhpTestInterpreterSettings>
+      <envs>
+        <env name="XDEBUG.MODE" value="coverage" />
+      </envs>
+    </CommandLine>
+    <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml" directory="$PROJECT_DIR$/tests/Unit" use_alternative_configuration_file="true" />
+    <method v="2" />
+  </configuration>
+</component>

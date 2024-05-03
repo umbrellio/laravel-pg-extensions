@@ -6,15 +6,16 @@
 [![Total Downloads](https://poser.pugx.org/umbrellio/laravel-pg-extensions/downloads.png)](https://packagist.org/packages/umbrellio/laravel-pg-extensions)
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 [![Build Status](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/badges/build.png?b=master)](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/build-status/master)
+[![Code Coverage](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/?branch=master)
 
-This project extends Laravel`s database layer to allow use specific Postgres features without raw queries. 
+This project extends Laravel's database layer to allow use specific Postgres features without raw queries. 
 
 ## Installation
 
 Run this command to install:
 ```bash
-php composer.phar require umbrellio/laravel-pg-extensions
+composer require umbrellio/laravel-pg-extensions
 ```
 
 ## Features
@@ -28,6 +29,7 @@ php composer.phar require umbrellio/laravel-pg-extensions
  - [Working with CHECK constraints](#check-constraints-creation)
  - [Working with partitions](#partitions)
  - [Check existing index before manipulation](#check-existing-index)
+ - [Getting foreign keys for table](#get-foreign-keys)
 
 ### Extended table creation
 
@@ -71,6 +73,21 @@ Schema::create('users', function (Blueprint $table) {
         ->createView('active_users', "SELECT * FROM users WHERE active = 1")
         ->materialize();
 });
+```
+
+### Get foreign keys
+
+Example:
+```php
+// Facade methods:
+/** @var ForeignKeyDefinition[] $fks */
+$fks = Schema::getForeignKeys('some_table');
+
+foreach ($fks as $fk) {
+    // $fk->source_column_name
+    // $fk->target_table_name
+    // $fk->target_column_name
+}
 ```
 
 ### Extended unique indexes creation
@@ -144,7 +161,7 @@ Schema::create('table', function (Blueprint $table) {
     $table->date('date_end'); 
     $table
         ->check(['date_start', 'date_end'])
-        ->whereColumn('date_end', '>', 'date_end')
+        ->whereColumn('date_end', '>', 'date_start')
         ->whereIn('type_id', [1, 2, 3]);
 });
 ```

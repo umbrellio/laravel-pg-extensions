@@ -8,15 +8,4 @@ sed -e "s/\${USERNAME}/postgres/" \
     phpunit.xml.dist > phpunit.xml
 COMPOSER_MEMORY_LIMIT=-1 composer update
 composer lint
-php vendor/bin/phpunit -c phpunit.xml --migrate-configuration
-if [ "x$EXCLUDE_GROUP" != "x" ]; then
-    php -d pcov.directory='.' vendor/bin/phpunit \
-      --exclude-group $EXCLUDE_GROUP \
-      --coverage-html build \
-      --coverage-text
-else
-    php -d pcov.directory='.' vendor/bin/phpunit \
-      --exclude-group WithoutSchema,forPHP7 \
-      --coverage-html build \
-      --coverage-text
-fi
+php -d xdebug.mode=coverage -d memory_limit=-1 vendor/bin/phpunit --coverage-html build --coverage-text

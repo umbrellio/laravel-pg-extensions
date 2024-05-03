@@ -6,17 +6,18 @@ namespace Umbrellio\Postgres\Tests\Functional;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\Test;
 use Umbrellio\Postgres\Schema\Blueprint;
 use Umbrellio\Postgres\Tests\Functional\Helpers\RoutineAssertions;
 use Umbrellio\Postgres\Tests\FunctionalTestCase;
 
 class CreateRoutineTest extends FunctionalTestCase
 {
-    use DatabaseTransactions, RoutineAssertions;
+    use DatabaseTransactions;
 
-    /**
-     * @test
-     */
+    use RoutineAssertions;
+
+    #[Test]
     public function createFunction(): void
     {
         Schema::create('test_table', function (Blueprint $table) {

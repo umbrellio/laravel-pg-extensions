@@ -35,7 +35,7 @@
   "require": {
     "ext-pdo": "*",
     "php": "^8.3|^8.4",
-    "doctrine/dbal": "3.6.*",
+    "doctrine/dbal": "3.6.* || 4.0.*",
     "laravel/framework": "^11.0"
   },
   "require-dev": {

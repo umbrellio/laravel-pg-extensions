@@ -12,7 +12,6 @@ use PDO;
 use Umbrellio\Postgres\Extensions\AbstractExtension;
 use Umbrellio\Postgres\Extensions\Exceptions\ExtensionInvalidException;
 use Umbrellio\Postgres\Schema\Builder;
-use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 use Umbrellio\Postgres\Schema\Types\NumericType;
 use Umbrellio\Postgres\Schema\Types\TsRangeType;
 use Umbrellio\Postgres\Schema\Types\TsTzRangeType;
@@ -104,11 +103,6 @@ class PostgresConnection extends BasePostgresConnection
         }
 
         return parent::prepareBindings($bindings);
-    }
-
-    protected function getDefaultSchemaGrammar()
-    {
-        return parent::getDefaultSchemaGrammar();
     }
 
     private function registerInitialTypes(): void

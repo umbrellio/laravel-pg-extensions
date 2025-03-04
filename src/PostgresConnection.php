@@ -108,7 +108,7 @@ class PostgresConnection extends BasePostgresConnection
 
     protected function getDefaultSchemaGrammar()
     {
-        return $this->withTablePrefix(new PostgresGrammar());
+        return $this->withTablePrefix(new PostgresGrammar($this));
     }
 
     private function registerInitialTypes(): void

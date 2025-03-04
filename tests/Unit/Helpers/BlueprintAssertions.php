@@ -26,9 +26,15 @@ trait BlueprintAssertions
 
     public function initializeMock(string $table)
     {
-        $this->blueprint = new Blueprint($table);
         $this->postgresConnection = $this->createMock(PostgresConnection::class);
-        $this->postgresGrammar = new PostgresGrammar();
+
+        $this->postgresGrammar = new PostgresGrammar($this->postgresConnection);
+
+        $this->postgresConnection->expects($this->any())
+            ->method('getSchemaGrammar')
+            ->willReturn($this->postgresGrammar);
+
+        $this->blueprint = new Blueprint($this->postgresConnection, $table);
     }
 
     /**

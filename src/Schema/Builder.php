@@ -48,9 +48,9 @@ class Builder extends BasePostgresBuilder
     /**
      * @codeCoverageIgnore
      */
-    public function getForeignKeys($tableName): array
+    public function getForeignKeys($table): array
     {
-        return $this->connection->selectFromWriteConnection($this->grammar->compileForeignKeysListing($tableName));
+        return $this->connection->selectFromWriteConnection($this->grammar->compileForeignKeysListing($table));
     }
 
     /**
@@ -71,6 +71,6 @@ class Builder extends BasePostgresBuilder
      */
     protected function createBlueprint($table, Closure $callback = null)
     {
-        return new Blueprint($table, $callback);
+        return new Blueprint($this->connection, $table, $callback);
     }
 }

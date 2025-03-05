@@ -44,8 +44,8 @@ class CreateIndexTest extends FunctionalTestCase
             $callback($table);
         });
 
-        $sm = Schema::getConnection()->getDoctrineSchemaManager();
-        $indexesFound = $sm->listTableIndexes('test_table');
+        $sm = Schema::getConnection()->getSchemaBuilder();
+        $indexesFound = $sm->getIndexListing('test_table');
 
         foreach ($indexesFound as $index) {
             var_dump($index);

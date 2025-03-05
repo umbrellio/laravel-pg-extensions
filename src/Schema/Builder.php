@@ -73,7 +73,9 @@ class Builder extends BasePostgresBuilder
     {
         $blueprint = new Blueprint($this->connection, $this->grammar);
         $blueprint->setTable($table);
-        $callback($blueprint);
+        if ($callback instanceof Closure) {
+            $callback($blueprint);
+        }
         return $blueprint;
     }
 }

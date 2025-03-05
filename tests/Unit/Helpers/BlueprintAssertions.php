@@ -49,6 +49,6 @@ trait BlueprintAssertions
 
     private function runToSql(): array
     {
-        return $this->blueprint->toSql($this->postgresConnection, $this->postgresGrammar);
+        return $this->blueprint->toSql();
     }
 }

@@ -221,7 +221,11 @@ class CreateIndexTest extends FunctionalTestCase
         foreach ($this->provideWrongData() as [$period_type_id, $period_start, $period_end]) {
             $data = compact('period_type_id', 'period_start', 'period_end');
             $this->expectException(QueryException::class);
-            DB::table('test_table')->insert($data);
+            try {
+                DB::table('test_table')->insert($data);
+            } catch (\Throwable $e) {
+                echo class_basename($e) . PHP_EOL;
+            }
         }
     }
 

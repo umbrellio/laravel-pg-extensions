@@ -224,7 +224,7 @@ class CreateIndexTest extends FunctionalTestCase
             try {
                 DB::table('test_table')->insert($data);
             } catch (\Throwable $e) {
-                echo class_basename($e) . PHP_EOL;
+                print_r([class_basename($e)]);
                 throw $e;
             }
         }

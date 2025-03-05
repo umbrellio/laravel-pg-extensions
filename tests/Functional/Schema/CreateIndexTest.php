@@ -44,6 +44,13 @@ class CreateIndexTest extends FunctionalTestCase
             $callback($table);
         });
 
+        $sm = Schema::getConnection()->getDoctrineSchemaManager();
+        $indexesFound = $sm->listTableIndexes('test_table');
+
+        foreach ($indexesFound as $index) {
+            var_dump($index);
+        }
+
         $this->seeTable('test_table');
         $this->assertRegExpIndex('test_table_name_unique', '/' . $this->getDummyIndex() . $expected . '/');
 

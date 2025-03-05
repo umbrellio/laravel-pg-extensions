@@ -50,7 +50,7 @@ class PostgresConnection extends BasePostgresConnection
     public function getSchemaBuilder()
     {
         if ($this->schemaGrammar === null) {
-            $this->useDefaultSchemaGrammar();
+            $this->schemaGrammar = $this->getDefaultSchemaGrammar();
         }
         return new Builder($this);
     }
@@ -108,7 +108,7 @@ class PostgresConnection extends BasePostgresConnection
 
     protected function getDefaultSchemaGrammar()
     {
-        return $this->withTablePrefix(new PostgresGrammar());
+        return new PostgresGrammar($this);
     }
 
     private function registerInitialTypes(): void

@@ -29,8 +29,7 @@ trait BlueprintAssertions
         $this->postgresConnection = $this->createMock(PostgresConnection::class);
         $this->postgresGrammar = new PostgresGrammar($this->postgresConnection);
         $this->postgresConnection->setSchemaGrammar($this->postgresGrammar);
-        $this->blueprint = new Blueprint($this->postgresConnection, $this->postgresGrammar);
-        $this->blueprint->setTable($table);
+        $this->blueprint = new Blueprint($this->postgresConnection, $table);
     }
 
     /**

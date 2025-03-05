@@ -73,7 +73,7 @@ class Builder extends BasePostgresBuilder
     {
         $blueprint = new Blueprint($this->connection, $this->grammar);
         $blueprint->setTable($table);
-        // @todo apply $callback
+        $callback($blueprint);
         return $blueprint;
     }
 }

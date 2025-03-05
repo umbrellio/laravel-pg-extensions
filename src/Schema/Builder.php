@@ -71,6 +71,9 @@ class Builder extends BasePostgresBuilder
      */
     protected function createBlueprint($table, Closure $callback = null)
     {
-        return new Blueprint($table, $callback);
+        $blueprint = new Blueprint($this->connection, $this->grammar);
+        $blueprint->setTable($table);
+        // @todo apply $callback
+        return $blueprint;
     }
 }

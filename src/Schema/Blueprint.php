@@ -26,6 +26,12 @@ class Blueprint extends BaseBlueprint
 {
     protected $commands = [];
 
+    public function setTable(string $table): self
+    {
+        $this->table = $table;
+        return $this;
+    }
+
     /**
      * @return AttachPartitionDefinition|Fluent
      */

@@ -81,14 +81,9 @@ jobs:
         coverage: [true]
         experimental: [false]
         operating_system: [ubuntu-latest]
-        postgres: ['10', '11', '12', '13', '14']
+        postgres: ['13', '14', '15']
         php_versions: ['8.3']
         include:
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.3'
-            postgres: '15'
-            coverage: false
-            experimental: true
           - operating_system: 'ubuntu-latest'
             php_versions: '8.4'
             postgres: '16'

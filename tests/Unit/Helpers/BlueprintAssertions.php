@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Tests\Unit\Helpers;
 
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use Umbrellio\Postgres\PostgresConnection;
 use Umbrellio\Postgres\Schema\Blueprint;
@@ -26,7 +27,8 @@ trait BlueprintAssertions
 
     public function initializeMock(string $table)
     {
-        $this->postgresConnection = $this->createMock(PostgresConnection::class);
+        $connection = Mockery::mock(PostgresConnection::class);
+        $this->postgresConnection = $connection->makePartial();
         $this->postgresGrammar = new PostgresGrammar($this->postgresConnection);
         $this->postgresConnection->setSchemaGrammar($this->postgresGrammar);
         $this->blueprint = new Blueprint($this->postgresConnection, $table);

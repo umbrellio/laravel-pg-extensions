@@ -12,12 +12,24 @@ use Illuminate\Support\Fluent;
 use Umbrellio\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
 use Umbrellio\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
 use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
-use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
-use Umbrellio\Postgres\Schema\Definitions\CheckDefinition;
-use Umbrellio\Postgres\Schema\Definitions\ExcludeDefinition;
-use Umbrellio\Postgres\Schema\Definitions\LikeDefinition;
-use Umbrellio\Postgres\Schema\Definitions\UniqueDefinition;
-use Umbrellio\Postgres\Schema\Definitions\ViewDefinition;
+use Umbrellio\Postgres\Schema\Builders\Routines\CreateFunctionBuilder;
+use Umbrellio\Postgres\Schema\Builders\Routines\CreateProcedureBuilder;
+use Umbrellio\Postgres\Schema\Builders\Routines\CreateTriggerBuilder;
+use Umbrellio\Postgres\Schema\Builders\Routines\DropFunctionBuilder;
+use Umbrellio\Postgres\Schema\Builders\Routines\DropProcedureBuilder;
+use Umbrellio\Postgres\Schema\Builders\Routines\DropTriggerBuilder;
+use Umbrellio\Postgres\Schema\Definitions\Indexes\CheckDefinition;
+use Umbrellio\Postgres\Schema\Definitions\Indexes\ExcludeDefinition;
+use Umbrellio\Postgres\Schema\Definitions\Indexes\UniqueDefinition;
+use Umbrellio\Postgres\Schema\Definitions\Routines\Functions\CreateFunctionDefinition;
+use Umbrellio\Postgres\Schema\Definitions\Routines\Functions\DropFunctionDefinition;
+use Umbrellio\Postgres\Schema\Definitions\Routines\Procedures\CreateProcedureDefinition;
+use Umbrellio\Postgres\Schema\Definitions\Routines\Procedures\DropProcedureDefinition;
+use Umbrellio\Postgres\Schema\Definitions\Routines\Triggers\CreateTriggerDefinition;
+use Umbrellio\Postgres\Schema\Definitions\Routines\Triggers\DropTriggerDefinition;
+use Umbrellio\Postgres\Schema\Definitions\Tables\AttachPartitionDefinition;
+use Umbrellio\Postgres\Schema\Definitions\Tables\LikeDefinition;
+use Umbrellio\Postgres\Schema\Definitions\Views\ViewDefinition;
 use Umbrellio\Postgres\Schema\Types\DateRangeType;
 use Umbrellio\Postgres\Schema\Types\TsRangeType;
 use Umbrellio\Postgres\Schema\Types\TsTzRangeType;
@@ -130,9 +142,49 @@ class Blueprint extends BaseBlueprint
      * @codeCoverageIgnore
      * @return ViewDefinition|Fluent
      */
-    public function createView(string $view, string $select, bool $materialize = false): Fluent
+    public function createView(string $view, string $select, bool $materialize = false)
     {
         return $this->addCommand('createView', compact('view', 'select', 'materialize'));
+    }
+
+    /**
+     * @return CreateTriggerDefinition
+     */
+    public function createTrigger(string $name)
+    {
+        return $this->addExtendedCommand(CreateTriggerBuilder::class, 'createTrigger', compact('name'));
+    }
+
+    /**
+     * @return CreateFunctionDefinition
+     */
+    public function createFunction(string $name)
+    {
+        return $this->addExtendedCommand(CreateFunctionBuilder::class, 'createFunction', compact('name'));
+    }
+
+    /**
+     * @return CreateProcedureDefinition
+     */
+    public function createProcedure(string $name)
+    {
+        return $this->addExtendedCommand(CreateProcedureBuilder::class, 'createProcedure', compact('name'));
+    }
+
+    /**
+     * @return DropFunctionDefinition
+     */
+    public function dropFunction(string $name)
+    {
+        return $this->addExtendedCommand(DropFunctionBuilder::class, 'dropFunction', compact('name'));
+    }
+
+    /**
+     * @return DropProcedureDefinition
+     */
+    public function dropProcedure(string $name)
+    {
+        return $this->addExtendedCommand(DropProcedureBuilder::class, 'dropProcedure', compact('name'));
     }
 
     /**
@@ -141,6 +193,14 @@ class Blueprint extends BaseBlueprint
     public function dropView(string $view): Fluent
     {
         return $this->addCommand('dropView', compact('view'));
+    }
+
+    /**
+     * @return DropTriggerDefinition
+     */
+    public function dropTrigger(string $name, bool $dropDepends = false)
+    {
+        return $this->addExtendedCommand(DropTriggerBuilder::class, 'dropTrigger', compact('name', 'dropDepends'));
     }
 
     /**

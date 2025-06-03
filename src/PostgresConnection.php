@@ -13,6 +13,7 @@ use Illuminate\Support\Traits\Macroable;
 use PDO;
 use Umbrellio\Postgres\Extensions\AbstractExtension;
 use Umbrellio\Postgres\Extensions\Exceptions\ExtensionInvalidException;
+use Umbrellio\Postgres\Helpers\PostgresTextSanitizer;
 use Umbrellio\Postgres\Schema\Builder;
 use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 use Umbrellio\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber;
@@ -107,6 +108,9 @@ class PostgresConnection extends BasePostgresConnection
             foreach ($bindings as $key => $value) {
                 if ($value instanceof DateTimeInterface) {
                     $bindings[$key] = $value->format($grammar->getDateFormat());
+                }
+                if (is_string($value)) {
+                    $bindings[$key] = PostgresTextSanitizer::sanitize($value);
                 }
             }
 

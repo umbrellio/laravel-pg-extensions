@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Umbrellio\Postgres\Helpers;
 
+use Illuminate\Support\Facades\Log;
+
 class PostgresTextSanitizer
 {
     /**
@@ -20,8 +22,11 @@ class PostgresTextSanitizer
         }
 
         // Удаляем управляющие символы, кроме: табуляция (\x09), \n (\x0A), \r (\x0D)
-        $input = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/u', '', $input);
+        $input1 = preg_replace_callback('/[\x00-\x1F]/', function ($match) {
+            $ord = ord($match[0]);
+            return in_array($ord, [9, 10, 13], true) ? $match[0] : '';
+        }, $input);
 
-        return $input;
+        return str_replace(array("\x00", "\x0"), '', $input1);
     }
 }

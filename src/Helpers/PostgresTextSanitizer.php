@@ -27,6 +27,6 @@ class PostgresTextSanitizer
             return in_array($ord, [9, 10, 13], true) ? $match[0] : '';
         }, $input);
 
-        return str_replace(array("\x00", "\x0"), '', $input1);
+        return str_replace(array("\x00", "\0"), '', $input1);
     }
 }

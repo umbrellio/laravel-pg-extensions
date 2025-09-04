@@ -17,6 +17,7 @@ use Umbrellio\Postgres\Helpers\PostgresTextSanitizer;
 use Umbrellio\Postgres\Schema\Builder;
 use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 use Umbrellio\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber;
+use Umbrellio\Postgres\Schema\Types\DateRangeType;
 use Umbrellio\Postgres\Schema\Types\NumericType;
 use Umbrellio\Postgres\Schema\Types\TsRangeType;
 use Umbrellio\Postgres\Schema\Types\TsTzRangeType;
@@ -33,6 +34,7 @@ class PostgresConnection extends BasePostgresConnection
         TsRangeType::TYPE_NAME => TsRangeType::class,
         TsTzRangeType::TYPE_NAME => TsTzRangeType::class,
         NumericType::TYPE_NAME => NumericType::class,
+        DateRangeType::TYPE_NAME => DateRangeType::class,
     ];
 
     /**

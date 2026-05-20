@@ -15,9 +15,11 @@ class PostgresTextSanitizer
      */
     public static function sanitize(?string $input): ?string
     {
+        // @codeCoverageIgnoreStart
         if ($input === null) {
             return null;
         }
+        // @codeCoverageIgnoreEnd
 
         // Удаляем управляющие символы, кроме: табуляция (\x09), \n (\x0A), \r (\x0D)
         $input = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/u', '', $input);

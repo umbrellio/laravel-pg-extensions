@@ -81,19 +81,8 @@ jobs:
         coverage: [true]
         experimental: [false]
         operating_system: [ubuntu-latest]
-        postgres: ['13', '14', '15']
-        php_versions: ['8.3']
-        include:
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.4'
-            postgres: '16'
-            coverage: false
-            experimental: true
-          - operating_system: 'ubuntu-latest'
-            php_versions: '8.5'
-            postgres: '17'
-            coverage: false
-            experimental: true
+        postgres: ['16', '17', '18']
+        php_versions: ['8.4', '8.5']
     runs-on: '${{ matrix.operating_system }}'
     services:
       postgres:

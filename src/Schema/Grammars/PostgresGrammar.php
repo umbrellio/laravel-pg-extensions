@@ -118,7 +118,7 @@ class PostgresGrammar extends BasePostgresGrammar
         return 'select view_definition from information_schema.views where table_schema = ? and table_name = ?';
     }
 
-    public function compileUniquePartial(Blueprint $blueprint, UniqueBuilder $command): string
+    public function compileUniquePartial(Blueprint $blueprint, UniqueBuilder $command): string|array
     {
         $constraints = $command->get('constraints');
         if ($constraints instanceof UniquePartialBuilder) {

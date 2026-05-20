@@ -36,7 +36,7 @@ jobs:
         operating_system:
           - ubuntu-latest
         php_versions:
-          - '8.3'
+          - '8.5'
       fail-fast: false
     env:
       PHP_CS_FIXER_FUTURE_MODE: '0'
